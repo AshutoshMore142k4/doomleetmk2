@@ -14,7 +14,131 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      problems: {
+        Row: {
+          approach: string
+          category: Database["public"]["Enums"]["problem_category"]
+          created_at: string
+          description: string
+          difficulty: Database["public"]["Enums"]["difficulty_level"]
+          hints: string[] | null
+          id: string
+          leetcode_number: number | null
+          order_index: number
+          slug: string
+          solution_code: string
+          space_complexity: string | null
+          test_cases: Json
+          time_complexity: string | null
+          title: string
+        }
+        Insert: {
+          approach: string
+          category: Database["public"]["Enums"]["problem_category"]
+          created_at?: string
+          description: string
+          difficulty: Database["public"]["Enums"]["difficulty_level"]
+          hints?: string[] | null
+          id?: string
+          leetcode_number?: number | null
+          order_index?: number
+          slug: string
+          solution_code: string
+          space_complexity?: string | null
+          test_cases?: Json
+          time_complexity?: string | null
+          title: string
+        }
+        Update: {
+          approach?: string
+          category?: Database["public"]["Enums"]["problem_category"]
+          created_at?: string
+          description?: string
+          difficulty?: Database["public"]["Enums"]["difficulty_level"]
+          hints?: string[] | null
+          id?: string
+          leetcode_number?: number | null
+          order_index?: number
+          slug?: string
+          solution_code?: string
+          space_complexity?: string | null
+          test_cases?: Json
+          time_complexity?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_progress: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          id: string
+          last_viewed_at: string | null
+          notes: string | null
+          problem_id: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          last_viewed_at?: string | null
+          notes?: string | null
+          problem_id: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          last_viewed_at?: string | null
+          notes?: string | null
+          problem_id?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_progress_problem_id_fkey"
+            columns: ["problem_id"]
+            isOneToOne: false
+            referencedRelation: "problems"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +147,26 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      difficulty_level: "Easy" | "Medium" | "Hard"
+      problem_category:
+        | "Arrays & Hashing"
+        | "Two Pointers"
+        | "Sliding Window"
+        | "Stack"
+        | "Binary Search"
+        | "Linked List"
+        | "Trees"
+        | "Tries"
+        | "Heap / Priority Queue"
+        | "Backtracking"
+        | "Graphs"
+        | "Advanced Graphs"
+        | "1-D Dynamic Programming"
+        | "2-D Dynamic Programming"
+        | "Greedy"
+        | "Intervals"
+        | "Math & Geometry"
+        | "Bit Manipulation"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +293,28 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      difficulty_level: ["Easy", "Medium", "Hard"],
+      problem_category: [
+        "Arrays & Hashing",
+        "Two Pointers",
+        "Sliding Window",
+        "Stack",
+        "Binary Search",
+        "Linked List",
+        "Trees",
+        "Tries",
+        "Heap / Priority Queue",
+        "Backtracking",
+        "Graphs",
+        "Advanced Graphs",
+        "1-D Dynamic Programming",
+        "2-D Dynamic Programming",
+        "Greedy",
+        "Intervals",
+        "Math & Geometry",
+        "Bit Manipulation",
+      ],
+    },
   },
 } as const
