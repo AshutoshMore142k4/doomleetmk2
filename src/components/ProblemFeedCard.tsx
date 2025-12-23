@@ -3,175 +3,195 @@ import { DifficultyBadge } from './DifficultyBadge';
 import { CodeBlock } from './CodeBlock';
 import { Problem } from '@/lib/problems-data';
 import { cn } from '@/lib/utils';
-import { ChevronDown, ChevronUp, Clock, HardDrive, Lightbulb, ExternalLink } from 'lucide-react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Star, Bookmark, Code2, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface ProblemFeedCardProps {
   problem: Problem;
 }
 
+// Helper to parse and highlight inline code in text
+function HighlightedText({ text }: { text: string }) {
+  // Match code wrapped in backticks or specific patterns
+  const parts = text.split(/(`[^`]+`)/g);
+  
+  return (
+    <>
+      {parts.map((part, i) => {
+        if (part.startsWith('`') && part.endsWith('`')) {
+          return (
+            <code key={i} className="px-1.5 py-0.5 rounded bg-secondary text-primary font-mono text-sm">
+              {part.slice(1, -1)}
+            </code>
+          );
+        }
+        // Also highlight specific keywords
+        const highlighted = part.split(/(\b(?:true|false|null|undefined|return|if|else|for|while)\b)/g);
+        return highlighted.map((word, j) => {
+          if (['true', 'false', 'null', 'undefined', 'return', 'if', 'else', 'for', 'while'].includes(word)) {
+            return (
+              <code key={`${i}-${j}`} className="px-1 py-0.5 rounded bg-secondary text-primary font-mono text-sm">
+                {word}
+              </code>
+            );
+          }
+          return <span key={`${i}-${j}`}>{word}</span>;
+        });
+      })}
+    </>
+  );
+}
+
+// Parse approach text into algorithm steps
+function parseAlgorithmSteps(approach: string): string[] {
+  // Split by periods or numbered patterns
+  const sentences = approach
+    .split(/(?:\.\s+|\n)/)
+    .filter(s => s.trim().length > 0)
+    .map(s => s.trim());
+  
+  return sentences;
+}
+
+// Generate key insights from hints and approach
+function generateInsights(problem: Problem): string[] {
+  const insights: string[] = [];
+  
+  // Add hints as insights
+  problem.hints.forEach(hint => {
+    insights.push(hint);
+  });
+  
+  // Add complexity insight
+  if (problem.timeComplexity && problem.spaceComplexity) {
+    insights.push(`Time complexity is ${problem.timeComplexity}, Space is ${problem.spaceComplexity}`);
+  }
+  
+  return insights.slice(0, 3);
+}
+
 export function ProblemFeedCard({ problem }: ProblemFeedCardProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [showCode, setShowCode] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isStarred, setIsStarred] = useState(false);
+
+  const algorithmSteps = parseAlgorithmSteps(problem.approach);
+  const keyInsights = generateInsights(problem);
 
   return (
     <div className="w-full max-w-2xl mx-auto">
-      <div className={cn(
-        "border border-border bg-card rounded overflow-hidden transition-all duration-300",
-        isExpanded && "ring-1 ring-primary/30"
-      )}>
-        {/* Header - Always visible */}
-        <div 
-          className="p-5 cursor-pointer"
-          onClick={() => setIsExpanded(!isExpanded)}
-        >
-          <div className="flex items-start justify-between gap-4 mb-3">
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-muted-foreground font-mono">#{problem.leetcodeNumber}</span>
-              <DifficultyBadge difficulty={problem.difficulty} />
-            </div>
-            <a
-              href={`https://leetcode.com/problems/${problem.slug}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              className="text-muted-foreground hover:text-primary transition-colors"
-            >
-              <ExternalLink className="h-4 w-4" />
-            </a>
-          </div>
+      <div className="relative bg-card border border-border rounded overflow-hidden">
+        {/* Main Content */}
+        <div className="p-6 pr-14">
+          {/* Title */}
+          <h2 className="text-xl font-semibold mb-3">{problem.title}</h2>
           
-          <h2 className="text-lg font-semibold mb-2">{problem.title}</h2>
-          
-          <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
-            {problem.description}
+          {/* Description with highlighted terms */}
+          <p className="text-muted-foreground text-sm leading-relaxed mb-6">
+            <HighlightedText text={problem.description} />
           </p>
 
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-muted-foreground px-2 py-1 bg-secondary rounded">
+          {/* Algorithm Section */}
+          <section className="mb-6">
+            <h3 className="text-lg font-semibold mb-3">Algorithm</h3>
+            <ol className="space-y-2">
+              {algorithmSteps.map((step, index) => (
+                <li key={index} className="flex gap-3 text-sm">
+                  <span className="text-muted-foreground shrink-0">{index + 1}.</span>
+                  <span className="text-muted-foreground">
+                    <HighlightedText text={step} />
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </section>
+
+          {/* Key Insights Section */}
+          {keyInsights.length > 0 && (
+            <section className="mb-6">
+              <h3 className="text-lg font-semibold mb-3">Key Insights</h3>
+              <ul className="space-y-2">
+                {keyInsights.map((insight, index) => (
+                  <li key={index} className="flex gap-2 text-sm text-muted-foreground">
+                    <span className="text-muted-foreground">•</span>
+                    <span><HighlightedText text={insight} /></span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {/* Complexity */}
+          <div className="flex items-center gap-1 text-sm mb-6">
+            <span className="text-muted-foreground">Time:</span>
+            <span className="text-primary font-mono">{problem.timeComplexity}</span>
+            <span className="text-muted-foreground mx-2">|</span>
+            <span className="text-muted-foreground">Space:</span>
+            <span className="text-primary font-mono">{problem.spaceComplexity}</span>
+          </div>
+
+          {/* Code Section (Expandable) */}
+          <div className="border-t border-border pt-4">
+            <button
+              onClick={() => setShowCode(!showCode)}
+              className="flex items-center gap-2 text-sm text-primary hover:underline mb-3"
+            >
+              <Code2 className="h-4 w-4" />
+              {showCode ? 'Hide Solution Code' : 'View Solution Code'}
+              {showCode ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+            </button>
+            
+            {showCode && (
+              <CodeBlock code={problem.solutionCode} />
+            )}
+          </div>
+
+          {/* Footer Badges */}
+          <div className="flex items-center gap-2 mt-6">
+            <DifficultyBadge difficulty={problem.difficulty} />
+            <span className="px-2.5 py-0.5 text-xs rounded bg-secondary text-secondary-foreground">
               {problem.category}
             </span>
-            <button 
-              className="flex items-center gap-1 text-sm text-primary hover:underline"
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsExpanded(!isExpanded);
-              }}
-            >
-              {isExpanded ? (
-                <>
-                  <span>Hide Solution</span>
-                  <ChevronUp className="h-4 w-4" />
-                </>
-              ) : (
-                <>
-                  <span>Show Solution</span>
-                  <ChevronDown className="h-4 w-4" />
-                </>
-              )}
-            </button>
           </div>
         </div>
 
-        {/* Expanded Content */}
-        {isExpanded && (
-          <div className="border-t border-border">
-            <Tabs defaultValue="examples" className="w-full">
-              <TabsList className="w-full justify-start rounded-none border-b border-border bg-transparent h-auto p-0">
-                <TabsTrigger 
-                  value="examples" 
-                  className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-4 py-3"
-                >
-                  Examples
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="hints"
-                  className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-4 py-3"
-                >
-                  Hints
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="approach"
-                  className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-4 py-3"
-                >
-                  Approach
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="solution"
-                  className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-4 py-3"
-                >
-                  Solution
-                </TabsTrigger>
-              </TabsList>
-
-              <div className="p-5">
-                <TabsContent value="examples" className="mt-0 space-y-4">
-                  {problem.testCases.map((testCase, index) => (
-                    <div key={index} className="rounded border border-border bg-secondary/30 p-4">
-                      <p className="text-xs font-medium text-muted-foreground mb-2">Example {index + 1}</p>
-                      <div className="space-y-1.5 text-sm">
-                        <div>
-                          <span className="text-muted-foreground">Input: </span>
-                          <code className="font-mono text-foreground">{testCase.input}</code>
-                        </div>
-                        <div>
-                          <span className="text-muted-foreground">Output: </span>
-                          <code className="font-mono text-foreground">{testCase.output}</code>
-                        </div>
-                        {testCase.explanation && (
-                          <div className="text-muted-foreground text-xs mt-2">
-                            {testCase.explanation}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </TabsContent>
-
-                <TabsContent value="hints" className="mt-0">
-                  {problem.hints.length > 0 ? (
-                    <div className="space-y-3">
-                      {problem.hints.map((hint, index) => (
-                        <div key={index} className="flex items-start gap-3 p-3 rounded bg-secondary/30 border border-border">
-                          <Lightbulb className="h-4 w-4 text-medium shrink-0 mt-0.5" />
-                          <p className="text-sm text-muted-foreground">{hint}</p>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-sm text-muted-foreground">No hints available for this problem.</p>
-                  )}
-                </TabsContent>
-
-                <TabsContent value="approach" className="mt-0 space-y-4">
-                  <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">
-                    {problem.approach}
-                  </p>
-                  
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    <div className="flex items-center gap-3 p-3 rounded border border-border bg-secondary/30">
-                      <Clock className="h-4 w-4 text-primary shrink-0" />
-                      <div>
-                        <p className="text-xs text-muted-foreground">Time</p>
-                        <p className="text-sm font-mono">{problem.timeComplexity}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3 p-3 rounded border border-border bg-secondary/30">
-                      <HardDrive className="h-4 w-4 text-primary shrink-0" />
-                      <div>
-                        <p className="text-xs text-muted-foreground">Space</p>
-                        <p className="text-sm font-mono">{problem.spaceComplexity}</p>
-                      </div>
-                    </div>
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="solution" className="mt-0">
-                  <CodeBlock code={problem.solutionCode} />
-                </TabsContent>
-              </div>
-            </Tabs>
-          </div>
-        )}
+        {/* Floating Action Buttons */}
+        <div className="absolute right-3 top-1/2 -translate-y-1/2 flex flex-col gap-3">
+          <button
+            onClick={() => setIsStarred(!isStarred)}
+            className={cn(
+              "p-2 rounded-full transition-colors",
+              isStarred 
+                ? "bg-medium/20 text-medium" 
+                : "bg-secondary text-muted-foreground hover:text-foreground"
+            )}
+          >
+            <Star className={cn("h-5 w-5", isStarred && "fill-current")} />
+          </button>
+          
+          <button
+            onClick={() => setIsBookmarked(!isBookmarked)}
+            className={cn(
+              "p-2 rounded-full transition-colors",
+              isBookmarked 
+                ? "bg-primary/20 text-primary" 
+                : "bg-secondary text-muted-foreground hover:text-foreground"
+            )}
+          >
+            <Bookmark className={cn("h-5 w-5", isBookmarked && "fill-current")} />
+          </button>
+          
+          <button
+            onClick={() => setShowCode(!showCode)}
+            className={cn(
+              "p-2 rounded-full transition-colors",
+              showCode 
+                ? "bg-primary/20 text-primary" 
+                : "bg-secondary text-muted-foreground hover:text-foreground"
+            )}
+          >
+            <Code2 className="h-5 w-5" />
+          </button>
+        </div>
       </div>
     </div>
   );
