@@ -99,7 +99,7 @@ export default function StriverSheet() {
   const topics = mergedStriverTopics;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       <Header />
 
       <div className="sticky top-14 z-40 bg-background/70 backdrop-blur-2xl border-b border-primary/10">
