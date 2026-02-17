@@ -84,9 +84,6 @@ export default function Auth() {
           
           <div className="relative">
             <div className="flex flex-col items-center mb-8">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 ring-1 ring-primary/20 mb-4">
-                <Code2 className="h-7 w-7 text-primary" />
-              </div>
               <h1 className="text-2xl font-bold">DoomLeet</h1>
               <p className="text-muted-foreground mt-1 text-sm">
                 {isSignUp ? 'Create your account' : 'Sign in to your account'}
