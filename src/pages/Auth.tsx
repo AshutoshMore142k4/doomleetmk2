@@ -75,9 +75,11 @@ export default function Auth() {
       <RetroGrid angle={65} cellSize={50} opacity={0.3} darkLineColor="hsl(270 70% 55% / 0.08)" />
       
       <div className="w-full max-w-sm relative z-10">
-        <div className="relative bg-primary/[0.04] backdrop-blur-2xl border border-primary/15 rounded-2xl overflow-hidden shadow-lg shadow-primary/5 ring-1 ring-primary/[0.08] p-8">
+        <div className="group/card relative bg-primary/[0.04] backdrop-blur-2xl border border-primary/15 rounded-2xl overflow-hidden shadow-lg shadow-primary/5 ring-1 ring-primary/[0.08] p-8">
+          <span className="absolute inset-x-0 top-0 h-px opacity-40 bg-gradient-to-r w-3/4 mx-auto from-transparent via-primary to-transparent" />
           <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/[0.06] via-transparent to-primary/[0.03] pointer-events-none" />
           <div className="absolute inset-[1px] rounded-2xl border border-primary/[0.05] pointer-events-none" />
+          <span className="absolute inset-x-0 bottom-0 h-px opacity-20 bg-gradient-to-r w-3/4 mx-auto from-transparent via-primary to-transparent" />
           
           <div className="relative">
             <div className="flex flex-col items-center mb-8">
