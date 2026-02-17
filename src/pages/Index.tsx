@@ -106,7 +106,6 @@ export default function Index() {
               <Link to="/problems">
                 <NeonButton variant="solid" size="lg" className="gap-2 shadow-lg shadow-primary/25">
                   Start NeetCode 150
-                  <ArrowRight className="h-4 w-4" />
                 </NeonButton>
               </Link>
               <Link to="/striver">
