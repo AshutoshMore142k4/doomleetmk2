@@ -19,32 +19,38 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b border-primary/10 bg-background/70 backdrop-blur-2xl supports-[backdrop-filter]:bg-background/50">
       <div className="container flex h-14 items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded bg-primary">
-            <Code2 className="h-5 w-5 text-primary-foreground" />
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20">
+            <Code2 className="h-5 w-5 text-primary" />
           </div>
-          <span className="text-lg font-semibold tracking-tight">NeetCode 150</span>
+          <span className="text-lg font-semibold tracking-tight">DoomLeet</span>
         </Link>
 
-        <nav className="flex items-center gap-4">
-          <Link to="/problems" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+        <nav className="flex items-center gap-1">
+          <Link 
+            to="/problems" 
+            className="px-3 py-1.5 text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all"
+          >
             NeetCode
           </Link>
-          <Link to="/striver" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+          <Link 
+            to="/striver" 
+            className="px-3 py-1.5 text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all"
+          >
             Striver
           </Link>
           
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="gap-2">
+                <Button variant="ghost" size="sm" className="gap-2 ml-2 rounded-lg hover:bg-primary/[0.06]">
                   <User className="h-4 w-4" />
                   <span className="hidden sm:inline">{user.email?.split('@')[0]}</span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+              <DropdownMenuContent align="end" className="bg-card/80 backdrop-blur-2xl border-primary/15">
                 <DropdownMenuItem onClick={handleSignOut} className="gap-2">
                   <LogOut className="h-4 w-4" />
                   Sign Out
@@ -52,7 +58,7 @@ export function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button asChild variant="default" size="sm">
+            <Button asChild size="sm" className="ml-2 rounded-lg shadow-lg shadow-primary/20">
               <Link to="/auth">Sign In</Link>
             </Button>
           )}

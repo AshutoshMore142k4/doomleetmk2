@@ -102,7 +102,7 @@ export default function StriverSheet() {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <div className="sticky top-14 z-40 bg-background/70 backdrop-blur-xl border-b border-border/40">
+      <div className="sticky top-14 z-40 bg-background/70 backdrop-blur-2xl border-b border-primary/10">
         <div className="container px-4 py-3">
           <h1 className="text-lg font-semibold mb-2">Striver's SDE Sheet</h1>
           <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
