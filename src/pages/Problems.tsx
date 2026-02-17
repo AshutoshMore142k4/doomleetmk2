@@ -44,7 +44,7 @@ export default function Problems() {
       <Header />
       
       {/* Sticky Controls */}
-      <div className="sticky top-14 z-40 bg-background/95 backdrop-blur border-b border-border">
+      <div className="sticky top-14 z-40 bg-background/70 backdrop-blur-2xl border-b border-primary/10">
         <div className="container px-4 py-3">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2">
