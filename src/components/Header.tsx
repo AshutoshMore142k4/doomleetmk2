@@ -30,7 +30,10 @@ export function Header() {
 
         <nav className="flex items-center gap-4">
           <Link to="/problems" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-            Problems
+            NeetCode
+          </Link>
+          <Link to="/striver" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            Striver
           </Link>
           
           {user ? (
