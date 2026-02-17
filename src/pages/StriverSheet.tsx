@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { Header } from '@/components/Header';
-import { striverTopics, StriverTopic } from '@/lib/strivers-sde-data';
+import { mergedStriverTopics } from '@/lib/strivers-sde-data';
 import { ProblemFeedCard } from '@/components/ProblemFeedCard';
 import { cn } from '@/lib/utils';
 import { ChevronDown, ChevronUp, Code2, BookOpen } from 'lucide-react';
@@ -96,7 +96,7 @@ export default function StriverSheet() {
     topicRefs.current[index]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  const topic = striverTopics[activeTopic];
+  const topics = mergedStriverTopics;
 
   return (
     <div className="min-h-screen bg-background">
@@ -106,7 +106,7 @@ export default function StriverSheet() {
         <div className="container px-4 py-3">
           <h1 className="text-lg font-semibold mb-2">Striver's SDE Sheet</h1>
           <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-            {striverTopics.map((t, i) => (
+            {topics.map((t, i) => (
               <button
                 key={i}
                 onClick={() => scrollToTopic(i)}
@@ -125,7 +125,7 @@ export default function StriverSheet() {
       </div>
 
       <main className="container px-4 py-6">
-        {striverTopics.map((t, i) => (
+        {topics.map((t, i) => (
           <div
             key={i}
             ref={el => topicRefs.current[i] = el}

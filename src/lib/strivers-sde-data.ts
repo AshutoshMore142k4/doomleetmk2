@@ -3220,3 +3220,56 @@ int repeatedStringMatch(string a, string b) {
 
 // Flat list of all problems
 export const allStriverProblems: StriverProblem[] = striverTopics.flatMap(t => t.problems);
+
+// Merge topics by pattern (e.g. "Arrays", "Arrays Part-II" → "Arrays")
+function getBaseTopic(name: string): string {
+  const mapping: Record<string, string> = {
+    'Arrays': 'Arrays',
+    'Arrays Part-II': 'Arrays',
+    'Arrays Part-III': 'Arrays',
+    'Arrays Part-IV': 'Arrays',
+    'Linked List': 'Linked List',
+    'Linked List Part-II': 'Linked List',
+    'Linked List and Arrays': 'Linked List',
+    'Greedy Algorithm': 'Greedy',
+    'Recursion': 'Recursion & Backtracking',
+    'Recursion and Backtracking': 'Recursion & Backtracking',
+    'Binary Search': 'Binary Search',
+    'Heaps': 'Heaps',
+    'Stack and Queue': 'Stack & Queue',
+    'Stack and Queue Part-II': 'Stack & Queue',
+    'String': 'Strings',
+    'String Part-II': 'Strings',
+    'Binary Tree': 'Binary Tree',
+    'Binary Tree Part-II': 'Binary Tree',
+    'Binary Tree Part-III': 'Binary Tree',
+    'Binary Search Tree': 'Binary Search Tree',
+    'Binary Search Tree Part-II': 'Binary Search Tree',
+    'Binary Trees [Miscellaneous]': 'Binary Tree',
+    'Graph': 'Graphs',
+    'Graph Part-II': 'Graphs',
+    'Dynamic Programming': 'Dynamic Programming',
+    'Dynamic Programming Part-II': 'Dynamic Programming',
+    'Trie': 'Trie',
+  };
+  return mapping[name] || name;
+}
+
+export interface MergedTopic {
+  name: string;
+  problems: StriverProblem[];
+}
+
+export const mergedStriverTopics: MergedTopic[] = (() => {
+  const map = new Map<string, StriverProblem[]>();
+  const order: string[] = [];
+  for (const topic of striverTopics) {
+    const base = getBaseTopic(topic.name);
+    if (!map.has(base)) {
+      map.set(base, []);
+      order.push(base);
+    }
+    map.get(base)!.push(...topic.problems);
+  }
+  return order.map(name => ({ name, problems: map.get(name)! }));
+})();
