@@ -110,7 +110,7 @@ export default function Index() {
               </Link>
               <Link to="/striver">
                 <NeonButton size="lg" className="gap-2">
-                  <Brain className="h-4 w-4" />
+                  
                   Striver's Sheet
                 </NeonButton>
               </Link>
