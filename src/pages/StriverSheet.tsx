@@ -12,7 +12,7 @@ function StriverProblemCard({ problem }: { problem: import('@/lib/strivers-sde-d
   const [showHints, setShowHints] = useState(false);
 
   return (
-    <div className="bg-card border border-border rounded overflow-hidden">
+    <div className="bg-card/40 backdrop-blur-xl border border-border/40 rounded-2xl overflow-hidden shadow-lg ring-1 ring-foreground/[0.03]">
       <div className="p-5">
         <div className="flex items-start justify-between gap-3 mb-3">
           <h3 className="text-lg font-semibold">{problem.title}</h3>
@@ -98,7 +98,7 @@ export default function StriverSheet() {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <div className="sticky top-14 z-40 bg-background/95 backdrop-blur border-b border-border">
+      <div className="sticky top-14 z-40 bg-background/70 backdrop-blur-xl border-b border-border/40">
         <div className="container px-4 py-3">
           <h1 className="text-lg font-semibold mb-2">Striver's SDE Sheet</h1>
           <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
@@ -107,13 +107,13 @@ export default function StriverSheet() {
                 key={i}
                 onClick={() => scrollToTopic(i)}
                 className={cn(
-                  'px-3 py-1.5 text-xs rounded-full border whitespace-nowrap transition-all shrink-0',
+                  'px-3 py-1.5 text-xs rounded-full border whitespace-nowrap transition-all shrink-0 backdrop-blur-md',
                   activeTopic === i
-                    ? 'bg-primary text-primary-foreground border-primary'
-                    : 'bg-secondary text-secondary-foreground border-border hover:border-primary/50'
+                    ? 'bg-primary/90 text-primary-foreground border-primary/60 shadow-md shadow-primary/20'
+                    : 'bg-secondary/50 text-secondary-foreground border-border/40 hover:bg-secondary/70 hover:border-primary/30'
                 )}
               >
-                Day {t.day}: {t.name} ({t.problems.length})
+                {t.name} ({t.problems.length})
               </button>
             ))}
           </div>
@@ -128,7 +128,6 @@ export default function StriverSheet() {
             className="mb-12 scroll-mt-36"
           >
             <div className="flex items-center gap-3 mb-4">
-              <span className="text-sm font-mono text-muted-foreground">Day {t.day}</span>
               <h2 className="text-xl font-bold">{t.name}</h2>
               <span className="text-sm text-muted-foreground">({t.problems.length} problems)</span>
             </div>
