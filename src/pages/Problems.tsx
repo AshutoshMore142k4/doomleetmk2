@@ -40,7 +40,7 @@ export default function Problems() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       <Header />
       
       {/* Sticky Controls */}

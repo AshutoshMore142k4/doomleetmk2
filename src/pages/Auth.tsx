@@ -71,7 +71,7 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden">
       <RetroGrid angle={65} cellSize={50} opacity={0.3} darkLineColor="hsl(270 70% 55% / 0.08)" />
       
       <div className="w-full max-w-sm relative z-10">
