@@ -44,7 +44,7 @@ export default function Index() {
               transition={{ duration: 0.5 }}
               className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs text-muted-foreground backdrop-blur-sm hover:border-primary/40 hover:bg-primary/10 transition-colors"
             >
-              <Sparkles className="h-3.5 w-3.5 text-primary" />
+              
               <span>Backed by</span>
               <span className="font-semibold text-primary">11startups.tech</span>
             </motion.a>
