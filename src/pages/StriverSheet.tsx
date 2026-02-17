@@ -12,8 +12,12 @@ function StriverProblemCard({ problem }: { problem: import('@/lib/strivers-sde-d
   const [showHints, setShowHints] = useState(false);
 
   return (
-    <div className="bg-card/40 backdrop-blur-xl border border-border/40 rounded-2xl overflow-hidden shadow-lg ring-1 ring-foreground/[0.03]">
-      <div className="p-5">
+    <div className="relative bg-primary/[0.04] backdrop-blur-2xl border border-primary/15 rounded-2xl overflow-hidden shadow-lg shadow-primary/5 ring-1 ring-primary/[0.08] transition-all duration-300 hover:border-primary/25 hover:shadow-primary/10 hover:bg-primary/[0.06]">
+      {/* Subtle inner glow */}
+      <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/[0.06] via-transparent to-primary/[0.03] pointer-events-none" />
+      <div className="absolute inset-[1px] rounded-2xl border border-primary/[0.05] pointer-events-none" />
+      
+      <div className="relative p-5">
         <div className="flex items-start justify-between gap-3 mb-3">
           <h3 className="text-lg font-semibold">{problem.title}</h3>
           <DifficultyBadge difficulty={problem.difficulty} />
@@ -63,7 +67,7 @@ function StriverProblemCard({ problem }: { problem: import('@/lib/strivers-sde-d
         )}
 
         {/* Code */}
-        <div className="border-t border-border pt-3">
+        <div className="border-t border-primary/10 pt-3">
           <button
             onClick={() => setShowCode(!showCode)}
             className="flex items-center gap-2 text-sm text-primary hover:underline"
