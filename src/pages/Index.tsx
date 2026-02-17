@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Header } from '@/components/Header';
-import { Code2, CheckCircle2, BookOpen, Zap, ArrowRight } from 'lucide-react';
+import Hero from '@/components/ui/neural-network-hero';
+import { CheckCircle2, BookOpen, Zap, ArrowRight } from 'lucide-react';
 import { problemsData, categories } from '@/lib/problems-data';
 import { useMemo } from 'react';
 
@@ -18,34 +19,17 @@ export default function Index() {
       <Header />
 
       {/* Hero Section */}
-      <section className="border-b border-border">
-        <div className="container px-4 py-16 md:py-24">
-          <div className="max-w-2xl mx-auto text-center">
-            <div className="flex justify-center mb-6">
-              <div className="flex h-16 w-16 items-center justify-center rounded bg-primary">
-                <Code2 className="h-9 w-9 text-primary-foreground" />
-              </div>
-            </div>
-            <h1 className="text-3xl md:text-4xl font-semibold tracking-tight mb-4">
-              Master Coding Interviews with NeetCode 150
-            </h1>
-            <p className="text-lg text-muted-foreground mb-8">
-              A curated collection of the most important LeetCode problems, organized by pattern and difficulty. Each problem includes detailed explanations, approaches, and solutions.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Button asChild size="lg" className="gap-2">
-                <Link to="/problems">
-                  Start Practicing
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-              </Button>
-              <Button asChild variant="secondary" size="lg">
-                <Link to="/auth">Create Account</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
+      <Hero
+        title="Master Coding Interviews with NeetCode 150"
+        description="A curated collection of the most important LeetCode problems, organized by pattern and difficulty. Each problem includes detailed explanations, approaches, and C++ solutions."
+        badgeLabel="New"
+        badgeText="NeetCode 150"
+        ctaButtons={[
+          { text: "Start Practicing", href: "/problems", primary: true },
+          { text: "Create Account", href: "/auth" }
+        ]}
+        microDetails={[`${stats.total} Problems`, `${stats.categories} Categories`, "C++ Solutions"]}
+      />
 
       {/* Stats Section */}
       <section className="border-b border-border">
