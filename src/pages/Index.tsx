@@ -1,12 +1,14 @@
 import { Link } from 'react-router-dom';
 import { Header } from '@/components/Header';
-import { HeroSection } from '@/components/ui/hero-section-dark';
+import { RetroGrid } from '@/components/ui/hero-section-dark';
 import { NeonCard } from '@/components/ui/neon-card';
 import { NeonButton } from '@/components/ui/neon-button';
-import { CheckCircle2, BookOpen, Zap, ArrowRight, Layers, Brain } from 'lucide-react';
+import { CheckCircle2, BookOpen, Zap, ArrowRight, Layers, Brain, Code2, Terminal, Sparkles } from 'lucide-react';
 import { problemsData, categories } from '@/lib/problems-data';
 import { mergedStriverTopics } from '@/lib/strivers-sde-data';
 import { useMemo } from 'react';
+import { motion } from 'motion/react';
+
 
 export default function Index() {
   const stats = useMemo(() => {
@@ -22,24 +24,115 @@ export default function Index() {
       <Header />
 
       {/* Hero Section */}
-      <HeroSection
-        title="DSA Interview Prep"
-        subtitle={{
-          regular: "Master coding interviews with ",
-          gradient: "NeetCode 150 & Striver's SDE Sheet",
-        }}
-        description="A curated collection of the most important LeetCode problems, organized by pattern and difficulty. Each problem includes detailed C++ solutions, approaches, and complexity analysis."
-        ctaText="Start Practicing"
-        ctaHref="/problems"
-        secondaryCtaText="Striver's Sheet"
-        secondaryCtaHref="/striver"
-        gridOptions={{
-          angle: 65,
-          opacity: 0.3,
-          cellSize: 50,
-          darkLineColor: "hsl(270 70% 55% / 0.08)",
-        }}
-      />
+      <section className="relative overflow-hidden">
+        <RetroGrid
+          angle={65}
+          cellSize={50}
+          opacity={0.3}
+          darkLineColor="hsl(270 70% 55% / 0.08)"
+        />
+
+        <div className="relative z-10 container px-4 pt-24 pb-20 md:pt-36 md:pb-28">
+          <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
+            {/* Backed by badge */}
+            <motion.a
+              href="https://11startups.tech"
+              target="_blank"
+              rel="noopener noreferrer"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs text-muted-foreground backdrop-blur-sm hover:border-primary/40 hover:bg-primary/10 transition-colors"
+            >
+              <Sparkles className="h-3.5 w-3.5 text-primary" />
+              <span>Backed by</span>
+              <span className="font-semibold text-primary">11startups.tech</span>
+            </motion.a>
+
+            {/* Floating code icons */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="mb-8 flex items-center gap-3"
+            >
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 backdrop-blur-sm">
+                <Terminal className="h-7 w-7 text-primary" />
+              </div>
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-border/40 bg-card/60 backdrop-blur-sm">
+                <Code2 className="h-5 w-5 text-muted-foreground" />
+              </div>
+            </motion.div>
+
+            {/* Main heading */}
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="mb-6 text-4xl font-bold tracking-tight sm:text-6xl md:text-7xl leading-[1.1]"
+            >
+              Crack the code.
+              <br />
+              <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/50 bg-clip-text text-transparent">
+                Land the job.
+              </span>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="mb-4 max-w-2xl text-base text-muted-foreground sm:text-lg leading-relaxed"
+            >
+              NeetCode 150 + Striver's SDE Sheet — {stats.total + stats.striverTotal} problems with C++ solutions, organized by pattern and difficulty.
+            </motion.p>
+
+            {/* Quick stats inline */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.35 }}
+              className="mb-10 flex items-center gap-4 text-sm text-muted-foreground"
+            >
+              <span className="flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-[hsl(var(--easy))]" />
+                {stats.easy} Easy
+              </span>
+              <span className="h-3 w-px bg-border" />
+              <span className="flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-[hsl(var(--medium))]" />
+                {stats.medium} Medium
+              </span>
+              <span className="h-3 w-px bg-border" />
+              <span className="flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-[hsl(var(--hard))]" />
+                {stats.hard} Hard
+              </span>
+            </motion.div>
+
+            {/* CTA buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="flex flex-col gap-3 sm:flex-row"
+            >
+              <Link to="/problems">
+                <NeonButton variant="solid" size="lg" className="gap-2 shadow-lg shadow-primary/25">
+                  Start NeetCode 150
+                  <ArrowRight className="h-4 w-4" />
+                </NeonButton>
+              </Link>
+              <Link to="/striver">
+                <NeonButton size="lg" className="gap-2">
+                  <Brain className="h-4 w-4" />
+                  Striver's Sheet
+                </NeonButton>
+              </Link>
+            </motion.div>
+          </div>
+        </div>
+      </section>
 
       {/* Stats Section */}
       <section className="border-b border-border/40 py-16">
