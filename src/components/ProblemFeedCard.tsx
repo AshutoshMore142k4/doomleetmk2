@@ -79,7 +79,7 @@ export function ProblemFeedCard({ problem }: ProblemFeedCardProps) {
 
   return (
     <div className="w-full max-w-2xl mx-auto">
-      <div className="relative bg-card border border-border rounded overflow-hidden">
+      <div className="relative bg-card/40 backdrop-blur-xl border border-border/40 rounded-2xl overflow-hidden shadow-lg ring-1 ring-foreground/[0.03]">
         {/* Main Content */}
         <div className="p-6 pr-14">
           {/* Title */}
