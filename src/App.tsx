@@ -4,7 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
-import { BeamsBackground } from "@/components/ui/beams-background";
+
 import Index from "./pages/Index";
 import Problems from "./pages/Problems";
 import StriverSheet from "./pages/StriverSheet";
@@ -19,7 +19,7 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BeamsBackground intensity="subtle">
+        <div className="min-h-screen bg-background">
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
@@ -29,7 +29,7 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
-        </BeamsBackground>
+        </div>
       </TooltipProvider>
     </AuthProvider>
   </QueryClientProvider>
