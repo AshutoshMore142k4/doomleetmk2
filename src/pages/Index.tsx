@@ -49,17 +49,6 @@ export default function Index() {
               <span className="font-semibold text-primary">11startups.tech</span>
             </motion.a>
 
-            {/* Floating code icons */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="mb-8 flex items-center gap-3"
-            >
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 backdrop-blur-sm">
-                <Terminal className="h-7 w-7 text-primary" />
-              </div>
-            </motion.div>
 
             {/* Main heading */}
             <motion.h1
