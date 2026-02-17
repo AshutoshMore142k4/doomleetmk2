@@ -76,6 +76,7 @@ export function ProblemFeedCard({ problem }: ProblemFeedCardProps) {
 
   const algorithmSteps = parseAlgorithmSteps(problem.approach);
   const keyInsights = generateInsights(problem);
+  const functionName = problem.solutionCode.match(/function\s+(\w+)/)?.[1] || 'solution';
 
   return (
     <div className="w-full max-w-2xl mx-auto">
@@ -142,7 +143,7 @@ export function ProblemFeedCard({ problem }: ProblemFeedCardProps) {
               className="flex items-center gap-2 text-sm text-primary hover:underline mb-3"
             >
               <Code2 className="h-4 w-4" />
-              {showCode ? 'Hide Solution Code' : 'View Solution Code'}
+              {showCode ? `Hide ${functionName}()` : `View ${functionName}()`}
               {showCode ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
             </button>
             
