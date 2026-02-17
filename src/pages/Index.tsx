@@ -46,7 +46,7 @@ export default function Index() {
           angle: 65,
           opacity: 0.3,
           cellSize: 50,
-          darkLineColor: "hsl(142 71% 45% / 0.08)",
+          darkLineColor: "hsl(270 70% 55% / 0.08)",
         }}
       />
 
