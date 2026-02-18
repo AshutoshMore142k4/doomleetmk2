@@ -76,7 +76,7 @@ export function ProblemFeedCard({ problem }: ProblemFeedCardProps) {
 
   const algorithmSteps = parseAlgorithmSteps(problem.approach);
   const keyInsights = generateInsights(problem);
-  const functionName = problem.solutionCode.match(/function\s+(\w+)/)?.[1] || 'solution';
+  const functionName = problem.solutionCode.match(/(?:int|void|bool|string|double|vector|ListNode|TreeNode|Node|long long|float|char|unsigned|auto|pair)\s*[<\[\]&*\s,\w>]*\s+(\w+)\s*\(/)?.[1] || problem.solutionCode.match(/class\s+(\w+)/)?.[1] || 'solution';
 
   return (
     <div className="w-full max-w-2xl mx-auto">
