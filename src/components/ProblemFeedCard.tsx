@@ -143,8 +143,7 @@ export function ProblemFeedCard({ problem }: ProblemFeedCardProps) {
               className="flex items-center gap-2 text-sm text-primary hover:underline mb-3"
             >
               <Code2 className="h-4 w-4" />
-              {showCode ? `Hide ${functionName}()` : `View ${functionName}()`}
-              {showCode ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+              {showCode ? 'Hide' : 'View'}
             </button>
             
             {showCode && (
