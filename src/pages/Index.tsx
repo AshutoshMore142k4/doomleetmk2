@@ -12,9 +12,9 @@ import { motion } from 'motion/react';
 
 export default function Index() {
   const stats = useMemo(() => {
-    const easy = problemsData.filter(p => p.difficulty === 'Easy').length;
-    const medium = problemsData.filter(p => p.difficulty === 'Medium').length;
-    const hard = problemsData.filter(p => p.difficulty === 'Hard').length;
+    const easy = problemsData.filter((p) => p.difficulty === 'Easy').length;
+    const medium = problemsData.filter((p) => p.difficulty === 'Medium').length;
+    const hard = problemsData.filter((p) => p.difficulty === 'Hard').length;
     const striverTotal = mergedStriverTopics.reduce((acc, t) => acc + t.problems.length, 0);
     return { easy, medium, hard, total: problemsData.length, categories: categories.length, striverTotal };
   }, []);
@@ -29,8 +29,8 @@ export default function Index() {
           angle={65}
           cellSize={50}
           opacity={0.3}
-          darkLineColor="hsl(270 70% 55% / 0.08)"
-        />
+          darkLineColor="hsl(270 70% 55% / 0.08)" />
+
 
         <div className="relative z-10 container px-4 pt-24 pb-20 md:pt-36 md:pb-28">
           <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
@@ -42,8 +42,8 @@ export default function Index() {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs text-muted-foreground backdrop-blur-sm hover:border-primary/40 hover:bg-primary/10 transition-colors"
-            >
+              className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs text-muted-foreground backdrop-blur-sm hover:border-primary/40 hover:bg-primary/10 transition-colors">
+
               
               <span>Backed by</span>
               <span className="font-semibold text-primary">11startups.tech</span>
@@ -55,8 +55,8 @@ export default function Index() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="mb-6 text-4xl font-bold tracking-tight sm:text-6xl md:text-7xl leading-[1.1]"
-            >
+              className="mb-6 text-4xl font-bold tracking-tight sm:text-6xl md:text-7xl leading-[1.1]">
+
               Crack the code.
               <br />
               <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/50 bg-clip-text text-transparent">
@@ -68,8 +68,8 @@ export default function Index() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="mb-4 max-w-2xl text-base text-muted-foreground sm:text-lg leading-relaxed"
-            >
+              className="mb-4 max-w-2xl text-base text-muted-foreground sm:text-lg leading-relaxed">
+
               NeetCode 150 + Striver's SDE Sheet — {stats.total + stats.striverTotal} problems with C++ solutions, organized by pattern and difficulty.
             </motion.p>
 
@@ -78,12 +78,12 @@ export default function Index() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.35 }}
-              className="mb-10 flex items-center gap-4 text-sm text-muted-foreground"
-            >
-              <span className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-[hsl(var(--easy))]" />
-                {stats.easy} Easy
-              </span>
+              className="mb-10 flex items-center gap-4 text-sm text-muted-foreground">
+
+              
+
+
+
               <span className="h-3 w-px bg-border" />
               <span className="flex items-center gap-1.5">
                 <span className="h-2 w-2 rounded-full bg-[hsl(var(--medium))]" />
@@ -101,8 +101,8 @@ export default function Index() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="flex flex-col gap-3 sm:flex-row"
-            >
+              className="flex flex-col gap-3 sm:flex-row">
+
               <Link to="/problems">
                 <NeonButton variant="solid" size="lg" className="gap-2 shadow-lg shadow-primary/25">
                   Start NeetCode 150
@@ -124,16 +124,16 @@ export default function Index() {
         <div className="container px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { value: stats.total, label: 'NeetCode Problems' },
-              { value: stats.striverTotal, label: 'Striver Problems' },
-              { value: stats.categories, label: 'Topic Patterns' },
-              { value: `${stats.easy + stats.medium + stats.hard}+`, label: 'C++ Solutions' },
-            ].map((stat, i) => (
-              <NeonCard key={i} className="p-6 text-center">
+            { value: stats.total, label: 'NeetCode Problems' },
+            { value: stats.striverTotal, label: 'Striver Problems' },
+            { value: stats.categories, label: 'Topic Patterns' },
+            { value: `${stats.easy + stats.medium + stats.hard}+`, label: 'C++ Solutions' }].
+            map((stat, i) =>
+            <NeonCard key={i} className="p-6 text-center">
                 <p className="text-3xl font-bold text-primary">{stat.value}</p>
                 <p className="text-sm text-muted-foreground mt-1">{stat.label}</p>
               </NeonCard>
-            ))}
+            )}
           </div>
         </div>
       </section>
@@ -184,11 +184,11 @@ export default function Index() {
         <div className="container px-4">
           <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             {[
-              { icon: BookOpen, title: 'Structured Learning', desc: `Problems organized by ${stats.categories} key patterns. Master each pattern systematically.` },
-              { icon: Zap, title: 'Detailed C++ Solutions', desc: 'Each problem includes syntax-highlighted C++ code with approach explanations and complexity analysis.' },
-              { icon: CheckCircle2, title: 'Track Progress', desc: 'Sign in to track your progress, mark problems as completed, and stay motivated.' },
-            ].map((feature, i) => (
-              <NeonCard key={i} className="p-6 text-center">
+            { icon: BookOpen, title: 'Structured Learning', desc: `Problems organized by ${stats.categories} key patterns. Master each pattern systematically.` },
+            { icon: Zap, title: 'Detailed C++ Solutions', desc: 'Each problem includes syntax-highlighted C++ code with approach explanations and complexity analysis.' },
+            { icon: CheckCircle2, title: 'Track Progress', desc: 'Sign in to track your progress, mark problems as completed, and stay motivated.' }].
+            map((feature, i) =>
+            <NeonCard key={i} className="p-6 text-center">
                 <div className="flex justify-center mb-4">
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
                     <feature.icon className="h-6 w-6 text-primary" />
@@ -197,7 +197,7 @@ export default function Index() {
                 <h3 className="font-semibold mb-2">{feature.title}</h3>
                 <p className="text-sm text-muted-foreground">{feature.desc}</p>
               </NeonCard>
-            ))}
+            )}
           </div>
         </div>
       </section>
@@ -210,11 +210,11 @@ export default function Index() {
             From fundamental data structures to advanced algorithms
           </p>
           <div className="flex flex-wrap justify-center gap-2 max-w-3xl mx-auto">
-            {categories.map((category) => (
-              <NeonButton key={category} size="sm" variant="ghost" neon={false} className="text-sm rounded-full border border-primary/15 bg-primary/[0.04] text-foreground hover:border-primary/30 hover:bg-primary/[0.08]">
+            {categories.map((category) =>
+            <NeonButton key={category} size="sm" variant="ghost" neon={false} className="text-sm rounded-full border border-primary/15 bg-primary/[0.04] text-foreground hover:border-primary/30 hover:bg-primary/[0.08]">
                 {category}
               </NeonButton>
-            ))}
+            )}
           </div>
         </div>
       </section>
@@ -252,6 +252,6 @@ export default function Index() {
           </p>
         </div>
       </footer>
-    </div>
-  );
+    </div>);
+
 }
