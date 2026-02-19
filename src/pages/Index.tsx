@@ -85,15 +85,15 @@ export default function Index() {
                 {stats.easy} Easy
               </span>
               <span className="h-3 w-px bg-border" />
-              <span className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-[hsl(var(--medium))]" />
-                {stats.medium} Medium
-              </span>
-              <span className="h-3 w-px bg-border" />
               
 
 
 
+              <span className="h-3 w-px bg-border" />
+              <span className="flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-[hsl(var(--hard))]" />
+                {stats.hard} Hard
+              </span>
             </motion.div>
 
             {/* CTA buttons */}
