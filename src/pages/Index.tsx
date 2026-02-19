@@ -73,28 +73,7 @@ export default function Index() {
               NeetCode 150 + Striver's SDE Sheet — {stats.total + stats.striverTotal} problems with C++ solutions, organized by pattern and difficulty.
             </motion.p>
 
-            {/* Quick stats inline */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.35 }}
-              className="mb-10 flex items-center gap-4 text-sm text-muted-foreground">
-
-              <span className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-[hsl(var(--easy))]" />
-                {stats.easy} Easy
-              </span>
-              <span className="h-3 w-px bg-border" />
-              
-
-
-
-              <span className="h-3 w-px bg-border" />
-              <span className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-[hsl(var(--hard))]" />
-                {stats.hard} Hard
-              </span>
-            </motion.div>
+            <div className="mb-10" />
 
             {/* CTA buttons */}
             <motion.div
