@@ -1,28 +1,28 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
-type Theme = 'mono' | 'purple';
+type Theme = 'dark' | 'light';
 
 interface ThemeContextType {
   theme: Theme;
   toggleTheme: () => void;
 }
 
-const ThemeContext = createContext<ThemeContextType>({ theme: 'mono', toggleTheme: () => {} });
+const ThemeContext = createContext<ThemeContextType>({ theme: 'dark', toggleTheme: () => {} });
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window !== 'undefined') {
-      return (localStorage.getItem('doomleet-theme') as Theme) || 'mono';
+      return (localStorage.getItem('doomleet-theme') as Theme) || 'dark';
     }
-    return 'mono';
+    return 'dark';
   });
 
   useEffect(() => {
     localStorage.setItem('doomleet-theme', theme);
-    document.documentElement.classList.toggle('theme-purple', theme === 'purple');
+    document.documentElement.classList.toggle('theme-light', theme === 'light');
   }, [theme]);
 
-  const toggleTheme = () => setTheme((t) => (t === 'mono' ? 'purple' : 'mono'));
+  const toggleTheme = () => setTheme((t) => (t === 'dark' ? 'light' : 'dark'));
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
