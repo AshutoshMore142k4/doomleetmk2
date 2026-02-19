@@ -2,7 +2,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useTheme } from '@/hooks/useTheme';
 import { Button } from '@/components/ui/button';
 import { Link, useNavigate } from 'react-router-dom';
-import { LogOut, User, Code2, Palette } from 'lucide-react';
+import { LogOut, User, Code2, Sun, Moon } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -47,9 +47,9 @@ export function Header() {
           <button
             onClick={toggleTheme}
             className="ml-1 flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:text-foreground hover:bg-primary/[0.06] transition-all"
-            title={theme === 'mono' ? 'Switch to purple theme' : 'Switch to mono theme'}
+            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
           >
-            <Palette className="h-4 w-4" />
+            {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </button>
           
           {user ? (
