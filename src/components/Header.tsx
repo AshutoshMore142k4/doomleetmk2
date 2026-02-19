@@ -1,7 +1,8 @@
 import { useAuth } from '@/hooks/useAuth';
+import { useTheme } from '@/hooks/useTheme';
 import { Button } from '@/components/ui/button';
 import { Link, useNavigate } from 'react-router-dom';
-import { LogOut, User, Code2 } from 'lucide-react';
+import { LogOut, User, Code2, Palette } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,6 +12,7 @@ import {
 
 export function Header() {
   const { user, signOut } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -41,11 +43,19 @@ export function Header() {
           >
             Striver
           </Link>
+
+          <button
+            onClick={toggleTheme}
+            className="ml-1 flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:text-foreground hover:bg-primary/[0.06] transition-all"
+            title={theme === 'mono' ? 'Switch to purple theme' : 'Switch to mono theme'}
+          >
+            <Palette className="h-4 w-4" />
+          </button>
           
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="gap-2 ml-2 rounded-lg hover:bg-primary/[0.06]">
+                <Button variant="ghost" size="sm" className="gap-2 ml-1 rounded-lg hover:bg-primary/[0.06]">
                   <User className="h-4 w-4" />
                   <span className="hidden sm:inline">{user.email?.split('@')[0]}</span>
                 </Button>
@@ -58,7 +68,7 @@ export function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button asChild size="sm" className="ml-2 rounded-lg shadow-lg shadow-primary/20">
+            <Button asChild size="sm" className="ml-1 rounded-lg shadow-lg shadow-primary/20">
               <Link to="/auth">Sign In</Link>
             </Button>
           )}
