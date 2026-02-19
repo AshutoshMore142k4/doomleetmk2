@@ -3,6 +3,7 @@ import { Check, Copy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Highlight, themes } from 'prism-react-renderer';
+import { useTheme } from '@/hooks/useTheme';
 
 interface CodeBlockProps {
   code: string;
@@ -12,6 +13,8 @@ interface CodeBlockProps {
 
 export function CodeBlock({ code, language = 'cpp', className }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
+  const { theme } = useTheme();
+  const codeTheme = theme === 'dark' ? themes.vsDark : themes.vsLight;
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(code);
@@ -33,7 +36,7 @@ export function CodeBlock({ code, language = 'cpp', className }: CodeBlockProps)
           <Copy className="h-4 w-4" />
         )}
       </Button>
-      <Highlight theme={themes.vsDark} code={code.trim()} language={language}>
+      <Highlight theme={codeTheme} code={code.trim()} language={language}>
         {({ className: hlClassName, style, tokens, getLineProps, getTokenProps }) => (
           <pre
             className={cn(hlClassName, 'overflow-x-auto rounded border border-border p-4 text-sm')}
