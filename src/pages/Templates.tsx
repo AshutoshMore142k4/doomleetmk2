@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { Header } from '@/components/Header';
 import { CodeBlock } from '@/components/CodeBlock';
 import { templatesData } from '@/lib/templates-data';
-import { ChevronDown, ChevronUp, Lightbulb, Zap, BookOpen } from 'lucide-react';
+import { ChevronDown, ChevronUp, Lightbulb, Zap, BookOpen, Clock, HardDrive } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export default function Templates() {
@@ -67,16 +67,40 @@ export default function Templates() {
                         onClick={() => toggleTemplate(key)}
                         className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-primary/[0.04] transition-colors"
                       >
-                        <span className="font-medium text-sm">{template.title}</span>
+                        <div className="flex items-center gap-3 min-w-0">
+                          <span className="font-medium text-sm">{template.title}</span>
+                          <div className="hidden sm:flex items-center gap-2 text-xs text-muted-foreground">
+                            <span className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-primary/[0.06] border border-primary/10">
+                              <Clock className="h-3 w-3 text-primary" />
+                              {template.timeComplexity}
+                            </span>
+                            <span className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-secondary/50 border border-border">
+                              <HardDrive className="h-3 w-3" />
+                              {template.spaceComplexity}
+                            </span>
+                          </div>
+                        </div>
                         {isExpanded ? (
-                          <ChevronUp className="h-4 w-4 text-muted-foreground" />
+                          <ChevronUp className="h-4 w-4 text-muted-foreground shrink-0" />
                         ) : (
-                          <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                          <ChevronDown className="h-4 w-4 text-muted-foreground shrink-0" />
                         )}
                       </button>
 
                       {isExpanded && (
                         <div className="px-4 pb-4 space-y-4">
+                          {/* Complexity badges on mobile */}
+                          <div className="flex sm:hidden items-center gap-2 text-xs text-muted-foreground">
+                            <span className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-primary/[0.06] border border-primary/10">
+                              <Clock className="h-3 w-3 text-primary" />
+                              {template.timeComplexity}
+                            </span>
+                            <span className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-secondary/50 border border-border">
+                              <HardDrive className="h-3 w-3" />
+                              {template.spaceComplexity}
+                            </span>
+                          </div>
+
                           <CodeBlock code={template.code} language="cpp" />
 
                           {/* When to Use */}
