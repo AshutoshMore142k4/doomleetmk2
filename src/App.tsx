@@ -10,6 +10,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import Problems from "./pages/Problems";
 import StriverSheet from "./pages/StriverSheet";
+import Templates from "./pages/Templates";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
@@ -28,6 +29,7 @@ const App = () => (
                 <Route path="/" element={<Index />} />
                 <Route path="/problems" element={<Problems />} />
                 <Route path="/striver" element={<ProtectedRoute><StriverSheet /></ProtectedRoute>} />
+                <Route path="/templates" element={<Templates />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
