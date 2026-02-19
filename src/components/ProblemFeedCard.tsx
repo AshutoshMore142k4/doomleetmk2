@@ -3,7 +3,7 @@ import { DifficultyBadge } from './DifficultyBadge';
 import { CodeBlock } from './CodeBlock';
 import { Problem } from '@/lib/problems-data';
 import { cn } from '@/lib/utils';
-import { Star, Bookmark, Code2, ChevronDown, ChevronUp } from 'lucide-react';
+import { Star, Bookmark, Code2, ChevronDown, ChevronUp, Lightbulb, Eye } from 'lucide-react';
 
 interface ProblemFeedCardProps {
   problem: Problem;
@@ -71,9 +71,16 @@ function generateInsights(problem: Problem): string[] {
 
 export function ProblemFeedCard({ problem }: ProblemFeedCardProps) {
   const [showCode, setShowCode] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [isStarred, setIsStarred] = useState(false);
+  const [revealedHints, setRevealedHints] = useState<number[]>([]);
 
+  const toggleHint = (index: number) => {
+    setRevealedHints(prev =>
+      prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]
+    );
+  };
   const algorithmSteps = parseAlgorithmSteps(problem.approach);
   const keyInsights = generateInsights(problem);
   const functionName = problem.solutionCode.match(/(?:int|void|bool|string|double|vector|ListNode|TreeNode|Node|long long|float|char|unsigned|auto|pair)\s*[<\[\]&*\s,\w>]*\s+(\w+)\s*\(/)?.[1] || problem.solutionCode.match(/class\s+(\w+)/)?.[1] || 'solution';
@@ -151,6 +158,69 @@ export function ProblemFeedCard({ problem }: ProblemFeedCardProps) {
             )}
           </div>
 
+          {/* Expandable Question Details */}
+          {showDetails && (
+            <div className="border-t border-border pt-4 mb-6 space-y-4">
+              {/* Test Cases */}
+              <div>
+                <h4 className="text-sm font-semibold mb-2">Test Cases</h4>
+                <div className="space-y-2">
+                  {problem.testCases.slice(0, 3).map((tc, i) => (
+                    <div key={i} className="bg-secondary/50 rounded-lg p-3 text-xs font-mono space-y-1">
+                      <div><span className="text-muted-foreground">Input: </span><span className="text-foreground">{tc.input}</span></div>
+                      <div><span className="text-muted-foreground">Output: </span><span className="text-primary">{tc.output}</span></div>
+                      {tc.explanation && (
+                        <div className="text-muted-foreground italic">↳ {tc.explanation}</div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Constraints */}
+              <div>
+                <h4 className="text-sm font-semibold mb-2">Constraints</h4>
+                <div className="flex items-center gap-1 text-xs">
+                  <span className="text-muted-foreground">Time:</span>
+                  <span className="text-primary font-mono">{problem.timeComplexity}</span>
+                  <span className="text-muted-foreground mx-2">|</span>
+                  <span className="text-muted-foreground">Space:</span>
+                  <span className="text-primary font-mono">{problem.spaceComplexity}</span>
+                </div>
+              </div>
+
+              {/* Hints - Tap to Reveal */}
+              {problem.hints.length > 0 && (
+                <div>
+                  <h4 className="text-sm font-semibold mb-2 flex items-center gap-1.5">
+                    <Lightbulb className="h-3.5 w-3.5 text-primary" />
+                    Hints
+                  </h4>
+                  <div className="space-y-2">
+                    {problem.hints.slice(0, 2).map((hint, i) => (
+                      <button
+                        key={i}
+                        onClick={() => toggleHint(i)}
+                        className="w-full text-left"
+                      >
+                        {revealedHints.includes(i) ? (
+                          <div className="bg-primary/10 border border-primary/20 rounded-lg p-3 text-sm text-foreground">
+                            {hint}
+                          </div>
+                        ) : (
+                          <div className="bg-secondary/50 border border-border rounded-lg p-3 text-sm text-muted-foreground flex items-center gap-2">
+                            <Eye className="h-3.5 w-3.5" />
+                            Tap to reveal Hint {i + 1}
+                          </div>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Footer Badges */}
           <div className="flex items-center gap-2 mt-6">
             <DifficultyBadge difficulty={problem.difficulty} />
@@ -174,6 +244,18 @@ export function ProblemFeedCard({ problem }: ProblemFeedCardProps) {
             <Star className={cn("h-5 w-5", isStarred && "fill-current")} />
           </button>
           
+          <button
+            onClick={() => setShowDetails(!showDetails)}
+            className={cn(
+              "p-2 rounded-full transition-colors",
+              showDetails 
+                ? "bg-primary/20 text-primary" 
+                : "bg-secondary text-muted-foreground hover:text-foreground"
+            )}
+          >
+            {showDetails ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+          </button>
+
           <button
             onClick={() => setIsBookmarked(!isBookmarked)}
             className={cn(
