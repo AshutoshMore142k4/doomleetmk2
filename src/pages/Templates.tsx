@@ -1,0 +1,125 @@
+import { useState, useRef } from 'react';
+import { Header } from '@/components/Header';
+import { CodeBlock } from '@/components/CodeBlock';
+import { templatesData } from '@/lib/templates-data';
+import { ChevronDown, ChevronUp, Lightbulb, Zap, BookOpen } from 'lucide-react';
+import { cn } from '@/lib/utils';
+
+export default function Templates() {
+  const [expandedTemplates, setExpandedTemplates] = useState<Record<string, boolean>>({});
+  const categoryRefs = useRef<Record<string, HTMLDivElement | null>>({});
+
+  const toggleTemplate = (key: string) => {
+    setExpandedTemplates(prev => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const scrollToCategory = (slug: string) => {
+    categoryRefs.current[slug]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Header />
+
+      <div className="container max-w-4xl px-4 py-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold tracking-tight mb-2">C++ Templates</h1>
+          <p className="text-muted-foreground">Battle-tested patterns for LeetCode. Tap any template to expand code, tips & when to use.</p>
+        </div>
+
+        {/* Category pills */}
+        <div className="flex flex-wrap gap-2 mb-8 sticky top-14 z-40 bg-background/80 backdrop-blur-xl py-3 -mx-4 px-4">
+          {templatesData.map(cat => (
+            <button
+              key={cat.slug}
+              onClick={() => scrollToCategory(cat.slug)}
+              className="px-3 py-1.5 text-xs font-medium rounded-full border border-border bg-card hover:bg-primary/10 hover:border-primary/30 transition-all text-muted-foreground hover:text-foreground"
+            >
+              {cat.name}
+            </button>
+          ))}
+        </div>
+
+        {/* Categories */}
+        <div className="space-y-10">
+          {templatesData.map(category => (
+            <div
+              key={category.slug}
+              ref={el => { categoryRefs.current[category.slug] = el; }}
+              className="scroll-mt-32"
+            >
+              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                <BookOpen className="h-5 w-5 text-primary" />
+                {category.name}
+              </h2>
+
+              <div className="space-y-3">
+                {category.templates.map((template, tIdx) => {
+                  const key = `${category.slug}-${tIdx}`;
+                  const isExpanded = expandedTemplates[key];
+
+                  return (
+                    <div
+                      key={key}
+                      className="rounded-xl border border-border bg-card/50 overflow-hidden"
+                    >
+                      <button
+                        onClick={() => toggleTemplate(key)}
+                        className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-primary/[0.04] transition-colors"
+                      >
+                        <span className="font-medium text-sm">{template.title}</span>
+                        {isExpanded ? (
+                          <ChevronUp className="h-4 w-4 text-muted-foreground" />
+                        ) : (
+                          <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                        )}
+                      </button>
+
+                      {isExpanded && (
+                        <div className="px-4 pb-4 space-y-4">
+                          <CodeBlock code={template.code} language="cpp" />
+
+                          {/* When to Use */}
+                          <div className="rounded-lg border border-primary/10 bg-primary/[0.03] p-3">
+                            <h4 className="text-xs font-semibold uppercase tracking-wider text-primary mb-2 flex items-center gap-1.5">
+                              <Zap className="h-3.5 w-3.5" />
+                              When to Use
+                            </h4>
+                            <ul className="space-y-1">
+                              {template.whenToUse.map((item, i) => (
+                                <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
+                                  <span className="text-primary mt-1">•</span>
+                                  {item}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          {/* Tips */}
+                          <div className="rounded-lg border border-border bg-secondary/30 p-3">
+                            <h4 className="text-xs font-semibold uppercase tracking-wider text-foreground/70 mb-2 flex items-center gap-1.5">
+                              <Lightbulb className="h-3.5 w-3.5" />
+                              Tips & Tricks
+                            </h4>
+                            <ul className="space-y-1">
+                              {template.tips.map((tip, i) => (
+                                <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
+                                  <span className="text-foreground/50 mt-1">→</span>
+                                  {tip}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}

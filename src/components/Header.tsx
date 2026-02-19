@@ -43,6 +43,12 @@ export function Header() {
           >
             Striver
           </Link>
+          <Link 
+            to="/templates" 
+            className="px-3 py-1.5 text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all"
+          >
+            Templates
+          </Link>
 
           <button
             onClick={toggleTheme}
