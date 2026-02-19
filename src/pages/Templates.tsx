@@ -4,8 +4,11 @@ import { CodeBlock } from '@/components/CodeBlock';
 import { templatesData } from '@/lib/templates-data';
 import { ChevronDown, ChevronUp, Lightbulb, Zap, BookOpen, Clock, HardDrive } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/hooks/useAuth';
+import { SignInOverlay } from '@/components/SignInOverlay';
 
 export default function Templates() {
+  const { user, loading } = useAuth();
   const [expandedTemplates, setExpandedTemplates] = useState<Record<string, boolean>>({});
   const categoryRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
@@ -17,11 +20,14 @@ export default function Templates() {
     categoryRefs.current[slug]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
+  const isLocked = !loading && !user;
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      {isLocked && <SignInOverlay />}
 
-      <div className="container max-w-4xl px-4 py-8">
+      <div className={cn("container max-w-4xl px-4 py-8", isLocked && "blur-sm select-none pointer-events-none")}>
         <div className="mb-8">
           <h1 className="text-3xl font-bold tracking-tight mb-2">C++ Templates</h1>
           <p className="text-muted-foreground">Battle-tested patterns for LeetCode. Tap any template to expand code, tips & when to use.</p>

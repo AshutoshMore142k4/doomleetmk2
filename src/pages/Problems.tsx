@@ -5,6 +5,8 @@ import { problemsData } from '@/lib/problems-data';
 import { Shuffle, Filter, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/hooks/useAuth';
+import { SignInOverlay } from '@/components/SignInOverlay';
 
 type Difficulty = 'Easy' | 'Medium' | 'Hard';
 
@@ -19,6 +21,7 @@ function shuffleArray<T>(array: T[]): T[] {
 }
 
 export default function Problems() {
+  const { user, loading } = useAuth();
   const [shuffledProblems, setShuffledProblems] = useState(() => shuffleArray(problemsData));
   const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty | null>(null);
   const [showFilters, setShowFilters] = useState(false);
@@ -39,9 +42,12 @@ export default function Problems() {
     return { easy, medium, hard, total: problemsData.length };
   }, []);
 
+  const isLocked = !loading && !user;
+
   return (
     <div className="min-h-screen">
       <Header />
+      {isLocked && <SignInOverlay />}
       
       {/* Sticky Controls */}
       <div className="sticky top-14 z-40 bg-background/70 backdrop-blur-2xl border-b border-primary/10">
@@ -147,7 +153,7 @@ export default function Problems() {
       </div>
       
       {/* Feed */}
-      <main className="container px-4 py-6">
+      <main className={cn("container px-4 py-6", isLocked && "blur-sm select-none pointer-events-none")}>
         <div className="space-y-4">
           {filteredProblems.length > 0 ? (
             filteredProblems.map((problem) => (
