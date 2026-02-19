@@ -632,22 +632,20 @@ void postorder(TreeNode* root, vector<int>& result) {
     ],
   },
   {
-    name: "Dynamic Programming",
-    slug: "dynamic-programming",
+    name: "1D DP (Linear)",
+    slug: "dp-1d",
     templates: [
       {
-        title: "1D DP (Fibonacci Pattern)",
+        title: "Fibonacci-style (Climbing Stairs)",
         code: `int climbStairs(int n) {
     if (n <= 2) return n;
-    
-    vector<int> dp(n + 1);
-    dp[1] = 1;
-    dp[2] = 2;
-    
+    int a = 1, b = 2;
     for (int i = 3; i <= n; i++) {
-        dp[i] = dp[i - 1] + dp[i - 2];
+        int c = a + b;
+        a = b;
+        b = c;
     }
-    return dp[n];
+    return b;
 }`,
         whenToUse: [
           "Current state depends on previous 1-2 states",
@@ -655,51 +653,101 @@ void postorder(TreeNode* root, vector<int>& result) {
           "\"How many ways\" or \"minimum cost\" with linear structure",
         ],
         tips: [
-          "Can optimize to O(1) space using two variables",
+          "O(1) space with two rolling variables instead of full array",
           "Always define what dp[i] means FIRST before coding",
           "Check base cases carefully — off-by-one errors are common",
         ],
       },
       {
-        title: "2D DP (Grid Paths)",
+        title: "Kadane's Algorithm (Max Subarray)",
+        code: `int maxSubArray(vector<int>& nums) {
+    long long best = LLONG_MIN, cur = 0;
+    for (int x : nums) {
+        cur = max((long long)x, cur + x);
+        best = max(best, cur);
+    }
+    return (int)best;
+}`,
+        whenToUse: [
+          "Maximum sum contiguous subarray",
+          "\"Best time to buy and sell stock\" (single transaction)",
+          "Any problem reducible to max subarray sum",
+        ],
+        tips: [
+          "cur = max(x, cur + x) → either start fresh or extend",
+          "Works in O(n) time, O(1) space",
+          "For circular subarray: also check totalSum - minSubarraySum",
+        ],
+      },
+    ],
+  },
+  {
+    name: "Grid DP (2D)",
+    slug: "dp-grid",
+    templates: [
+      {
+        title: "Unique Paths",
         code: `int uniquePaths(int m, int n) {
     vector<vector<int>> dp(m, vector<int>(n, 1));
-    
-    for (int i = 1; i < m; i++) {
-        for (int j = 1; j < n; j++) {
+    for (int i = 1; i < m; i++)
+        for (int j = 1; j < n; j++)
             dp[i][j] = dp[i-1][j] + dp[i][j-1];
-        }
-    }
     return dp[m-1][n-1];
 }`,
         whenToUse: [
-          "Grid/matrix path problems",
-          "Edit distance, LCS, LIS in 2D",
-          "\"Minimum path sum\" or \"number of paths\"",
+          "Count paths in grid moving only right/down",
+          "Grid with obstacles — set blocked cells to 0",
+          "\"Number of ways to reach bottom-right\"",
         ],
         tips: [
-          "Initialize first row and column as base cases",
-          "Can often optimize to 1D array (row by row)",
-          "Draw the DP table by hand for small inputs to verify",
+          "First row and column are all 1s (only one way to reach them)",
+          "Can optimize to 1D array processing row by row",
+          "For obstacles: if grid[i][j] is blocked, dp[i][j] = 0",
         ],
       },
       {
-        title: "0/1 Knapsack",
-        code: `int knapsack(vector<int>& weights, vector<int>& values, int capacity) {
-    int n = weights.size();
-    vector<vector<int>> dp(n + 1, vector<int>(capacity + 1, 0));
-    
+        title: "Min Path Sum",
+        code: `int minPathSum(vector<vector<int>>& grid) {
+    int m = grid.size(), n = grid[0].size();
+    vector<vector<int>> dp(m, vector<int>(n, 0));
+    dp[0][0] = grid[0][0];
+    for (int i = 1; i < m; i++) dp[i][0] = dp[i-1][0] + grid[i][0];
+    for (int j = 1; j < n; j++) dp[0][j] = dp[0][j-1] + grid[0][j];
+    for (int i = 1; i < m; i++)
+        for (int j = 1; j < n; j++)
+            dp[i][j] = grid[i][j] + min(dp[i-1][j], dp[i][j-1]);
+    return dp[m-1][n-1];
+}`,
+        whenToUse: [
+          "Minimize cost path through grid",
+          "\"Minimum path sum from top-left to bottom-right\"",
+          "Grid with weighted cells",
+        ],
+        tips: [
+          "Initialize edges carefully — they can only come from one direction",
+          "dp[i][j] = grid[i][j] + min(from above, from left)",
+          "Can do in-place on the grid itself to save space",
+        ],
+      },
+    ],
+  },
+  {
+    name: "Knapsack / Subset DP",
+    slug: "dp-knapsack",
+    templates: [
+      {
+        title: "0/1 Knapsack (2D)",
+        code: `int knapsack01(vector<int>& w, vector<int>& v, int cap) {
+    int n = w.size();
+    vector<vector<int>> dp(n+1, vector<int>(cap+1, 0));
     for (int i = 1; i <= n; i++) {
-        for (int w = 0; w <= capacity; w++) {
-            if (weights[i-1] <= w) {
-                dp[i][w] = max(dp[i-1][w], 
-                              dp[i-1][w - weights[i-1]] + values[i-1]);
-            } else {
-                dp[i][w] = dp[i-1][w];
-            }
+        for (int c = 0; c <= cap; c++) {
+            dp[i][c] = dp[i-1][c];
+            if (w[i-1] <= c)
+                dp[i][c] = max(dp[i][c], dp[i-1][c-w[i-1]] + v[i-1]);
         }
     }
-    return dp[n][capacity];
+    return dp[n][cap];
 }`,
         whenToUse: [
           "\"Pick or skip\" decision for each item",
@@ -709,7 +757,501 @@ void postorder(TreeNode* root, vector<int>& result) {
         tips: [
           "Two choices per item: include or exclude",
           "Can optimize to 1D by iterating capacity in REVERSE",
-          "For unbounded knapsack: iterate capacity forward instead",
+          "dp[i][c] = max(skip item i, take item i)",
+        ],
+      },
+      {
+        title: "Subset Sum (Boolean, Space-Optimized)",
+        code: `bool canPartitionSum(vector<int>& nums, int target) {
+    vector<char> dp(target + 1, 0);
+    dp[0] = 1;
+    for (int x : nums) {
+        for (int s = target; s >= x; s--) {
+            dp[s] = dp[s] || dp[s - x];
+        }
+    }
+    return dp[target];
+}`,
+        whenToUse: [
+          "\"Can we form sum T using a subset?\"",
+          "Partition equal subset sum (target = totalSum / 2)",
+          "Count subsets with given sum (change bool to int)",
+        ],
+        tips: [
+          "Iterate capacity in REVERSE to avoid using same item twice",
+          "O(n × target) time, O(target) space",
+          "For count variant: dp[s] += dp[s - x]",
+        ],
+      },
+      {
+        title: "Unbounded Knapsack (Coin Change)",
+        code: `int coinChange(vector<int>& coins, int amount) {
+    const int INF = 1e9;
+    vector<int> dp(amount + 1, INF);
+    dp[0] = 0;
+    for (int c : coins) {
+        for (int a = c; a <= amount; a++) {
+            dp[a] = min(dp[a], dp[a - c] + 1);
+        }
+    }
+    return dp[amount] >= INF ? -1 : dp[amount];
+}`,
+        whenToUse: [
+          "Unlimited supply of each item (coins, rod cutting)",
+          "\"Minimum coins to make amount\"",
+          "\"Number of ways to make change\" (count variant)",
+        ],
+        tips: [
+          "Iterate capacity FORWARD (allows reusing same item)",
+          "For counting ways: dp[a] += dp[a - c] with dp[0] = 1",
+          "Key difference from 0/1: forward vs reverse inner loop",
+        ],
+      },
+    ],
+  },
+  {
+    name: "Subsequence DP (LIS / LCS)",
+    slug: "dp-subsequence",
+    templates: [
+      {
+        title: "LIS — O(n log n)",
+        code: `int lengthOfLIS(vector<int>& nums) {
+    vector<int> tail;
+    for (int x : nums) {
+        auto it = lower_bound(tail.begin(), tail.end(), x);
+        if (it == tail.end()) tail.push_back(x);
+        else *it = x;
+    }
+    return (int)tail.size();
+}`,
+        whenToUse: [
+          "Longest increasing subsequence",
+          "Russian doll envelopes, longest chain",
+          "Any problem reducible to LIS",
+        ],
+        tips: [
+          "tail[] is NOT the actual LIS — it's the smallest possible tail for each length",
+          "lower_bound for strictly increasing, upper_bound for non-decreasing",
+          "O(n²) DP version: dp[i] = max(dp[j] + 1) for all j < i where nums[j] < nums[i]",
+        ],
+      },
+      {
+        title: "LCS — O(n²)",
+        code: `int longestCommonSubsequence(string a, string b) {
+    int n = a.size(), m = b.size();
+    vector<vector<int>> dp(n+1, vector<int>(m+1, 0));
+    for (int i = 1; i <= n; i++)
+        for (int j = 1; j <= m; j++)
+            dp[i][j] = (a[i-1] == b[j-1])
+                ? dp[i-1][j-1] + 1
+                : max(dp[i-1][j], dp[i][j-1]);
+    return dp[n][m];
+}`,
+        whenToUse: [
+          "Longest common subsequence of two strings",
+          "Edit distance (similar structure)",
+          "Diff algorithms, DNA sequence matching",
+        ],
+        tips: [
+          "If chars match: diagonal + 1. Else: max(left, above)",
+          "To reconstruct LCS: backtrack from dp[n][m]",
+          "Can optimize to O(min(n,m)) space with rolling array",
+        ],
+      },
+    ],
+  },
+  {
+    name: "String Palindrome DP",
+    slug: "dp-palindrome",
+    templates: [
+      {
+        title: "Longest Palindromic Subsequence",
+        code: `int longestPalindromeSubseq(string s) {
+    int n = s.size();
+    vector<vector<int>> dp(n, vector<int>(n, 0));
+    for (int i = n - 1; i >= 0; i--) {
+        dp[i][i] = 1;
+        for (int j = i + 1; j < n; j++) {
+            if (s[i] == s[j]) dp[i][j] = dp[i+1][j-1] + 2;
+            else dp[i][j] = max(dp[i+1][j], dp[i][j-1]);
+        }
+    }
+    return dp[0][n-1];
+}`,
+        whenToUse: [
+          "Longest palindromic subsequence",
+          "Min deletions to make string palindrome = n - LPS",
+          "LPS(s) = LCS(s, reverse(s))",
+        ],
+        tips: [
+          "Fill diagonally or bottom-up (i from n-1 to 0)",
+          "dp[i][j] = length of LPS in s[i..j]",
+          "Base case: every single char is a palindrome of length 1",
+        ],
+      },
+      {
+        title: "Min Cuts for Palindrome Partitioning",
+        code: `int minCut(string s) {
+    int n = s.size();
+    vector<vector<char>> pal(n, vector<char>(n, 0));
+    for (int i = n - 1; i >= 0; i--)
+        for (int j = i; j < n; j++)
+            if (s[i] == s[j] && (j - i <= 2 || pal[i+1][j-1]))
+                pal[i][j] = 1;
+
+    vector<int> dp(n, 1e9);
+    for (int i = 0; i < n; i++) {
+        if (pal[0][i]) dp[i] = 0;
+        else {
+            for (int j = 0; j < i; j++)
+                if (pal[j+1][i])
+                    dp[i] = min(dp[i], dp[j] + 1);
+        }
+    }
+    return dp[n-1];
+}`,
+        whenToUse: [
+          "Minimum cuts to partition into palindromes",
+          "Palindrome partitioning (all partitions → backtracking)",
+          "Problems combining palindrome check with optimization",
+        ],
+        tips: [
+          "Pre-compute palindrome table pal[i][j] first",
+          "dp[i] = min cuts for s[0..i]",
+          "If s[0..i] is already palindrome, dp[i] = 0",
+        ],
+      },
+    ],
+  },
+  {
+    name: "Interval DP",
+    slug: "dp-interval",
+    templates: [
+      {
+        title: "Interval DP Skeleton",
+        code: `// dp[l][r] computed by increasing interval length
+for (int len = 1; len <= n; len++) {
+    for (int l = 0; l + len - 1 < n; l++) {
+        int r = l + len - 1;
+        dp[l][r] = INIT;
+        for (int k = l; k <= r; k++) {
+            dp[l][r] = combine(dp[l][r], dp[l][k-1], dp[k+1][r], k);
+        }
+    }
+}`,
+        whenToUse: [
+          "\"Merge stones\", matrix chain multiplication",
+          "Problems on subarrays/substrings with split points",
+          "Optimal BST, burst balloons",
+        ],
+        tips: [
+          "Always iterate by increasing interval LENGTH",
+          "O(n³) typical — try to optimize with Knuth's optimization if monotonic",
+          "dp[l][r] = best answer for the subarray/substring l..r",
+        ],
+      },
+      {
+        title: "Burst Balloons",
+        code: `int maxCoins(vector<int>& nums) {
+    int n = nums.size();
+    vector<int> a(n + 2, 1);
+    for (int i = 0; i < n; i++) a[i+1] = nums[i];
+    int m = n + 2;
+    vector<vector<int>> dp(m, vector<int>(m, 0));
+
+    for (int len = 2; len < m; len++) {
+        for (int l = 0; l + len < m; l++) {
+            int r = l + len;
+            for (int k = l + 1; k < r; k++) {
+                dp[l][r] = max(dp[l][r],
+                    dp[l][k] + dp[k][r] + a[l]*a[k]*a[r]);
+            }
+        }
+    }
+    return dp[0][m-1];
+}`,
+        whenToUse: [
+          "Burst balloons — choose last balloon to burst in interval",
+          "Problems where order of removal matters",
+          "\"Maximize score by choosing split points\"",
+        ],
+        tips: [
+          "Pad with 1s at boundaries for clean multiplication",
+          "Think \"which element is LAST to process\" in the interval",
+          "dp[l][r] = max coins from bursting all balloons between l and r",
+        ],
+      },
+    ],
+  },
+  {
+    name: "Stock DP (State Machine)",
+    slug: "dp-stock",
+    templates: [
+      {
+        title: "With Cooldown",
+        code: `int maxProfitCooldown(vector<int>& prices) {
+    long long hold = LLONG_MIN/4, sold = 0, rest = 0;
+    for (int p : prices) {
+        long long prevSold = sold;
+        sold = hold + p;
+        hold = max(hold, rest - p);
+        rest = max(rest, prevSold);
+    }
+    return (int)max(sold, rest);
+}`,
+        whenToUse: [
+          "Buy/sell with cooldown period after selling",
+          "State machine DP: hold, sold, rest states",
+          "\"Best time to buy and sell stock with cooldown\"",
+        ],
+        tips: [
+          "3 states: holding stock, just sold, resting (cooldown)",
+          "Transitions: hold→sold (sell), rest→hold (buy), sold→rest (cooldown)",
+          "O(n) time, O(1) space",
+        ],
+      },
+      {
+        title: "At Most K Transactions",
+        code: `int maxProfitK(int k, vector<int>& prices) {
+    int n = prices.size();
+    if (n == 0 || k == 0) return 0;
+    if (k >= n/2) {
+        int profit = 0;
+        for (int i = 1; i < n; i++)
+            profit += max(0, prices[i]-prices[i-1]);
+        return profit;
+    }
+    vector<int> buy(k+1, INT_MIN/2), sell(k+1, 0);
+    for (int p : prices)
+        for (int t = 1; t <= k; t++) {
+            buy[t] = max(buy[t], sell[t-1] - p);
+            sell[t] = max(sell[t], buy[t] + p);
+        }
+    return sell[k];
+}`,
+        whenToUse: [
+          "\"At most K buy-sell transactions\"",
+          "Generalized stock problem with transaction limit",
+          "When k ≥ n/2, equivalent to unlimited transactions",
+        ],
+        tips: [
+          "Optimize: if k ≥ n/2, greedily take all positive diffs",
+          "buy[t] = best profit after t-th buy, sell[t] = after t-th sell",
+          "O(nk) time, O(k) space",
+        ],
+      },
+    ],
+  },
+  {
+    name: "Tree DP",
+    slug: "dp-tree",
+    templates: [
+      {
+        title: "House Robber III (Postorder, Return States)",
+        code: `pair<long long,long long> dfs(TreeNode* root) {
+    if (!root) return {0, 0}; // {notTake, take}
+    auto [ln, lt] = dfs(root->left);
+    auto [rn, rt] = dfs(root->right);
+    long long take = root->val + ln + rn;
+    long long notTake = max(ln, lt) + max(rn, rt);
+    return {notTake, take};
+}
+
+int rob(TreeNode* root) {
+    auto [notTake, take] = dfs(root);
+    return (int)max(notTake, take);
+}`,
+        whenToUse: [
+          "DP on tree — each node returns multiple states",
+          "House robber on tree, max independent set",
+          "Problems where taking a node affects its children",
+        ],
+        tips: [
+          "Postorder traversal: process children first, then combine at parent",
+          "Return a pair/tuple of states from each DFS call",
+          "take = node.val + notTake(left) + notTake(right)",
+        ],
+      },
+    ],
+  },
+  {
+    name: "DP on DAG",
+    slug: "dp-dag",
+    templates: [
+      {
+        title: "Longest Path in DAG",
+        code: `int longestPathDAG(int n, vector<vector<int>>& edges) {
+    vector<vector<int>> g(n);
+    vector<int> indeg(n, 0);
+    for (auto &e : edges) {
+        int u = e[0], v = e[1];
+        g[u].push_back(v);
+        indeg[v]++;
+    }
+    queue<int> q;
+    vector<int> dp(n, 0);
+    for (int i = 0; i < n; i++)
+        if (indeg[i] == 0) q.push(i);
+    while (!q.empty()) {
+        int u = q.front(); q.pop();
+        for (int v : g[u]) {
+            dp[v] = max(dp[v], dp[u] + 1);
+            if (--indeg[v] == 0) q.push(v);
+        }
+    }
+    return *max_element(dp.begin(), dp.end());
+}`,
+        whenToUse: [
+          "Longest/shortest path in a DAG",
+          "Task scheduling with dependencies",
+          "Any DP where states form a DAG (topological order)",
+        ],
+        tips: [
+          "Process nodes in topological order using Kahn's BFS",
+          "dp[v] = max(dp[u] + 1) for all predecessors u",
+          "Works because DAG has no cycles → valid topological order",
+        ],
+      },
+    ],
+  },
+  {
+    name: "Bitmask DP",
+    slug: "dp-bitmask",
+    templates: [
+      {
+        title: "TSP-style Skeleton",
+        code: `int N = n;
+int FULL = 1 << N;
+const long long INF = (1LL<<60);
+vector<vector<long long>> dp(FULL, vector<long long>(N, INF));
+
+dp[1<<0][0] = 0; // start at node 0
+
+for (int mask = 0; mask < FULL; mask++) {
+    for (int i = 0; i < N; i++) if (mask & (1<<i)) {
+        long long cur = dp[mask][i];
+        if (cur >= INF/2) continue;
+        for (int j = 0; j < N; j++) if (!(mask & (1<<j))) {
+            int nmask = mask | (1<<j);
+            dp[nmask][j] = min(dp[nmask][j], cur + cost[i][j]);
+        }
+    }
+}`,
+        whenToUse: [
+          "TSP — visit all nodes with minimum cost",
+          "Assignment problems, matching (n ≤ 20)",
+          "\"Visit all states\" where n is small enough for 2^n",
+        ],
+        tips: [
+          "Only works for n ≤ 20 (2^20 ≈ 1M states)",
+          "mask encodes which nodes are visited as a bitmask",
+          "dp[mask][i] = best cost to reach node i having visited 'mask' nodes",
+        ],
+      },
+    ],
+  },
+  {
+    name: "Digit DP",
+    slug: "dp-digit",
+    templates: [
+      {
+        title: "Count Numbers with Property",
+        code: `string s;
+long long memo[20][2][2];
+bool vis[20][2][2];
+
+long long dfs(int pos, bool tight, bool started) {
+    if (pos == (int)s.size()) return 1; // adjust base
+    if (vis[pos][tight][started])
+        return memo[pos][tight][started];
+    vis[pos][tight][started] = true;
+
+    long long ans = 0;
+    int lim = tight ? (s[pos]-'0') : 9;
+    for (int d = 0; d <= lim; d++) {
+        bool ntight = tight && (d == lim);
+        bool nstarted = started || (d != 0);
+        ans += dfs(pos + 1, ntight, nstarted);
+    }
+    return memo[pos][tight][started] = ans;
+}
+
+long long solve(long long X) {
+    s = to_string(X);
+    memset(vis, 0, sizeof(vis));
+    return dfs(0, true, false);
+}`,
+        whenToUse: [
+          "\"Count numbers in [L, R] with property P\"",
+          "Count numbers without digit 4, with digit sum = K, etc.",
+          "Any digit-level constraint on a number range",
+        ],
+        tips: [
+          "solve(R) - solve(L-1) gives count in range [L, R]",
+          "tight flag: are we still bounded by the upper limit?",
+          "started flag: have we placed a non-zero digit yet? (handles leading zeros)",
+        ],
+      },
+    ],
+  },
+  {
+    name: "DP Optimizations",
+    slug: "dp-optimizations",
+    templates: [
+      {
+        title: "Rolling Array (Space Optimization)",
+        code: `// Instead of dp[n][m], use dp[2][m]
+// Example: LCS with rolling array
+int lcs(string a, string b) {
+    int n = a.size(), m = b.size();
+    vector<vector<int>> dp(2, vector<int>(m+1, 0));
+    for (int i = 1; i <= n; i++) {
+        int cur = i & 1, prev = 1 - cur;
+        for (int j = 1; j <= m; j++) {
+            if (a[i-1] == b[j-1])
+                dp[cur][j] = dp[prev][j-1] + 1;
+            else
+                dp[cur][j] = max(dp[prev][j], dp[cur][j-1]);
+        }
+    }
+    return dp[n & 1][m];
+}`,
+        whenToUse: [
+          "When dp[i] only depends on dp[i-1] row",
+          "LCS, edit distance, grid DP — reduce O(nm) space to O(m)",
+          "Memory limit is tight",
+        ],
+        tips: [
+          "Use i & 1 to alternate between rows 0 and 1",
+          "Cannot reconstruct the solution path with rolling array",
+          "For 1D DP: just use two variables (a, b) instead of array",
+        ],
+      },
+      {
+        title: "Monotonic Deque Optimization",
+        code: `// dp[i] = min(dp[j] + cost(j,i)) for j in window [i-k, i-1]
+// Use deque to maintain candidates in O(1) per transition
+deque<int> dq;
+for (int i = 0; i < n; i++) {
+    // Remove out-of-window elements
+    while (!dq.empty() && dq.front() < i - k) dq.pop_front();
+    
+    // dp[i] = dp[dq.front()] + cost
+    if (!dq.empty()) dp[i] = dp[dq.front()] + /* cost */;
+    
+    // Maintain monotonicity (increasing for min queries)
+    while (!dq.empty() && dp[dq.back()] >= dp[i]) dq.pop_back();
+    dq.push_back(i);
+}`,
+        whenToUse: [
+          "DP transition looks at min/max over a sliding window of previous states",
+          "Jump game with window, constrained subsequence sum",
+          "Reduce O(nk) transitions to O(n) total",
+        ],
+        tips: [
+          "Deque front = optimal candidate for current transition",
+          "Pop from back to maintain monotonic order",
+          "Pop from front to remove out-of-window elements",
         ],
       },
     ],
