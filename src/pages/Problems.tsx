@@ -43,12 +43,12 @@ export default function Problems() {
   }, []);
 
   const isLocked = !loading && !user;
+  const FREE_LIMIT = 3;
 
   return (
     <div className="min-h-screen">
       <Header />
-      {isLocked && <SignInOverlay />}
-      
+
       {/* Sticky Controls */}
       <div className="sticky top-14 z-40 bg-background/70 backdrop-blur-2xl border-b border-primary/10">
         <div className="container px-4 py-3">
@@ -153,12 +153,29 @@ export default function Problems() {
       </div>
       
       {/* Feed */}
-      <main className={cn("container px-4 py-6", isLocked && "blur-sm select-none pointer-events-none")}>
+      <main className="container px-4 py-6">
         <div className="space-y-4">
           {filteredProblems.length > 0 ? (
-            filteredProblems.map((problem) => (
-              <ProblemFeedCard key={problem.id} problem={problem} />
-            ))
+            <>
+              {filteredProblems.slice(0, isLocked ? FREE_LIMIT : filteredProblems.length).map((problem) => (
+                <ProblemFeedCard key={problem.id} problem={problem} />
+              ))}
+              {isLocked && filteredProblems.length > FREE_LIMIT && (
+                <div className="relative">
+                  <div className="space-y-4 blur-md select-none pointer-events-none">
+                    {filteredProblems.slice(FREE_LIMIT, FREE_LIMIT + 2).map((problem) => (
+                      <ProblemFeedCard key={problem.id} problem={problem} />
+                    ))}
+                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <SignInOverlay />
+                  </div>
+                </div>
+              )}
+              {!isLocked && filteredProblems.slice(FREE_LIMIT).map((problem) => (
+                <ProblemFeedCard key={problem.id} problem={problem} />
+              ))}
+            </>
           ) : (
             <div className="text-center py-16">
               <p className="text-muted-foreground">No problems found</p>

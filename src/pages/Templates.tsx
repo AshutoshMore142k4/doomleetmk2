@@ -21,13 +21,13 @@ export default function Templates() {
   };
 
   const isLocked = !loading && !user;
+  const FREE_CATEGORIES = 1; // Show first category freely
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      {isLocked && <SignInOverlay />}
 
-      <div className={cn("container max-w-4xl px-4 py-8", isLocked && "blur-sm select-none pointer-events-none")}>
+      <div className="container max-w-4xl px-4 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold tracking-tight mb-2">C++ Templates</h1>
           <p className="text-muted-foreground">Battle-tested patterns for LeetCode. Tap any template to expand code, tips & when to use.</p>
@@ -48,7 +48,7 @@ export default function Templates() {
 
         {/* Categories */}
         <div className="space-y-10">
-          {templatesData.map(category => (
+          {templatesData.slice(0, isLocked ? FREE_CATEGORIES : templatesData.length).map(category => (
             <div
               key={category.slug}
               ref={el => { categoryRefs.current[category.slug] = el; }}
@@ -95,7 +95,6 @@ export default function Templates() {
 
                       {isExpanded && (
                         <div className="px-4 pb-4 space-y-4">
-                          {/* Complexity badges on mobile */}
                           <div className="flex sm:hidden items-center gap-2 text-xs text-muted-foreground">
                             <span className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-primary/[0.06] border border-primary/10">
                               <Clock className="h-3 w-3 text-primary" />
@@ -106,10 +105,7 @@ export default function Templates() {
                               {template.spaceComplexity}
                             </span>
                           </div>
-
                           <CodeBlock code={template.code} language="cpp" />
-
-                          {/* When to Use */}
                           <div className="rounded-lg border border-primary/10 bg-primary/[0.03] p-3">
                             <h4 className="text-xs font-semibold uppercase tracking-wider text-primary mb-2 flex items-center gap-1.5">
                               <Zap className="h-3.5 w-3.5" />
@@ -124,8 +120,6 @@ export default function Templates() {
                               ))}
                             </ul>
                           </div>
-
-                          {/* Tips */}
                           <div className="rounded-lg border border-border bg-secondary/30 p-3">
                             <h4 className="text-xs font-semibold uppercase tracking-wider text-foreground/70 mb-2 flex items-center gap-1.5">
                               <Lightbulb className="h-3.5 w-3.5" />
@@ -148,6 +142,32 @@ export default function Templates() {
               </div>
             </div>
           ))}
+
+          {/* Blurred teaser + sign-in overlay */}
+          {isLocked && templatesData.length > FREE_CATEGORIES && (
+            <div className="relative">
+              <div className="blur-md select-none pointer-events-none space-y-10">
+                {templatesData.slice(FREE_CATEGORIES, FREE_CATEGORIES + 1).map(category => (
+                  <div key={category.slug}>
+                    <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                      <BookOpen className="h-5 w-5 text-primary" />
+                      {category.name}
+                    </h2>
+                    <div className="space-y-3">
+                      {category.templates.slice(0, 3).map((template, tIdx) => (
+                        <div key={tIdx} className="rounded-xl border border-border bg-card/50 px-4 py-3">
+                          <span className="font-medium text-sm">{template.title}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <SignInOverlay />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
