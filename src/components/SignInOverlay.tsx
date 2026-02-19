@@ -4,12 +4,8 @@ import { NeonButton } from '@/components/ui/neon-button';
 
 export function SignInOverlay() {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
-      {/* Blur backdrop */}
-      <div className="absolute inset-0 bg-background/60 backdrop-blur-sm pointer-events-auto" />
-
-      {/* Card */}
-      <div className="relative z-10 max-w-sm w-full mx-4 rounded-2xl border border-primary/20 bg-card p-8 text-center shadow-2xl pointer-events-auto">
+    <div className="flex items-center justify-center py-8">
+      <div className="max-w-sm w-full mx-4 rounded-2xl border border-primary/20 bg-card p-8 text-center shadow-2xl">
         <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
           <Lock className="h-7 w-7 text-primary" />
         </div>
