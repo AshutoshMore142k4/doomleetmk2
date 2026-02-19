@@ -1,6 +1,8 @@
 export interface Template {
   title: string;
   code: string;
+  timeComplexity: string;
+  spaceComplexity: string;
   whenToUse: string[];
   tips: string[];
 }
@@ -18,6 +20,8 @@ export const templatesData: TemplateCategory[] = [
     templates: [
       {
         title: "Standard Binary Search",
+        timeComplexity: "O(log n)",
+        spaceComplexity: "O(1)",
         code: `int binarySearch(vector<int>& arr, int target) {
     int left = 0, right = arr.size() - 1;
     
@@ -43,6 +47,8 @@ export const templatesData: TemplateCategory[] = [
       },
       {
         title: "Binary Search on Answer",
+        timeComplexity: "O(log(range) × feasible_check)",
+        spaceComplexity: "O(1)",
         code: `bool feasible(int mid) {
     // Your condition logic here
     return true;
@@ -76,6 +82,8 @@ int binarySearchAnswer(int left, int right) {
       },
       {
         title: "Lower Bound / Upper Bound",
+        timeComplexity: "O(log n)",
+        spaceComplexity: "O(1)",
         code: `// First element >= target
 int lowerBound(vector<int>& arr, int target) {
     return lower_bound(arr.begin(), arr.end(), target) - arr.begin();
@@ -104,6 +112,8 @@ int upperBound(vector<int>& arr, int target) {
     templates: [
       {
         title: "Opposite Direction (Sum Problems)",
+        timeComplexity: "O(n)",
+        spaceComplexity: "O(1)",
         code: `vector<int> twoSumSorted(vector<int>& nums, int target) {
     int left = 0, right = nums.size() - 1;
     
@@ -129,6 +139,8 @@ int upperBound(vector<int>& arr, int target) {
       },
       {
         title: "Same Direction (Fast-Slow)",
+        timeComplexity: "O(n)",
+        spaceComplexity: "O(1)",
         code: `int removeDuplicates(vector<int>& nums) {
     if (nums.empty()) return 0;
     
@@ -154,6 +166,8 @@ int upperBound(vector<int>& arr, int target) {
       },
       {
         title: "Cycle Detection (Linked List)",
+        timeComplexity: "O(n)",
+        spaceComplexity: "O(1)",
         code: `bool hasCycle(ListNode* head) {
     if (!head || !head->next) return false;
     
@@ -186,6 +200,8 @@ int upperBound(vector<int>& arr, int target) {
     templates: [
       {
         title: "Fixed Size Window",
+        timeComplexity: "O(n)",
+        spaceComplexity: "O(1)",
         code: `int maxSumFixedWindow(vector<int>& nums, int k) {
     int windowSum = 0, maxSum = 0;
     
@@ -215,6 +231,8 @@ int upperBound(vector<int>& arr, int target) {
       },
       {
         title: "Variable Size — Longest Valid Window",
+        timeComplexity: "O(n)",
+        spaceComplexity: "O(k) where k = charset size",
         code: `int lengthOfLongestSubstring(string s) {
     unordered_set<char> window;
     int left = 0, maxLen = 0;
@@ -243,6 +261,8 @@ int upperBound(vector<int>& arr, int target) {
       },
       {
         title: "Variable Size — Shortest Valid Window",
+        timeComplexity: "O(n)",
+        spaceComplexity: "O(1)",
         code: `int minSubArrayLen(int target, vector<int>& nums) {
     int left = 0, sum = 0, minLen = INT_MAX;
     
@@ -276,6 +296,8 @@ int upperBound(vector<int>& arr, int target) {
     templates: [
       {
         title: "Range Sum Queries",
+        timeComplexity: "O(n) build, O(1) per query",
+        spaceComplexity: "O(n)",
         code: `class PrefixSum {
     vector<int> prefix;
 public:
@@ -311,6 +333,8 @@ public:
     templates: [
       {
         title: "DFS — Recursive (Pre/In/Post)",
+        timeComplexity: "O(n)",
+        spaceComplexity: "O(h) — h = tree height",
         code: `// PreOrder: Root -> Left -> Right
 void preorder(TreeNode* root, vector<int>& result) {
     if (!root) return;
@@ -347,6 +371,8 @@ void postorder(TreeNode* root, vector<int>& result) {
       },
       {
         title: "DFS — Iterative with Stack",
+        timeComplexity: "O(n)",
+        spaceComplexity: "O(h)",
         code: `vector<int> preorderIterative(TreeNode* root) {
     vector<int> result;
     if (!root) return result;
@@ -377,6 +403,8 @@ void postorder(TreeNode* root, vector<int>& result) {
       },
       {
         title: "BFS — Level Order Traversal",
+        timeComplexity: "O(n)",
+        spaceComplexity: "O(w) — w = max width",
         code: `vector<vector<int>> levelOrder(TreeNode* root) {
     vector<vector<int>> result;
     if (!root) return result;
@@ -419,6 +447,8 @@ void postorder(TreeNode* root, vector<int>& result) {
     templates: [
       {
         title: "DFS on Graph",
+        timeComplexity: "O(V + E)",
+        spaceComplexity: "O(V)",
         code: `void dfs(int node, vector<vector<int>>& graph, vector<bool>& visited) {
     visited[node] = true;
     
@@ -441,6 +471,8 @@ void postorder(TreeNode* root, vector<int>& result) {
       },
       {
         title: "BFS on Graph",
+        timeComplexity: "O(V + E)",
+        spaceComplexity: "O(V)",
         code: `void bfs(int start, vector<vector<int>>& graph) {
     queue<int> q;
     unordered_set<int> visited;
@@ -473,6 +505,8 @@ void postorder(TreeNode* root, vector<int>& result) {
       },
       {
         title: "BFS — Shortest Path",
+        timeComplexity: "O(V + E)",
+        spaceComplexity: "O(V)",
         code: `int shortestPath(vector<vector<int>>& graph, int start, int target) {
     queue<int> q;
     unordered_set<int> visited;
@@ -514,6 +548,8 @@ void postorder(TreeNode* root, vector<int>& result) {
       },
       {
         title: "Matrix DFS (4-Directional)",
+        timeComplexity: "O(m × n)",
+        spaceComplexity: "O(m × n)",
         code: `void dfsMatrix(vector<vector<int>>& grid, int r, int c, 
                vector<vector<bool>>& visited) {
     int rows = grid.size(), cols = grid[0].size();
@@ -550,6 +586,8 @@ void postorder(TreeNode* root, vector<int>& result) {
     templates: [
       {
         title: "Generate All Permutations",
+        timeComplexity: "O(n! × n)",
+        spaceComplexity: "O(n)",
         code: `void backtrack(vector<int>& nums, vector<int>& path, vector<bool>& used, 
                vector<vector<int>>& result) {
     if (path.size() == nums.size()) {
@@ -582,6 +620,8 @@ void postorder(TreeNode* root, vector<int>& result) {
       },
       {
         title: "Generate All Subsets",
+        timeComplexity: "O(2^n × n)",
+        spaceComplexity: "O(n)",
         code: `void subsetsBacktrack(vector<int>& nums, int start, vector<int>& path, 
                       vector<vector<int>>& result) {
     result.push_back(path);
@@ -605,6 +645,8 @@ void postorder(TreeNode* root, vector<int>& result) {
       },
       {
         title: "Generate All Combinations",
+        timeComplexity: "O(C(n,k) × k)",
+        spaceComplexity: "O(k)",
         code: `void combine(int n, int k, int start, vector<int>& path, 
              vector<vector<int>>& result) {
     if (path.size() == k) {
@@ -637,6 +679,8 @@ void postorder(TreeNode* root, vector<int>& result) {
     templates: [
       {
         title: "Fibonacci-style (Climbing Stairs)",
+        timeComplexity: "O(n)",
+        spaceComplexity: "O(1)",
         code: `int climbStairs(int n) {
     if (n <= 2) return n;
     int a = 1, b = 2;
@@ -660,6 +704,8 @@ void postorder(TreeNode* root, vector<int>& result) {
       },
       {
         title: "Kadane's Algorithm (Max Subarray)",
+        timeComplexity: "O(n)",
+        spaceComplexity: "O(1)",
         code: `int maxSubArray(vector<int>& nums) {
     long long best = LLONG_MIN, cur = 0;
     for (int x : nums) {
@@ -687,6 +733,8 @@ void postorder(TreeNode* root, vector<int>& result) {
     templates: [
       {
         title: "Unique Paths",
+        timeComplexity: "O(m × n)",
+        spaceComplexity: "O(m × n)",
         code: `int uniquePaths(int m, int n) {
     vector<vector<int>> dp(m, vector<int>(n, 1));
     for (int i = 1; i < m; i++)
@@ -707,6 +755,8 @@ void postorder(TreeNode* root, vector<int>& result) {
       },
       {
         title: "Min Path Sum",
+        timeComplexity: "O(m × n)",
+        spaceComplexity: "O(m × n)",
         code: `int minPathSum(vector<vector<int>>& grid) {
     int m = grid.size(), n = grid[0].size();
     vector<vector<int>> dp(m, vector<int>(n, 0));
@@ -737,6 +787,8 @@ void postorder(TreeNode* root, vector<int>& result) {
     templates: [
       {
         title: "0/1 Knapsack (2D)",
+        timeComplexity: "O(n × W)",
+        spaceComplexity: "O(n × W)",
         code: `int knapsack01(vector<int>& w, vector<int>& v, int cap) {
     int n = w.size();
     vector<vector<int>> dp(n+1, vector<int>(cap+1, 0));
@@ -762,6 +814,8 @@ void postorder(TreeNode* root, vector<int>& result) {
       },
       {
         title: "Subset Sum (Boolean, Space-Optimized)",
+        timeComplexity: "O(n × target)",
+        spaceComplexity: "O(target)",
         code: `bool canPartitionSum(vector<int>& nums, int target) {
     vector<char> dp(target + 1, 0);
     dp[0] = 1;
@@ -785,6 +839,8 @@ void postorder(TreeNode* root, vector<int>& result) {
       },
       {
         title: "Unbounded Knapsack (Coin Change)",
+        timeComplexity: "O(n × amount)",
+        spaceComplexity: "O(amount)",
         code: `int coinChange(vector<int>& coins, int amount) {
     const int INF = 1e9;
     vector<int> dp(amount + 1, INF);
@@ -815,6 +871,8 @@ void postorder(TreeNode* root, vector<int>& result) {
     templates: [
       {
         title: "LIS — O(n log n)",
+        timeComplexity: "O(n log n)",
+        spaceComplexity: "O(n)",
         code: `int lengthOfLIS(vector<int>& nums) {
     vector<int> tail;
     for (int x : nums) {
@@ -837,6 +895,8 @@ void postorder(TreeNode* root, vector<int>& result) {
       },
       {
         title: "LCS — O(n²)",
+        timeComplexity: "O(n × m)",
+        spaceComplexity: "O(n × m)",
         code: `int longestCommonSubsequence(string a, string b) {
     int n = a.size(), m = b.size();
     vector<vector<int>> dp(n+1, vector<int>(m+1, 0));
@@ -866,6 +926,8 @@ void postorder(TreeNode* root, vector<int>& result) {
     templates: [
       {
         title: "Longest Palindromic Subsequence",
+        timeComplexity: "O(n²)",
+        spaceComplexity: "O(n²)",
         code: `int longestPalindromeSubseq(string s) {
     int n = s.size();
     vector<vector<int>> dp(n, vector<int>(n, 0));
@@ -891,6 +953,8 @@ void postorder(TreeNode* root, vector<int>& result) {
       },
       {
         title: "Min Cuts for Palindrome Partitioning",
+        timeComplexity: "O(n²)",
+        spaceComplexity: "O(n²)",
         code: `int minCut(string s) {
     int n = s.size();
     vector<vector<char>> pal(n, vector<char>(n, 0));
@@ -929,6 +993,8 @@ void postorder(TreeNode* root, vector<int>& result) {
     templates: [
       {
         title: "Interval DP Skeleton",
+        timeComplexity: "O(n³)",
+        spaceComplexity: "O(n²)",
         code: `// dp[l][r] computed by increasing interval length
 for (int len = 1; len <= n; len++) {
     for (int l = 0; l + len - 1 < n; l++) {
@@ -952,6 +1018,8 @@ for (int len = 1; len <= n; len++) {
       },
       {
         title: "Burst Balloons",
+        timeComplexity: "O(n³)",
+        spaceComplexity: "O(n²)",
         code: `int maxCoins(vector<int>& nums) {
     int n = nums.size();
     vector<int> a(n + 2, 1);
@@ -989,6 +1057,8 @@ for (int len = 1; len <= n; len++) {
     templates: [
       {
         title: "With Cooldown",
+        timeComplexity: "O(n)",
+        spaceComplexity: "O(1)",
         code: `int maxProfitCooldown(vector<int>& prices) {
     long long hold = LLONG_MIN/4, sold = 0, rest = 0;
     for (int p : prices) {
@@ -1012,6 +1082,8 @@ for (int len = 1; len <= n; len++) {
       },
       {
         title: "At Most K Transactions",
+        timeComplexity: "O(n × k)",
+        spaceComplexity: "O(k)",
         code: `int maxProfitK(int k, vector<int>& prices) {
     int n = prices.size();
     if (n == 0 || k == 0) return 0;
@@ -1048,6 +1120,8 @@ for (int len = 1; len <= n; len++) {
     templates: [
       {
         title: "House Robber III (Postorder, Return States)",
+        timeComplexity: "O(n)",
+        spaceComplexity: "O(h)",
         code: `pair<long long,long long> dfs(TreeNode* root) {
     if (!root) return {0, 0}; // {notTake, take}
     auto [ln, lt] = dfs(root->left);
@@ -1080,6 +1154,8 @@ int rob(TreeNode* root) {
     templates: [
       {
         title: "Longest Path in DAG",
+        timeComplexity: "O(V + E)",
+        spaceComplexity: "O(V + E)",
         code: `int longestPathDAG(int n, vector<vector<int>>& edges) {
     vector<vector<int>> g(n);
     vector<int> indeg(n, 0);
@@ -1120,6 +1196,8 @@ int rob(TreeNode* root) {
     templates: [
       {
         title: "TSP-style Skeleton",
+        timeComplexity: "O(2^n × n²)",
+        spaceComplexity: "O(2^n × n)",
         code: `int N = n;
 int FULL = 1 << N;
 const long long INF = (1LL<<60);
@@ -1156,6 +1234,8 @@ for (int mask = 0; mask < FULL; mask++) {
     templates: [
       {
         title: "Count Numbers with Property",
+        timeComplexity: "O(digits × 2 × 2 × 10)",
+        spaceComplexity: "O(digits × 2 × 2)",
         code: `string s;
 long long memo[20][2][2];
 bool vis[20][2][2];
@@ -1200,6 +1280,8 @@ long long solve(long long X) {
     templates: [
       {
         title: "Rolling Array (Space Optimization)",
+        timeComplexity: "O(n × m)",
+        spaceComplexity: "O(m) — reduced from O(n × m)",
         code: `// Instead of dp[n][m], use dp[2][m]
 // Example: LCS with rolling array
 int lcs(string a, string b) {
@@ -1229,6 +1311,8 @@ int lcs(string a, string b) {
       },
       {
         title: "Monotonic Deque Optimization",
+        timeComplexity: "O(n) — reduced from O(n × k)",
+        spaceComplexity: "O(k)",
         code: `// dp[i] = min(dp[j] + cost(j,i)) for j in window [i-k, i-1]
 // Use deque to maintain candidates in O(1) per transition
 deque<int> dq;
@@ -1262,6 +1346,8 @@ for (int i = 0; i < n; i++) {
     templates: [
       {
         title: "Next Greater Element",
+        timeComplexity: "O(n)",
+        spaceComplexity: "O(n)",
         code: `vector<int> nextGreaterElement(vector<int>& nums) {
     int n = nums.size();
     vector<int> result(n, -1);
@@ -1295,6 +1381,8 @@ for (int i = 0; i < n; i++) {
     templates: [
       {
         title: "Union-Find (DSU)",
+        timeComplexity: "O(α(n)) ≈ O(1) per operation",
+        spaceComplexity: "O(n)",
         code: `class UnionFind {
     vector<int> parent, rank;
 public:
@@ -1341,6 +1429,8 @@ public:
       },
       {
         title: "Trie (Prefix Tree)",
+        timeComplexity: "O(L) per insert/search — L = word length",
+        spaceComplexity: "O(total characters)",
         code: `class TrieNode {
 public:
     unordered_map<char, TrieNode*> children;
@@ -1387,6 +1477,8 @@ public:
       },
       {
         title: "Topological Sort (Kahn's BFS)",
+        timeComplexity: "O(V + E)",
+        spaceComplexity: "O(V + E)",
         code: `vector<int> topologicalSort(int n, vector<vector<int>>& edges) {
     vector<int> indegree(n, 0);
     vector<vector<int>> graph(n);
