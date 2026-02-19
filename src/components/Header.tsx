@@ -20,6 +20,8 @@ export function Header() {
     navigate('/');
   };
 
+  const displayName = user?.firstName || user?.emailAddresses?.[0]?.emailAddress?.split('@')[0] || 'User';
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-primary/10 bg-background/70 backdrop-blur-2xl supports-[backdrop-filter]:bg-background/50">
       <div className="container flex h-14 items-center justify-between px-4">
@@ -63,7 +65,7 @@ export function Header() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="gap-2 ml-1 rounded-lg hover:bg-primary/[0.06]">
                   <User className="h-4 w-4" />
-                  <span className="hidden sm:inline">{user.email?.split('@')[0]}</span>
+                  <span className="hidden sm:inline">{displayName}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="bg-card/80 backdrop-blur-2xl border-primary/15">
