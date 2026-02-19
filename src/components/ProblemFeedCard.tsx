@@ -95,9 +95,9 @@ export function ProblemFeedCard({ problem }: ProblemFeedCardProps) {
         {/* Bottom neon line */}
         <span className="absolute inset-x-0 bottom-0 h-px opacity-20 group-hover/card:opacity-50 transition-all duration-500 ease-in-out bg-gradient-to-r w-3/4 mx-auto from-transparent via-primary to-transparent" />
         {/* Main Content */}
-        <div className="p-6 pr-14">
+        <div className="p-4 sm:p-6 sm:pr-14">
           {/* Title */}
-          <h2 className="text-xl font-semibold mb-3">{problem.title}</h2>
+          <h2 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">{problem.title}</h2>
           
           {/* Description with highlighted terms */}
           <p className="text-muted-foreground text-sm leading-relaxed mb-6">
@@ -230,8 +230,48 @@ export function ProblemFeedCard({ problem }: ProblemFeedCardProps) {
           </div>
         </div>
 
-        {/* Floating Action Buttons */}
-        <div className="absolute right-3 top-1/2 -translate-y-1/2 flex flex-col gap-3">
+        {/* Mobile Action Buttons - horizontal bar at bottom */}
+        <div className="flex sm:hidden items-center justify-around border-t border-border px-4 py-2">
+          <button
+            onClick={() => setIsStarred(!isStarred)}
+            className={cn(
+              "p-2 rounded-full transition-colors",
+              isStarred ? "text-medium" : "text-muted-foreground"
+            )}
+          >
+            <Star className={cn("h-5 w-5", isStarred && "fill-current")} />
+          </button>
+          <button
+            onClick={() => setShowDetails(!showDetails)}
+            className={cn(
+              "p-2 rounded-full transition-colors",
+              showDetails ? "text-primary" : "text-muted-foreground"
+            )}
+          >
+            {showDetails ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+          </button>
+          <button
+            onClick={() => setIsBookmarked(!isBookmarked)}
+            className={cn(
+              "p-2 rounded-full transition-colors",
+              isBookmarked ? "text-primary" : "text-muted-foreground"
+            )}
+          >
+            <Bookmark className={cn("h-5 w-5", isBookmarked && "fill-current")} />
+          </button>
+          <button
+            onClick={() => setShowCode(!showCode)}
+            className={cn(
+              "p-2 rounded-full transition-colors",
+              showCode ? "text-primary" : "text-muted-foreground"
+            )}
+          >
+            <Code2 className="h-5 w-5" />
+          </button>
+        </div>
+
+        {/* Desktop Floating Action Buttons - vertical sidebar */}
+        <div className="hidden sm:flex absolute right-3 top-1/2 -translate-y-1/2 flex-col gap-3">
           <button
             onClick={() => setIsStarred(!isStarred)}
             className={cn(
@@ -243,7 +283,6 @@ export function ProblemFeedCard({ problem }: ProblemFeedCardProps) {
           >
             <Star className={cn("h-5 w-5", isStarred && "fill-current")} />
           </button>
-          
           <button
             onClick={() => setShowDetails(!showDetails)}
             className={cn(
@@ -255,7 +294,6 @@ export function ProblemFeedCard({ problem }: ProblemFeedCardProps) {
           >
             {showDetails ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
           </button>
-
           <button
             onClick={() => setIsBookmarked(!isBookmarked)}
             className={cn(
@@ -267,7 +305,6 @@ export function ProblemFeedCard({ problem }: ProblemFeedCardProps) {
           >
             <Bookmark className={cn("h-5 w-5", isBookmarked && "fill-current")} />
           </button>
-          
           <button
             onClick={() => setShowCode(!showCode)}
             className={cn(
