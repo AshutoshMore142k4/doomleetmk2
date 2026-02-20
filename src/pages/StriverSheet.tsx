@@ -6,6 +6,8 @@ import { ChevronDown, ChevronUp, Code2, Star, Bookmark, Lightbulb, Eye } from 'l
 import { DifficultyBadge } from '@/components/DifficultyBadge';
 import { CodeBlock } from '@/components/CodeBlock';
 import { usePageTitle } from '@/hooks/usePageTitle';
+import { useAuth } from '@/hooks/useAuth';
+import { SignInOverlay } from '@/components/SignInOverlay';
 
 function StriverProblemCard({ problem }: { problem: import('@/lib/strivers-sde-data').StriverProblem }) {
   const [showCode, setShowCode] = useState(false);
@@ -170,10 +172,14 @@ function StriverProblemCard({ problem }: { problem: import('@/lib/strivers-sde-d
 
 export default function StriverSheet() {
   usePageTitle("Striver's SDE Sheet");
+  const { user, loading } = useAuth();
   const [activeTopic, setActiveTopic] = useState(0);
   const topicRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [scrollHidden, setScrollHidden] = useState(false);
   const lastScrollY = useRef(0);
+  
+  const isLocked = !loading && !user;
+  const FREE_TOPICS = 3;
 
   useEffect(() => {
     const onScroll = () => {
@@ -222,7 +228,7 @@ export default function StriverSheet() {
       </div>
 
       <main className="container px-4 py-6">
-        {topics.map((t, i) => (
+        {topics.slice(0, isLocked ? FREE_TOPICS : topics.length).map((t, i) => (
           <div
             key={i}
             ref={el => topicRefs.current[i] = el}
@@ -240,6 +246,32 @@ export default function StriverSheet() {
             </div>
           </div>
         ))}
+
+        {/* Blurred teaser + sign-in overlay */}
+        {isLocked && topics.length > FREE_TOPICS && (
+          <div className="relative mb-12">
+            <div className="blur-md select-none pointer-events-none">
+              {topics.slice(FREE_TOPICS, FREE_TOPICS + 1).map((t, i) => (
+                <div key={i} className="scroll-mt-36">
+                  <div className="flex items-center gap-3 mb-4">
+                    <h2 className="text-xl font-bold">{t.name}</h2>
+                    <span className="text-sm text-muted-foreground">({t.problems.length} problems)</span>
+                  </div>
+                  <div className="space-y-4 max-w-2xl mx-auto">
+                    {t.problems.slice(0, 2).map((problem, j) => (
+                      <div key={j} className="rounded-xl border border-border bg-card/50 px-4 py-3">
+                        <span className="font-medium text-sm">{problem.title}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <SignInOverlay />
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );

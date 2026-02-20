@@ -5,6 +5,8 @@ import { Search, ExternalLink, ArrowRight, Hash, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { Link } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
+import { SignInOverlay } from '@/components/SignInOverlay';
 
 const difficultyColor = {
   Easy: 'text-green-400 bg-green-500/10 border-green-500/20',
@@ -14,8 +16,12 @@ const difficultyColor = {
 
 export default function ProblemMapper() {
   usePageTitle('Problem Mapper');
+  const { user, loading } = useAuth();
   const [query, setQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  
+  const isLocked = !loading && !user;
+  const FREE_RESULTS = 10;
 
   const categories = useMemo(() => {
     const cats = new Map<string, number>();
@@ -109,7 +115,7 @@ export default function ProblemMapper() {
 
         {/* Results */}
         <div className="space-y-2">
-          {filtered.map(problem => (
+          {filtered.slice(0, isLocked ? FREE_RESULTS : filtered.length).map(problem => (
             <div
               key={`${problem.lcNumber}-${problem.templateCategory}`}
               className="rounded-xl border border-border bg-card/50 hover:bg-card/80 transition-colors px-4 py-3 flex items-center gap-3"
@@ -161,6 +167,31 @@ export default function ProblemMapper() {
               <Search className="h-8 w-8 mx-auto mb-3 opacity-40" />
               <p className="text-sm">No problems found for "{query}"</p>
               <p className="text-xs mt-1 opacity-60">Try a LeetCode number or problem name</p>
+            </div>
+          )}
+
+          {/* Blurred teaser + sign-in overlay */}
+          {isLocked && filtered.length > FREE_RESULTS && (
+            <div className="relative mt-4">
+              <div className="blur-md select-none pointer-events-none space-y-2">
+                {filtered.slice(FREE_RESULTS, FREE_RESULTS + 4).map((problem, i) => (
+                  <div
+                    key={i}
+                    className="rounded-xl border border-border bg-card/50 px-4 py-3 flex items-center gap-3"
+                  >
+                    <div className="flex items-center gap-1 shrink-0 w-16">
+                      <Hash className="h-3 w-3 text-muted-foreground/50" />
+                      <span className="text-sm font-mono font-semibold">{problem.lcNumber}</span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <span className="text-sm font-medium">{problem.title}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <SignInOverlay />
+              </div>
             </div>
           )}
         </div>

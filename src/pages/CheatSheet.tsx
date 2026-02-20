@@ -5,6 +5,8 @@ import { cn } from '@/lib/utils';
 import { Code2, ScrollText } from 'lucide-react';
 import { CodeBlock } from '@/components/CodeBlock';
 import { usePageTitle } from '@/hooks/usePageTitle';
+import { useAuth } from '@/hooks/useAuth';
+import { SignInOverlay } from '@/components/SignInOverlay';
 
 function CheatEntry({ entry }: { entry: import('@/lib/cheatsheet-data').CheatSheetEntry }) {
   const [showCode, setShowCode] = useState(false);
@@ -36,10 +38,14 @@ function CheatEntry({ entry }: { entry: import('@/lib/cheatsheet-data').CheatShe
 
 export default function CheatSheet() {
   usePageTitle('Bonus Cheat Sheet');
+  const { user, loading } = useAuth();
   const [activeSection, setActiveSection] = useState(0);
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [scrollHidden, setScrollHidden] = useState(false);
   const lastScrollY = useRef(0);
+  
+  const isLocked = !loading && !user;
+  const FREE_SECTIONS = 3;
 
   useEffect(() => {
     const onScroll = () => {
@@ -108,7 +114,7 @@ export default function CheatSheet() {
       </div>
 
       <main className="container px-4 py-6">
-        {sections.map((section, i) => (
+        {sections.slice(0, isLocked ? FREE_SECTIONS : sections.length).map((section, i) => (
           <div
             key={i}
             ref={el => { sectionRefs.current[i] = el; }}
@@ -128,6 +134,34 @@ export default function CheatSheet() {
             </div>
           </div>
         ))}
+
+        {/* Blurred teaser + sign-in overlay */}
+        {isLocked && sections.length > FREE_SECTIONS && (
+          <div className="relative mb-12">
+            <div className="blur-md select-none pointer-events-none">
+              {sections.slice(FREE_SECTIONS, FREE_SECTIONS + 1).map((section, i) => (
+                <div key={i} className="scroll-mt-36">
+                  <div className="flex items-center gap-3 mb-4">
+                    <h2 className="text-xl font-bold">{section.name}</h2>
+                    <span className="text-sm text-muted-foreground">
+                      ({section.entries.length} {section.entries.length === 1 ? 'entry' : 'entries'})
+                    </span>
+                  </div>
+                  <div className="space-y-3 max-w-2xl mx-auto">
+                    {section.entries.slice(0, 3).map((entry, j) => (
+                      <div key={j} className="rounded-xl border border-border bg-card/50 px-4 py-3">
+                        <h3 className="text-sm font-semibold">{entry.title}</h3>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <SignInOverlay />
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );
