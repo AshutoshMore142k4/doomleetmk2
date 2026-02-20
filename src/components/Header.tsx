@@ -45,29 +45,29 @@ export function Header() {
           <span className="text-lg font-semibold tracking-tight">DoomLeet</span>
         </Link>
 
-        <nav className="flex items-center gap-1">
+        <nav className="flex items-center gap-0.5 sm:gap-1">
           <Link 
             to="/problems" 
-            className="px-3 py-1.5 text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all"
+            className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all"
           >
             NeetCode
           </Link>
           <Link 
             to="/striver" 
-            className="px-3 py-1.5 text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all"
+            className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all"
           >
             Striver
           </Link>
           <Link 
             to="/templates" 
-            className="px-3 py-1.5 text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all"
+            className="hidden sm:inline-block px-3 py-1.5 text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all"
           >
             Templates
           </Link>
 
           <button
             onClick={toggleTheme}
-            className="ml-1 flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:text-foreground hover:bg-primary/[0.06] transition-all"
+            className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-lg text-muted-foreground hover:text-foreground hover:bg-primary/[0.06] transition-all"
             title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
           >
             {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
@@ -76,7 +76,7 @@ export function Header() {
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="gap-2 ml-1 rounded-lg hover:bg-primary/[0.06]">
+                <Button variant="ghost" size="sm" className="gap-1 sm:gap-2 rounded-lg hover:bg-primary/[0.06] px-2 sm:px-3">
                   <User className="h-4 w-4" />
                   <span className="hidden sm:inline">{displayName}</span>
                 </Button>
@@ -89,7 +89,7 @@ export function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button asChild size="sm" className="ml-1 rounded-lg shadow-lg shadow-primary/20">
+            <Button asChild size="sm" className="rounded-lg shadow-lg shadow-primary/20 px-2 sm:px-3 text-xs sm:text-sm">
               <Link to="/auth">Sign In</Link>
             </Button>
           )}

@@ -46,12 +46,12 @@ export default function Problems() {
   const FREE_LIMIT = 3;
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-x-hidden">
       <Header />
 
       {/* Sticky Controls */}
       <div className="sticky top-14 z-40 bg-background/70 backdrop-blur-2xl border-b border-primary/10">
-        <div className="container px-4 py-3">
+        <div className="px-3 sm:container sm:px-4 py-3">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2">
               <h1 className="text-lg font-semibold">Feed</h1>
@@ -153,8 +153,8 @@ export default function Problems() {
       </div>
       
       {/* Feed */}
-      <main className="container px-4 py-6">
-        <div className="space-y-4">
+      <main className="px-2 sm:container sm:px-4 py-4 sm:py-6">
+        <div className="space-y-3 sm:space-y-4">
           {filteredProblems.length > 0 ? (
             <>
               {filteredProblems.slice(0, isLocked ? FREE_LIMIT : filteredProblems.length).map((problem) => (
