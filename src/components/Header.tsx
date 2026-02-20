@@ -3,7 +3,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useTheme } from '@/hooks/useTheme';
 import { Button } from '@/components/ui/button';
 import { Link, useNavigate } from 'react-router-dom';
-import { LogOut, User, Code2, Sun, Moon } from 'lucide-react';
+import { LogOut, User, Sun, Moon } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -40,9 +40,7 @@ export function Header() {
       <div className="container flex h-14 items-center gap-2 px-4">
         {/* Logo - always visible */}
         <Link to="/" className="flex items-center gap-2 shrink-0">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20">
-            <Code2 className="h-5 w-5 text-primary" />
-          </div>
+          <img src="/favicon.svg" alt="GrindLeet" className="h-8 w-8 rounded-lg" />
           <span className="text-lg font-semibold tracking-tight hidden sm:inline">GrindLeet</span>
         </Link>
 
@@ -114,9 +112,12 @@ export function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button asChild size="sm" className="rounded-lg shadow-lg shadow-primary/20 px-2 sm:px-3 text-xs sm:text-sm">
-              <Link to="/auth">Sign In</Link>
-            </Button>
+            <Link 
+              to="/auth" 
+              className="rounded-full bg-foreground text-background px-4 py-1.5 text-xs sm:text-sm font-medium hover:bg-foreground/90 transition-colors"
+            >
+              Sign In
+            </Link>
           )}
         </div>
       </div>
