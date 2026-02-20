@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Header } from '@/components/Header';
 import { mergedStriverTopics } from '@/lib/strivers-sde-data';
 import { cn } from '@/lib/utils';

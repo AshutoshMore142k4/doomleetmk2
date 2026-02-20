@@ -674,8 +674,8 @@ void postorder(TreeNode* root, vector<int>& result) {
     ],
   },
   {
-    name: "1D DP (Linear)",
-    slug: "dp-1d",
+    name: "DP Patterns",
+    slug: "dp-patterns",
     templates: [
       {
         title: "Fibonacci-style (Climbing Stairs)",
@@ -725,12 +725,6 @@ void postorder(TreeNode* root, vector<int>& result) {
           "For circular subarray: also check totalSum - minSubarraySum",
         ],
       },
-    ],
-  },
-  {
-    name: "Grid DP (2D)",
-    slug: "dp-grid",
-    templates: [
       {
         title: "Unique Paths",
         timeComplexity: "O(m × n)",
@@ -779,12 +773,6 @@ void postorder(TreeNode* root, vector<int>& result) {
           "Can do in-place on the grid itself to save space",
         ],
       },
-    ],
-  },
-  {
-    name: "Knapsack / Subset DP",
-    slug: "dp-knapsack",
-    templates: [
       {
         title: "0/1 Knapsack (2D)",
         timeComplexity: "O(n × W)",
@@ -863,12 +851,6 @@ void postorder(TreeNode* root, vector<int>& result) {
           "Key difference from 0/1: forward vs reverse inner loop",
         ],
       },
-    ],
-  },
-  {
-    name: "Subsequence DP (LIS / LCS)",
-    slug: "dp-subsequence",
-    templates: [
       {
         title: "LIS — O(n log n)",
         timeComplexity: "O(n log n)",
@@ -918,12 +900,6 @@ void postorder(TreeNode* root, vector<int>& result) {
           "Can optimize to O(min(n,m)) space with rolling array",
         ],
       },
-    ],
-  },
-  {
-    name: "String Palindrome DP",
-    slug: "dp-palindrome",
-    templates: [
       {
         title: "Longest Palindromic Subsequence",
         timeComplexity: "O(n²)",
@@ -985,12 +961,6 @@ void postorder(TreeNode* root, vector<int>& result) {
           "If s[0..i] is already palindrome, dp[i] = 0",
         ],
       },
-    ],
-  },
-  {
-    name: "Interval DP",
-    slug: "dp-interval",
-    templates: [
       {
         title: "Interval DP Skeleton",
         timeComplexity: "O(n³)",
@@ -1049,14 +1019,8 @@ for (int len = 1; len <= n; len++) {
           "dp[l][r] = max coins from bursting all balloons between l and r",
         ],
       },
-    ],
-  },
-  {
-    name: "Stock DP (State Machine)",
-    slug: "dp-stock",
-    templates: [
       {
-        title: "With Cooldown",
+        title: "Stock DP — With Cooldown",
         timeComplexity: "O(n)",
         spaceComplexity: "O(1)",
         code: `int maxProfitCooldown(vector<int>& prices) {
@@ -1081,7 +1045,7 @@ for (int len = 1; len <= n; len++) {
         ],
       },
       {
-        title: "At Most K Transactions",
+        title: "Stock DP — At Most K Transactions",
         timeComplexity: "O(n × k)",
         spaceComplexity: "O(k)",
         code: `int maxProfitK(int k, vector<int>& prices) {
@@ -1112,14 +1076,8 @@ for (int len = 1; len <= n; len++) {
           "O(nk) time, O(k) space",
         ],
       },
-    ],
-  },
-  {
-    name: "Tree DP",
-    slug: "dp-tree",
-    templates: [
       {
-        title: "House Robber III (Postorder, Return States)",
+        title: "Tree DP — House Robber III",
         timeComplexity: "O(n)",
         spaceComplexity: "O(h)",
         code: `pair<long long,long long> dfs(TreeNode* root) {
@@ -1146,12 +1104,6 @@ int rob(TreeNode* root) {
           "take = node.val + notTake(left) + notTake(right)",
         ],
       },
-    ],
-  },
-  {
-    name: "DP on DAG",
-    slug: "dp-dag",
-    templates: [
       {
         title: "Longest Path in DAG",
         timeComplexity: "O(V + E)",
@@ -1188,14 +1140,8 @@ int rob(TreeNode* root) {
           "Works because DAG has no cycles → valid topological order",
         ],
       },
-    ],
-  },
-  {
-    name: "Bitmask DP",
-    slug: "dp-bitmask",
-    templates: [
       {
-        title: "TSP-style Skeleton",
+        title: "Bitmask DP — TSP-style",
         timeComplexity: "O(2^n × n²)",
         spaceComplexity: "O(2^n × n)",
         code: `int N = n;
@@ -1226,14 +1172,8 @@ for (int mask = 0; mask < FULL; mask++) {
           "dp[mask][i] = best cost to reach node i having visited 'mask' nodes",
         ],
       },
-    ],
-  },
-  {
-    name: "Digit DP",
-    slug: "dp-digit",
-    templates: [
       {
-        title: "Count Numbers with Property",
+        title: "Digit DP — Count Numbers with Property",
         timeComplexity: "O(digits × 2 × 2 × 10)",
         spaceComplexity: "O(digits × 2 × 2)",
         code: `string s;
@@ -1272,12 +1212,6 @@ long long solve(long long X) {
           "started flag: have we placed a non-zero digit yet? (handles leading zeros)",
         ],
       },
-    ],
-  },
-  {
-    name: "DP Optimizations",
-    slug: "dp-optimizations",
-    templates: [
       {
         title: "Rolling Array (Space Optimization)",
         timeComplexity: "O(n × m)",

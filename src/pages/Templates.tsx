@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Header } from '@/components/Header';
 import { CodeBlock } from '@/components/CodeBlock';
 import { templatesData } from '@/lib/templates-data';
@@ -13,6 +13,18 @@ export default function Templates() {
   const { user, loading } = useAuth();
   const [expandedTemplates, setExpandedTemplates] = useState<Record<string, boolean>>({});
   const categoryRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const [hidden, setHidden] = useState(false);
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY;
+      setHidden(y > 56 && y > lastScrollY.current);
+      lastScrollY.current = y;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   const toggleTemplate = (key: string) => {
     setExpandedTemplates(prev => ({ ...prev, [key]: !prev[key] }));
@@ -36,7 +48,7 @@ export default function Templates() {
         </div>
 
         {/* Category pills */}
-        <div className="flex flex-wrap gap-2 mb-8 sticky top-14 z-40 bg-background/80 backdrop-blur-xl py-3 -mx-4 px-4">
+        <div className={`flex flex-wrap gap-2 mb-8 sticky z-40 bg-background/80 backdrop-blur-xl py-3 -mx-4 px-4 transition-all duration-300 ${hidden ? 'top-0 -translate-y-full' : 'top-14 translate-y-0'}`}>
           {templatesData.map(cat => (
             <button
               key={cat.slug}
