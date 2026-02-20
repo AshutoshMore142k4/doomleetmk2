@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { DifficultyBadge } from './DifficultyBadge';
 import { CodeBlock } from './CodeBlock';
 import { Problem } from '@/lib/problems-data';
+import { getConstraints } from '@/lib/constraints-data';
 import { cn } from '@/lib/utils';
 import { Star, Bookmark, Code2, ChevronDown, ChevronUp, Lightbulb, Eye } from 'lucide-react';
 
@@ -180,13 +181,14 @@ export function ProblemFeedCard({ problem }: ProblemFeedCardProps) {
               {/* Constraints */}
               <div>
                 <h4 className="text-sm font-semibold mb-2">Constraints</h4>
-                <div className="flex items-center gap-1 text-xs">
-                  <span className="text-muted-foreground">Time:</span>
-                  <span className="text-primary font-mono">{problem.timeComplexity}</span>
-                  <span className="text-muted-foreground mx-2">|</span>
-                  <span className="text-muted-foreground">Space:</span>
-                  <span className="text-primary font-mono">{problem.spaceComplexity}</span>
-                </div>
+                <ul className="space-y-1">
+                  {getConstraints(problem).map((c, i) => (
+                    <li key={i} className="text-xs font-mono text-muted-foreground flex items-start gap-2">
+                      <span className="text-primary mt-0.5">•</span>
+                      <code className="px-1.5 py-0.5 rounded bg-secondary/50">{c}</code>
+                    </li>
+                  ))}
+                </ul>
               </div>
 
               {/* Hints - Tap to Reveal */}
