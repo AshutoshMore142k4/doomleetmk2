@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { ChevronDown, ChevronUp, Code2, Star, Bookmark, Lightbulb, Eye } from 'lucide-react';
 import { DifficultyBadge } from '@/components/DifficultyBadge';
 import { CodeBlock } from '@/components/CodeBlock';
+import { useScrollHide } from '@/hooks/useScrollHide';
 
 function StriverProblemCard({ problem }: { problem: import('@/lib/strivers-sde-data').StriverProblem }) {
   const [showCode, setShowCode] = useState(false);
@@ -168,6 +169,7 @@ function StriverProblemCard({ problem }: { problem: import('@/lib/strivers-sde-d
 }
 
 export default function StriverSheet() {
+  const hidden = useScrollHide();
   const [activeTopic, setActiveTopic] = useState(0);
   const topicRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -182,7 +184,7 @@ export default function StriverSheet() {
     <div className="min-h-screen">
       <Header />
 
-      <div className="sticky top-14 z-40 bg-background/70 backdrop-blur-2xl border-b border-primary/10">
+      <div className={`sticky top-14 z-40 bg-background/70 backdrop-blur-2xl border-b border-primary/10 transition-transform duration-300 ${hidden ? '-translate-y-[calc(100%+3.5rem)]' : 'translate-y-0'}`}>
         <div className="container px-4 py-3">
           <h1 className="text-lg font-semibold mb-2">Striver's SDE Sheet</h1>
           <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">

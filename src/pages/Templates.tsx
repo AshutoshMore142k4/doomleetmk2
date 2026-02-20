@@ -6,9 +6,11 @@ import { ChevronDown, ChevronUp, Lightbulb, Zap, BookOpen, Clock, HardDrive } fr
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
 import { SignInOverlay } from '@/components/SignInOverlay';
+import { useScrollHide } from '@/hooks/useScrollHide';
 
 export default function Templates() {
   const { user, loading } = useAuth();
+  const hidden = useScrollHide();
   const [expandedTemplates, setExpandedTemplates] = useState<Record<string, boolean>>({});
   const categoryRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
@@ -34,7 +36,7 @@ export default function Templates() {
         </div>
 
         {/* Category pills */}
-        <div className="flex flex-wrap gap-2 mb-8 sticky top-14 z-40 bg-background/80 backdrop-blur-xl py-3 -mx-4 px-4">
+        <div className={`flex flex-wrap gap-2 mb-8 sticky top-14 z-40 bg-background/80 backdrop-blur-xl py-3 -mx-4 px-4 transition-transform duration-300 ${hidden ? '-translate-y-[calc(100%+3.5rem)]' : 'translate-y-0'}`}>
           {templatesData.map(cat => (
             <button
               key={cat.slug}
