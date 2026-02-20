@@ -6,6 +6,7 @@ import { Shuffle, Filter, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
+import { usePageTitle } from '@/hooks/usePageTitle';
 import { SignInOverlay } from '@/components/SignInOverlay';
 
 type Difficulty = 'Easy' | 'Medium' | 'Hard';
@@ -21,6 +22,7 @@ function shuffleArray<T>(array: T[]): T[] {
 }
 
 export default function Problems() {
+  usePageTitle('NeetCode 150 Problems');
   const { user, loading } = useAuth();
   const [shuffledProblems, setShuffledProblems] = useState(() => shuffleArray(problemsData));
   const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty | null>(null);

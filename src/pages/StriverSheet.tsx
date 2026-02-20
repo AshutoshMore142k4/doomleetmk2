@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { ChevronDown, ChevronUp, Code2, Star, Bookmark, Lightbulb, Eye } from 'lucide-react';
 import { DifficultyBadge } from '@/components/DifficultyBadge';
 import { CodeBlock } from '@/components/CodeBlock';
+import { usePageTitle } from '@/hooks/usePageTitle';
 
 function StriverProblemCard({ problem }: { problem: import('@/lib/strivers-sde-data').StriverProblem }) {
   const [showCode, setShowCode] = useState(false);
@@ -168,6 +169,7 @@ function StriverProblemCard({ problem }: { problem: import('@/lib/strivers-sde-d
 }
 
 export default function StriverSheet() {
+  usePageTitle("Striver's SDE Sheet");
   const [activeTopic, setActiveTopic] = useState(0);
   const topicRefs = useRef<(HTMLDivElement | null)[]>([]);
 
