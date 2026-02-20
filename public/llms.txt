@@ -1,8 +1,8 @@
-# DoomLeet
+# GrindLeet
 
 > Master coding interviews with NeetCode 150 and Striver's SDE Sheet. 400+ problems with detailed C++ solutions, organized by pattern and difficulty.
 
-DoomLeet is a free coding interview preparation platform. It provides two complete, curated problem sets — NeetCode 150 and Striver's SDE Sheet — with battle-tested C++ solutions, approach explanations, time/space complexity analysis, and algorithm templates.
+GrindLeet is a free coding interview preparation platform. It provides two complete, curated problem sets — NeetCode 150 and Striver's SDE Sheet — with battle-tested C++ solutions, approach explanations, time/space complexity analysis, and algorithm templates.
 
 ## Features
 
@@ -15,10 +15,10 @@ DoomLeet is a free coding interview preparation platform. It provides two comple
 
 ## Pages
 
-- [Home](https://doomleet.lovable.app/): Landing page with overview and navigation
-- [NeetCode 150 Problems](https://doomleet.lovable.app/problems): Browse and study all 150 NeetCode problems
-- [Striver's SDE Sheet](https://doomleet.lovable.app/striver): Browse Striver's curated problem set by topic
-- [Algorithm Templates](https://doomleet.lovable.app/templates): Battle-tested C++ algorithm templates
+- [Home](/): Landing page with overview and navigation
+- [NeetCode 150 Problems](/problems): Browse and study all 150 NeetCode problems
+- [Striver's SDE Sheet](/striver): Browse Striver's curated problem set by topic
+- [Algorithm Templates](/templates): Battle-tested C++ algorithm templates
 
 ## Topics Covered
 

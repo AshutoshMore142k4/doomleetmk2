@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-const BASE_TITLE = 'DoomLeet';
+const BASE_TITLE = 'GrindLeet';
 
 export function usePageTitle(title?: string) {
   useEffect(() => {

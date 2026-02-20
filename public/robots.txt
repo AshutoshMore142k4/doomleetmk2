@@ -35,4 +35,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://doomleet.lovable.app/sitemap.xml
+Sitemap: /sitemap.xml
