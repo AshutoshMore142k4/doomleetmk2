@@ -64,6 +64,18 @@ export function Header() {
           >
             Templates
           </Link>
+          <Link 
+            to="/mapper" 
+            className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all"
+          >
+            Mapper
+          </Link>
+          <Link 
+            to="/compare" 
+            className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all"
+          >
+            Compare
+          </Link>
 
           <button
             onClick={toggleTheme}

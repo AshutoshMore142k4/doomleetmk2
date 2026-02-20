@@ -2,11 +2,12 @@ import { useState, useRef, useEffect } from 'react';
 import { Header } from '@/components/Header';
 import { CodeBlock } from '@/components/CodeBlock';
 import { templatesData } from '@/lib/templates-data';
-import { ChevronDown, ChevronUp, Lightbulb, Zap, BookOpen, Clock, HardDrive } from 'lucide-react';
+import { ChevronDown, ChevronUp, Lightbulb, Zap, BookOpen, Clock, HardDrive, CheckCircle2, AlertCircle, Circle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
 import { SignInOverlay } from '@/components/SignInOverlay';
 import { usePageTitle } from '@/hooks/usePageTitle';
+import { useTemplateProgress, TemplateStatus } from '@/hooks/useTemplateProgress';
 
 export default function Templates() {
   usePageTitle('Algorithm Templates');
@@ -15,6 +16,13 @@ export default function Templates() {
   const categoryRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const [hidden, setHidden] = useState(false);
   const lastScrollY = useRef(0);
+  const { getStatus, cycleStatus, stats } = useTemplateProgress();
+
+  const statusConfig: Record<TemplateStatus, { icon: typeof Circle; label: string; color: string; bg: string }> = {
+    none: { icon: Circle, label: 'Not started', color: 'text-muted-foreground/40', bg: 'hover:bg-muted/50' },
+    learned: { icon: CheckCircle2, label: 'Learned', color: 'text-green-400', bg: 'bg-green-500/10' },
+    'needs-review': { icon: AlertCircle, label: 'Needs review', color: 'text-yellow-400', bg: 'bg-yellow-500/10' },
+  };
 
   useEffect(() => {
     const onScroll = () => {
@@ -46,6 +54,22 @@ export default function Templates() {
           <h1 className="text-3xl font-bold tracking-tight mb-2">C++ Templates</h1>
           <p className="text-muted-foreground">Battle-tested patterns for LeetCode. Tap any template to expand code, tips & when to use.</p>
         </div>
+
+        {/* Progress stats bar */}
+        {(stats.learned > 0 || stats.needsReview > 0) && (
+          <div className="flex items-center gap-4 mb-4 px-3 py-2 rounded-xl border border-border bg-card/50 text-xs">
+            <div className="flex items-center gap-1.5 text-green-400">
+              <CheckCircle2 className="h-3.5 w-3.5" />
+              <span className="font-medium">{stats.learned}</span>
+              <span className="text-muted-foreground">learned</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-yellow-400">
+              <AlertCircle className="h-3.5 w-3.5" />
+              <span className="font-medium">{stats.needsReview}</span>
+              <span className="text-muted-foreground">to review</span>
+            </div>
+          </div>
+        )}
 
         {/* Category pills */}
         <div className={`flex flex-wrap gap-2 mb-8 sticky z-40 bg-background/80 backdrop-blur-xl py-3 -mx-4 px-4 transition-all duration-300 ${hidden ? 'top-0 -translate-y-full' : 'top-14 translate-y-0'}`}>
@@ -83,10 +107,26 @@ export default function Templates() {
                       key={key}
                       className="rounded-xl border border-border bg-card/50 overflow-hidden"
                     >
-                      <button
-                        onClick={() => toggleTemplate(key)}
-                        className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-primary/[0.04] transition-colors"
-                      >
+                      <div className="flex items-center">
+                        {/* Status toggle button */}
+                        <button
+                          onClick={(e) => { e.stopPropagation(); cycleStatus(key); }}
+                          className={cn(
+                            'shrink-0 flex items-center justify-center w-9 h-full border-r border-border/50 transition-colors',
+                            statusConfig[getStatus(key)].bg
+                          )}
+                          title={`Status: ${statusConfig[getStatus(key)].label} (click to change)`}
+                        >
+                          {(() => {
+                            const StatusIcon = statusConfig[getStatus(key)].icon;
+                            return <StatusIcon className={cn('h-4 w-4', statusConfig[getStatus(key)].color)} />;
+                          })()}
+                        </button>
+
+                        <button
+                          onClick={() => toggleTemplate(key)}
+                          className="flex-1 flex items-center justify-between px-4 py-3 text-left hover:bg-primary/[0.04] transition-colors"
+                        >
                         <div className="flex items-center gap-3 min-w-0">
                           <span className="font-medium text-sm">{template.title}</span>
                           <div className="hidden sm:flex items-center gap-2 text-xs text-muted-foreground">
@@ -106,6 +146,7 @@ export default function Templates() {
                           <ChevronDown className="h-4 w-4 text-muted-foreground shrink-0" />
                         )}
                       </button>
+                      </div>
 
                       {isExpanded && (
                         <div className="px-4 pb-4 space-y-4">
