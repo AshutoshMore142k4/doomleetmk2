@@ -6,8 +6,10 @@ import { ChevronDown, ChevronUp, Lightbulb, Zap, BookOpen, Clock, HardDrive } fr
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
 import { SignInOverlay } from '@/components/SignInOverlay';
+import { usePageTitle } from '@/hooks/usePageTitle';
 
 export default function Templates() {
+  usePageTitle('Algorithm Templates');
   const { user, loading } = useAuth();
   const [expandedTemplates, setExpandedTemplates] = useState<Record<string, boolean>>({});
   const categoryRefs = useRef<Record<string, HTMLDivElement | null>>({});

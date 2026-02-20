@@ -8,9 +8,11 @@ import { problemsData, categories } from '@/lib/problems-data';
 import { mergedStriverTopics } from '@/lib/strivers-sde-data';
 import { useMemo } from 'react';
 import { motion } from 'motion/react';
+import { usePageTitle } from '@/hooks/usePageTitle';
 
 
 export default function Index() {
+  usePageTitle();
   const stats = useMemo(() => {
     const easy = problemsData.filter((p) => p.difficulty === 'Easy').length;
     const medium = problemsData.filter((p) => p.difficulty === 'Medium').length;
