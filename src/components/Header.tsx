@@ -37,46 +37,59 @@ export function Header() {
 
   return (
     <header className={`sticky top-0 z-50 w-full border-b border-primary/10 bg-background/70 backdrop-blur-2xl supports-[backdrop-filter]:bg-background/50 transition-transform duration-300 ${hidden ? '-translate-y-full' : 'translate-y-0'}`}>
-      <div className="container flex h-14 items-center justify-between px-4">
-        <Link to="/" className="flex items-center gap-2">
+      <div className="container flex h-14 items-center gap-2 px-4">
+        {/* Logo - always visible */}
+        <Link to="/" className="flex items-center gap-2 shrink-0">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20">
             <Code2 className="h-5 w-5 text-primary" />
           </div>
-          <span className="text-lg font-semibold tracking-tight">GrindLeet</span>
+          <span className="text-lg font-semibold tracking-tight hidden sm:inline">GrindLeet</span>
         </Link>
 
-        <nav className="flex items-center gap-0.5 sm:gap-1">
-          <Link 
-            to="/problems" 
-            className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all"
-          >
-            NeetCode
-          </Link>
-          <Link 
-            to="/striver" 
-            className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all"
-          >
-            Striver
-          </Link>
-          <Link 
-            to="/templates" 
-            className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all"
-          >
-            Templates
-          </Link>
-          <Link 
-            to="/mapper" 
-            className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all"
-          >
-            Mapper
-          </Link>
-          <Link 
-            to="/compare" 
-            className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all"
-          >
-            Compare
-          </Link>
+        {/* Scrollable nav links */}
+        <nav className="flex-1 overflow-x-auto scrollbar-hide min-w-0">
+          <div className="flex items-center gap-0.5 sm:gap-1 w-max">
+            <Link 
+              to="/problems" 
+              className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all whitespace-nowrap"
+            >
+              NeetCode
+            </Link>
+            <Link 
+              to="/striver" 
+              className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all whitespace-nowrap"
+            >
+              Striver
+            </Link>
+            <Link 
+              to="/templates" 
+              className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all whitespace-nowrap"
+            >
+              Templates
+            </Link>
+            <Link 
+              to="/mapper" 
+              className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all whitespace-nowrap"
+            >
+              Mapper
+            </Link>
+            <Link 
+              to="/compare" 
+              className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all whitespace-nowrap"
+            >
+              Compare
+            </Link>
+            <Link 
+              to="/cheatsheet" 
+              className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all whitespace-nowrap"
+            >
+              Bonus
+            </Link>
+          </div>
+        </nav>
 
+        {/* Right-side actions - always visible */}
+        <div className="flex items-center gap-0.5 shrink-0">
           <button
             onClick={toggleTheme}
             className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-lg text-muted-foreground hover:text-foreground hover:bg-primary/[0.06] transition-all"
@@ -105,7 +118,7 @@ export function Header() {
               <Link to="/auth">Sign In</Link>
             </Button>
           )}
-        </nav>
+        </div>
       </div>
     </header>
   );

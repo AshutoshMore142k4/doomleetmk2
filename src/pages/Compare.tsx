@@ -105,7 +105,7 @@ export default function Compare() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       <Header />
       <div className="container max-w-4xl px-4 py-8">
         <div className="mb-8">

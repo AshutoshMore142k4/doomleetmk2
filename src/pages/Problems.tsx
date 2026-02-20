@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { Header } from '@/components/Header';
 import { ProblemFeedCard } from '@/components/ProblemFeedCard';
 import { problemsData } from '@/lib/problems-data';
@@ -27,6 +27,18 @@ export default function Problems() {
   const [shuffledProblems, setShuffledProblems] = useState(() => shuffleArray(problemsData));
   const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty | null>(null);
   const [showFilters, setShowFilters] = useState(false);
+  const [scrollHidden, setScrollHidden] = useState(false);
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrollHidden(y > 56 && y > lastScrollY.current);
+      lastScrollY.current = y;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   const reshuffle = () => {
     setShuffledProblems(shuffleArray(problemsData));
@@ -52,7 +64,10 @@ export default function Problems() {
       <Header />
 
       {/* Sticky Controls */}
-      <div className="sticky top-14 z-40 bg-background/70 backdrop-blur-2xl border-b border-primary/10">
+      <div className={cn(
+        "sticky top-14 z-40 bg-background/70 backdrop-blur-2xl border-b border-primary/10 transition-transform duration-300",
+        scrollHidden ? '-translate-y-[calc(100%+3.5rem)]' : 'translate-y-0'
+      )}>
         <div className="px-3 sm:container sm:px-4 py-3">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2">

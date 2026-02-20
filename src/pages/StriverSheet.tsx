@@ -39,7 +39,7 @@ function StriverProblemCard({ problem }: { problem: import('@/lib/strivers-sde-d
           </section>
 
           {/* Complexity */}
-          <div className="flex items-center gap-1 text-sm mb-6">
+          <div className="flex flex-wrap items-center gap-1 text-sm mb-6">
             <span className="text-muted-foreground">Time:</span>
             <span className="text-primary font-mono">{problem.timeComplexity}</span>
             <span className="text-muted-foreground mx-2">|</span>
@@ -172,6 +172,18 @@ export default function StriverSheet() {
   usePageTitle("Striver's SDE Sheet");
   const [activeTopic, setActiveTopic] = useState(0);
   const topicRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [scrollHidden, setScrollHidden] = useState(false);
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrollHidden(y > 56 && y > lastScrollY.current);
+      lastScrollY.current = y;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   const scrollToTopic = (index: number) => {
     setActiveTopic(index);
@@ -181,10 +193,13 @@ export default function StriverSheet() {
   const topics = mergedStriverTopics;
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-x-hidden">
       <Header />
 
-      <div className="sticky top-14 z-40 bg-background/70 backdrop-blur-2xl border-b border-primary/10">
+      <div className={cn(
+        "sticky top-14 z-40 bg-background/70 backdrop-blur-2xl border-b border-primary/10 transition-transform duration-300",
+        scrollHidden ? '-translate-y-[calc(100%+3.5rem)]' : 'translate-y-0'
+      )}>
         <div className="container px-4 py-3">
           <h1 className="text-lg font-semibold mb-2">Striver's SDE Sheet</h1>
           <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">

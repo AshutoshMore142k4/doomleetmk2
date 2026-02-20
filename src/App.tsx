@@ -12,6 +12,7 @@ import StriverSheet from "./pages/StriverSheet";
 import Templates from "./pages/Templates";
 import ProblemMapper from "./pages/ProblemMapper";
 import Compare from "./pages/Compare";
+import CheatSheet from "./pages/CheatSheet";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Support from "./pages/Support";
 import Auth from "./pages/Auth";
@@ -25,7 +26,7 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <div className="min-h-screen bg-background">
+        <div className="min-h-screen bg-background overflow-x-hidden">
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
@@ -34,6 +35,7 @@ const App = () => (
               <Route path="/templates" element={<Templates />} />
               <Route path="/mapper" element={<ProblemMapper />} />
               <Route path="/compare" element={<Compare />} />
+              <Route path="/cheatsheet" element={<CheatSheet />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/support" element={<Support />} />
               <Route path="/auth" element={<Auth />} />
