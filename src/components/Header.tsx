@@ -60,7 +60,7 @@ export function Header() {
           </Link>
           <Link 
             to="/templates" 
-            className="hidden sm:inline-block px-3 py-1.5 text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all"
+            className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all"
           >
             Templates
           </Link>

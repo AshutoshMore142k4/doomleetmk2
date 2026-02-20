@@ -89,8 +89,13 @@ export default function Index() {
               </Link>
               <Link to="/striver">
                 <NeonButton size="lg" className="gap-2">
-                  
                   Striver's Sheet
+                </NeonButton>
+              </Link>
+              <Link to="/templates">
+                <NeonButton size="lg" className="gap-2">
+                  <Terminal className="h-4 w-4" />
+                  Templates
                 </NeonButton>
               </Link>
             </motion.div>
