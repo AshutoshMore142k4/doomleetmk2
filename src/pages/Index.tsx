@@ -138,8 +138,8 @@ export default function Index() {
                 {stats.total} handpicked problems across {stats.categories} patterns. Scrollable feed with shuffle, filtering by difficulty, and instant code reveal.
               </p>
               <Link to="/problems">
-                <NeonButton size="sm" className="gap-2">
-                  Explore NeetCode <ArrowRight className="h-3.5 w-3.5" />
+                <NeonButton size="sm">
+                  Explore NeetCode
                 </NeonButton>
               </Link>
             </NeonCard>
@@ -153,8 +153,8 @@ export default function Index() {
                 {stats.striverTotal} problems organized by {mergedStriverTopics.length} unified topics. Topic-wise scrolling with sticky navigation pills.
               </p>
               <Link to="/striver">
-                <NeonButton size="sm" className="gap-2">
-                  Explore Striver <ArrowRight className="h-3.5 w-3.5" />
+                <NeonButton size="sm">
+                  Explore Striver
                 </NeonButton>
               </Link>
             </NeonCard>
@@ -212,9 +212,8 @@ export default function Index() {
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link to="/problems">
-                <NeonButton variant="solid" size="lg" className="gap-2 shadow-lg shadow-primary/25">
+                <NeonButton variant="solid" size="lg" className="shadow-lg shadow-primary/25">
                   View All Problems
-                  <ArrowRight className="h-4 w-4" />
                 </NeonButton>
               </Link>
               <Link to="/auth">
