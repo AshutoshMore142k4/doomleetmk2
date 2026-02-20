@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
 import { SignInOverlay } from '@/components/SignInOverlay';
-import { useScrollHide } from '@/hooks/useScrollHide';
 
 type Difficulty = 'Easy' | 'Medium' | 'Hard';
 
@@ -23,7 +22,6 @@ function shuffleArray<T>(array: T[]): T[] {
 
 export default function Problems() {
   const { user, loading } = useAuth();
-  const hidden = useScrollHide();
   const [shuffledProblems, setShuffledProblems] = useState(() => shuffleArray(problemsData));
   const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty | null>(null);
   const [showFilters, setShowFilters] = useState(false);
@@ -52,7 +50,7 @@ export default function Problems() {
       <Header />
 
       {/* Sticky Controls */}
-      <div className={`sticky top-14 z-40 bg-background/70 backdrop-blur-2xl border-b border-primary/10 transition-transform duration-300 ${hidden ? '-translate-y-[calc(100%+3.5rem)]' : 'translate-y-0'}`}>
+      <div className="sticky top-14 z-40 bg-background/70 backdrop-blur-2xl border-b border-primary/10">
         <div className="container px-4 py-3">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2">
