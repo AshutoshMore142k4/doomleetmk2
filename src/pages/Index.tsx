@@ -73,7 +73,7 @@ export default function Index() {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="mb-4 max-w-2xl text-base text-muted-foreground sm:text-lg leading-relaxed">
 
-              NeetCode 150 + Striver's SDE Sheet — {stats.total + stats.striverTotal} problems with C++ solutions, organized by pattern and difficulty.
+              NeetCode 150 + Striver's SDE Sheet — {stats.total + stats.striverTotal} problems with C++ solutions, organized by pattern and difficulty. Battle-tested templates, LC-to-pattern mapper, and side-by-side algorithm comparisons — everything you need in one place.
             </motion.p>
 
             <div className="mb-10" />
