@@ -25,6 +25,7 @@ export default function Index() {
     <div className="min-h-screen">
       <Header />
 
+      <main>
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         <RetroGrid
@@ -105,7 +106,7 @@ export default function Index() {
       </section>
 
       {/* Stats Section */}
-      <section className="border-b border-border/40 py-16">
+      <section aria-label="Platform statistics" className="border-b border-border/40 py-16">
         <div className="container px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
@@ -124,7 +125,7 @@ export default function Index() {
       </section>
 
       {/* Features Section */}
-      <section className="border-b border-border/40 py-16">
+      <section aria-label="Problem sets" className="border-b border-border/40 py-16">
         <div className="container px-4">
           <h2 className="text-2xl font-bold text-center mb-4">Two Complete Problem Sets</h2>
           <p className="text-muted-foreground text-center mb-12 max-w-xl mx-auto">
@@ -165,7 +166,7 @@ export default function Index() {
       </section>
 
       {/* Features Grid */}
-      <section className="border-b border-border/40 py-16">
+      <section aria-label="Key features" className="border-b border-border/40 py-16">
         <div className="container px-4">
           <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             {[
@@ -188,7 +189,7 @@ export default function Index() {
       </section>
 
       {/* Topics Covered */}
-      <section className="border-b border-border/40 py-16">
+      <section aria-label="Topics covered" className="border-b border-border/40 py-16">
         <div className="container px-4">
           <h2 className="text-2xl font-bold text-center mb-4">Topics Covered</h2>
           <p className="text-muted-foreground text-center mb-8 max-w-xl mx-auto">
@@ -205,7 +206,7 @@ export default function Index() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20">
+      <section aria-label="Call to action" className="py-20">
         <div className="container px-4">
           <NeonCard className="max-w-2xl mx-auto p-12 text-center">
             <h2 className="text-2xl font-bold mb-4">Ready to Start?</h2>
@@ -227,6 +228,7 @@ export default function Index() {
           </NeonCard>
         </div>
       </section>
+      </main>
 
       {/* Footer */}
       <footer className="border-t border-border/40">

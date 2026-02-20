@@ -1,0 +1,33 @@
+# DoomLeet
+
+> Master coding interviews with NeetCode 150 and Striver's SDE Sheet. 400+ problems with detailed C++ solutions, organized by pattern and difficulty.
+
+DoomLeet is a free coding interview preparation platform. It provides two complete, curated problem sets — NeetCode 150 and Striver's SDE Sheet — with battle-tested C++ solutions, approach explanations, time/space complexity analysis, and algorithm templates.
+
+## Features
+
+- **NeetCode 150**: 150 handpicked LeetCode problems across 18 topic patterns (Arrays & Hashing, Two Pointers, Sliding Window, Stack, Binary Search, Linked List, Trees, Tries, Heap/Priority Queue, Backtracking, Graphs, Advanced Graphs, 1-D Dynamic Programming, 2-D Dynamic Programming, Greedy, Intervals, Math & Geometry, Bit Manipulation). Filter by Easy, Medium, or Hard difficulty.
+- **Striver's SDE Sheet**: 180+ problems organized by topic with sticky navigation. Covers arrays, linked lists, greedy, recursion, binary search, heaps, stacks, queues, strings, trees, graphs, dynamic programming, and tries.
+- **Algorithm Templates**: Ready-to-use C++ code templates for common algorithmic patterns including Binary Search, Two Pointers, Sliding Window, BFS/DFS, Union Find, Topological Sort, Dijkstra's, and more. Each template includes when-to-use guidance and complexity analysis.
+- **Progress Tracking**: Sign in to track completed problems and stay motivated.
+- **Difficulty Filtering**: Filter problems by Easy, Medium, or Hard.
+- **Shuffle Mode**: Randomize problem order for varied practice.
+
+## Pages
+
+- [Home](https://doomleet.lovable.app/): Landing page with overview and navigation
+- [NeetCode 150 Problems](https://doomleet.lovable.app/problems): Browse and study all 150 NeetCode problems
+- [Striver's SDE Sheet](https://doomleet.lovable.app/striver): Browse Striver's curated problem set by topic
+- [Algorithm Templates](https://doomleet.lovable.app/templates): Battle-tested C++ algorithm templates
+
+## Topics Covered
+
+Arrays & Hashing, Two Pointers, Sliding Window, Stack, Binary Search, Linked List, Trees, Tries, Heap / Priority Queue, Backtracking, Graphs, Advanced Graphs, 1-D Dynamic Programming, 2-D Dynamic Programming, Greedy, Intervals, Math & Geometry, Bit Manipulation
+
+## Target Audience
+
+Software engineers and computer science students preparing for technical coding interviews at companies like Google, Meta, Amazon, Apple, Microsoft, and other top tech companies.
+
+## Tech Stack
+
+React, TypeScript, Tailwind CSS, Vite
