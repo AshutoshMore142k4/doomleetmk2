@@ -233,9 +233,19 @@ export default function Index() {
       {/* Footer */}
       <footer className="border-t border-border/40">
         <div className="container px-4 py-6">
-          <p className="text-center text-sm text-muted-foreground">
-            Built for developers preparing for technical interviews
-          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p className="text-sm text-muted-foreground">
+              Built for developers preparing for technical interviews
+            </p>
+            <div className="flex items-center gap-4">
+              <Link to="/privacy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Privacy Policy
+              </Link>
+              <Link to="/support" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Support
+              </Link>
+            </div>
+          </div>
         </div>
       </footer>
     </div>);

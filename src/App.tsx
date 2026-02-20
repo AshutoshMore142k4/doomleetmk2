@@ -12,6 +12,8 @@ import StriverSheet from "./pages/StriverSheet";
 import Templates from "./pages/Templates";
 import ProblemMapper from "./pages/ProblemMapper";
 import Compare from "./pages/Compare";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Support from "./pages/Support";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
@@ -32,6 +34,8 @@ const App = () => (
               <Route path="/templates" element={<Templates />} />
               <Route path="/mapper" element={<ProblemMapper />} />
               <Route path="/compare" element={<Compare />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/support" element={<Support />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
