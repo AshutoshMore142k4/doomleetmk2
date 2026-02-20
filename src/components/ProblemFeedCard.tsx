@@ -86,7 +86,7 @@ export function ProblemFeedCard({ problem }: ProblemFeedCardProps) {
   const functionName = problem.solutionCode.match(/(?:int|void|bool|string|double|vector|ListNode|TreeNode|Node|long long|float|char|unsigned|auto|pair)\s*[<\[\]&*\s,\w>]*\s+(\w+)\s*\(/)?.[1] || problem.solutionCode.match(/class\s+(\w+)/)?.[1] || 'solution';
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
+    <div className="w-full max-w-2xl mx-auto overflow-hidden">
       <div className="group/card relative bg-primary/[0.04] backdrop-blur-2xl border border-primary/15 rounded-2xl overflow-hidden shadow-lg shadow-primary/5 ring-1 ring-primary/[0.08] transition-all duration-500 hover:border-primary/30 hover:shadow-primary/15 hover:bg-primary/[0.06]">
         {/* Top neon line */}
         <span className="absolute inset-x-0 top-0 h-px opacity-0 group-hover/card:opacity-60 transition-all duration-500 ease-in-out bg-gradient-to-r w-3/4 mx-auto from-transparent via-primary to-transparent" />
