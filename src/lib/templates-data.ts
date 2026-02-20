@@ -707,12 +707,12 @@ void postorder(TreeNode* root, vector<int>& result) {
         timeComplexity: "O(n)",
         spaceComplexity: "O(1)",
         code: `int maxSubArray(vector<int>& nums) {
-    long long best = LLONG_MIN, cur = 0;
-    for (int x : nums) {
-        cur = max((long long)x, cur + x);
+    int best = nums[0], cur = nums[0];
+    for (int i = 1; i < (int)nums.size(); i++) {
+        cur = max(nums[i], cur + nums[i]);
         best = max(best, cur);
     }
-    return (int)best;
+    return best;
 }`,
         whenToUse: [
           "Maximum sum contiguous subarray",
@@ -830,7 +830,7 @@ void postorder(TreeNode* root, vector<int>& result) {
         timeComplexity: "O(n × amount)",
         spaceComplexity: "O(amount)",
         code: `int coinChange(vector<int>& coins, int amount) {
-    const int INF = 1e9;
+    const int INF = amount + 1; // safe sentinel: valid answer is always <= amount
     vector<int> dp(amount + 1, INF);
     dp[0] = 0;
     for (int c : coins) {
@@ -962,18 +962,27 @@ void postorder(TreeNode* root, vector<int>& result) {
         ],
       },
       {
-        title: "Interval DP Skeleton",
+        title: "Interval DP — Matrix Chain Multiplication",
         timeComplexity: "O(n³)",
         spaceComplexity: "O(n²)",
-        code: `// dp[l][r] computed by increasing interval length
-for (int len = 1; len <= n; len++) {
-    for (int l = 0; l + len - 1 < n; l++) {
-        int r = l + len - 1;
-        dp[l][r] = INIT;
-        for (int k = l; k <= r; k++) {
-            dp[l][r] = combine(dp[l][r], dp[l][k-1], dp[k+1][r], k);
+        code: `// Matrix Chain: dims[] has n+1 elements for n matrices
+// Matrix i has dimensions dims[i] x dims[i+1]
+int matrixChainOrder(vector<int>& dims) {
+    int n = dims.size() - 1;
+    vector<vector<int>> dp(n, vector<int>(n, 0));
+
+    for (int len = 2; len <= n; len++) {
+        for (int l = 0; l + len - 1 < n; l++) {
+            int r = l + len - 1;
+            dp[l][r] = INT_MAX;
+            for (int k = l; k < r; k++) {
+                int cost = dp[l][k] + dp[k+1][r]
+                         + dims[l] * dims[k+1] * dims[r+1];
+                dp[l][r] = min(dp[l][r], cost);
+            }
         }
     }
+    return dp[0][n - 1];
 }`,
         whenToUse: [
           "\"Merge stones\", matrix chain multiplication",
@@ -1144,22 +1153,29 @@ int rob(TreeNode* root) {
         title: "Bitmask DP — TSP-style",
         timeComplexity: "O(2^n × n²)",
         spaceComplexity: "O(2^n × n)",
-        code: `int N = n;
-int FULL = 1 << N;
-const long long INF = (1LL<<60);
-vector<vector<long long>> dp(FULL, vector<long long>(N, INF));
+        code: `long long tsp(vector<vector<int>>& cost) {
+    int n = cost.size();
+    int FULL = 1 << n;
+    const long long INF = 1e18;
+    vector<vector<long long>> dp(FULL, vector<long long>(n, INF));
 
-dp[1<<0][0] = 0; // start at node 0
+    dp[1][0] = 0; // start at node 0
 
-for (int mask = 0; mask < FULL; mask++) {
-    for (int i = 0; i < N; i++) if (mask & (1<<i)) {
-        long long cur = dp[mask][i];
-        if (cur >= INF/2) continue;
-        for (int j = 0; j < N; j++) if (!(mask & (1<<j))) {
-            int nmask = mask | (1<<j);
-            dp[nmask][j] = min(dp[nmask][j], cur + cost[i][j]);
+    for (int mask = 1; mask < FULL; mask++) {
+        for (int i = 0; i < n; i++) {
+            if (!(mask & (1 << i)) || dp[mask][i] >= INF) continue;
+            for (int j = 0; j < n; j++) {
+                if (mask & (1 << j)) continue;
+                int nmask = mask | (1 << j);
+                dp[nmask][j] = min(dp[nmask][j], dp[mask][i] + cost[i][j]);
+            }
         }
     }
+
+    long long ans = INF;
+    for (int i = 0; i < n; i++)
+        ans = min(ans, dp[FULL - 1][i] + cost[i][0]);
+    return ans;
 }`,
         whenToUse: [
           "TSP — visit all nodes with minimum cost",
@@ -1173,22 +1189,25 @@ for (int mask = 0; mask < FULL; mask++) {
         ],
       },
       {
-        title: "Digit DP — Count Numbers with Property",
+        title: "Digit DP — Count Numbers Without Digit 4",
         timeComplexity: "O(digits × 2 × 2 × 10)",
         spaceComplexity: "O(digits × 2 × 2)",
         code: `string s;
 long long memo[20][2][2];
 bool vis[20][2][2];
 
+// Count numbers in [1, X] that do NOT contain digit 4
 long long dfs(int pos, bool tight, bool started) {
-    if (pos == (int)s.size()) return 1; // adjust base
+    if (pos == (int)s.size())
+        return started ? 1 : 0; // only count if we placed a non-zero number
     if (vis[pos][tight][started])
         return memo[pos][tight][started];
     vis[pos][tight][started] = true;
 
     long long ans = 0;
-    int lim = tight ? (s[pos]-'0') : 9;
+    int lim = tight ? (s[pos] - '0') : 9;
     for (int d = 0; d <= lim; d++) {
+        if (d == 4) continue; // skip forbidden digit
         bool ntight = tight && (d == lim);
         bool nstarted = started || (d != 0);
         ans += dfs(pos + 1, ntight, nstarted);
@@ -1197,6 +1216,7 @@ long long dfs(int pos, bool tight, bool started) {
 }
 
 long long solve(long long X) {
+    if (X <= 0) return 0;
     s = to_string(X);
     memset(vis, 0, sizeof(vis));
     return dfs(0, true, false);
@@ -1244,22 +1264,29 @@ int lcs(string a, string b) {
         ],
       },
       {
-        title: "Monotonic Deque Optimization",
-        timeComplexity: "O(n) — reduced from O(n × k)",
+        title: "Sliding Window Maximum (Monotonic Deque)",
+        timeComplexity: "O(n)",
         spaceComplexity: "O(k)",
-        code: `// dp[i] = min(dp[j] + cost(j,i)) for j in window [i-k, i-1]
-// Use deque to maintain candidates in O(1) per transition
-deque<int> dq;
-for (int i = 0; i < n; i++) {
-    // Remove out-of-window elements
-    while (!dq.empty() && dq.front() < i - k) dq.pop_front();
-    
-    // dp[i] = dp[dq.front()] + cost
-    if (!dq.empty()) dp[i] = dp[dq.front()] + /* cost */;
-    
-    // Maintain monotonicity (increasing for min queries)
-    while (!dq.empty() && dp[dq.back()] >= dp[i]) dq.pop_back();
-    dq.push_back(i);
+        code: `vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+    deque<int> dq; // stores indices, front = index of current max
+    vector<int> result;
+
+    for (int i = 0; i < (int)nums.size(); i++) {
+        // Remove out-of-window elements from front
+        while (!dq.empty() && dq.front() <= i - k)
+            dq.pop_front();
+
+        // Remove smaller elements from back (they can never be max)
+        while (!dq.empty() && nums[dq.back()] <= nums[i])
+            dq.pop_back();
+
+        dq.push_back(i);
+
+        // Window is fully formed starting at index k-1
+        if (i >= k - 1)
+            result.push_back(nums[dq.front()]);
+    }
+    return result;
 }`,
         whenToUse: [
           "DP transition looks at min/max over a sliding window of previous states",
@@ -1452,6 +1479,710 @@ public:
           "Start with all nodes having indegree 0",
           "If result size < n, there's a cycle",
           "BFS (Kahn's) is easier to implement than DFS topological sort",
+        ],
+      },
+    ],
+  },
+  {
+    name: "Greedy",
+    slug: "greedy",
+    templates: [
+      {
+        title: "Interval Scheduling (Max Non-Overlapping)",
+        timeComplexity: "O(n log n)",
+        spaceComplexity: "O(1)",
+        code: `int maxNonOverlapping(vector<vector<int>>& intervals) {
+    sort(intervals.begin(), intervals.end(),
+         [](auto& a, auto& b) { return a[1] < b[1]; });
+    int count = 0, end = INT_MIN;
+    for (auto& iv : intervals) {
+        if (iv[0] >= end) {
+            count++;
+            end = iv[1];
+        }
+    }
+    return count;
+}`,
+        whenToUse: [
+          "Select maximum non-overlapping intervals",
+          "Meeting rooms / job scheduling variants",
+          "Sort by end time, greedily pick earliest-finishing",
+        ],
+        tips: [
+          "Always sort by END time, not start time",
+          "Greedy choice: earliest finish leaves most room",
+          "For min intervals to cover range, sort by start instead",
+        ],
+      },
+      {
+        title: "Jump Game (Can Reach End)",
+        timeComplexity: "O(n)",
+        spaceComplexity: "O(1)",
+        code: `bool canJump(vector<int>& nums) {
+    int maxReach = 0;
+    for (int i = 0; i < nums.size(); i++) {
+        if (i > maxReach) return false;
+        maxReach = max(maxReach, i + nums[i]);
+    }
+    return true;
+}`,
+        whenToUse: [
+          "Reachability problems with variable jump lengths",
+          "Any problem that asks 'can you reach the end?'",
+          "Greedy tracking of farthest reachable position",
+        ],
+        tips: [
+          "Track the farthest index you can reach",
+          "If current index > maxReach, you're stuck",
+          "For min jumps, use BFS / level-order approach",
+        ],
+      },
+      {
+        title: "Fractional Knapsack",
+        timeComplexity: "O(n log n)",
+        spaceComplexity: "O(1)",
+        code: `double fractionalKnapsack(int W, vector<pair<int,int>>& items) {
+    // items = {value, weight}
+    sort(items.begin(), items.end(), [](auto& a, auto& b) {
+        return (double)a.first / a.second > (double)b.first / b.second;
+    });
+    double totalValue = 0.0;
+    for (auto& [val, wt] : items) {
+        if (W >= wt) {
+            totalValue += val;
+            W -= wt;
+        } else {
+            totalValue += (double)val * W / wt;
+            break;
+        }
+    }
+    return totalValue;
+}`,
+        whenToUse: [
+          "Knapsack where items can be fractionally taken",
+          "Maximize value with limited capacity",
+          "Sort by value/weight ratio",
+        ],
+        tips: [
+          "Sort by value-to-weight ratio (descending)",
+          "Take full items greedily until capacity runs out",
+          "Take fraction of last item that fits",
+        ],
+      },
+    ],
+  },
+  {
+    name: "Heap / Priority Queue",
+    slug: "heap-priority-queue",
+    templates: [
+      {
+        title: "Kth Largest Element",
+        timeComplexity: "O(n log k)",
+        spaceComplexity: "O(k)",
+        code: `int findKthLargest(vector<int>& nums, int k) {
+    // Min-heap of size k — top is kth largest
+    priority_queue<int, vector<int>, greater<int>> minHeap;
+    for (int num : nums) {
+        minHeap.push(num);
+        if ((int)minHeap.size() > k) minHeap.pop();
+    }
+    return minHeap.top();
+}`,
+        whenToUse: [
+          "Find kth largest / smallest element",
+          "Top-K frequent / closest / largest problems",
+          "Streaming data — maintain running kth element",
+        ],
+        tips: [
+          "For kth LARGEST, use a MIN-heap of size k",
+          "For kth SMALLEST, use a MAX-heap of size k",
+          "Heap top always holds the answer",
+        ],
+      },
+      {
+        title: "Merge K Sorted Lists",
+        timeComplexity: "O(N log k)",
+        spaceComplexity: "O(k)",
+        code: `struct ListNode {
+    int val;
+    ListNode* next;
+    ListNode(int x) : val(x), next(nullptr) {}
+};
+
+ListNode* mergeKLists(vector<ListNode*>& lists) {
+    auto cmp = [](ListNode* a, ListNode* b) {
+        return a->val > b->val;
+    };
+    priority_queue<ListNode*, vector<ListNode*>, decltype(cmp)> pq(cmp);
+
+    for (auto* list : lists)
+        if (list) pq.push(list);
+
+    ListNode dummy(0);
+    ListNode* tail = &dummy;
+    while (!pq.empty()) {
+        auto* node = pq.top(); pq.pop();
+        tail->next = node;
+        tail = tail->next;
+        if (node->next) pq.push(node->next);
+    }
+    return dummy.next;
+}`,
+        whenToUse: [
+          "Merge multiple sorted sequences efficiently",
+          "K-way merge pattern",
+          "Streaming merge from K sources",
+        ],
+        tips: [
+          "Push one element from each list into the heap",
+          "Pop min, advance that list, push next element",
+          "Dummy head simplifies linked list construction",
+        ],
+      },
+      {
+        title: "Median from Data Stream",
+        timeComplexity: "O(log n) per insert, O(1) median",
+        spaceComplexity: "O(n)",
+        code: `class MedianFinder {
+    priority_queue<int> lo;                             // max-heap (lower half)
+    priority_queue<int, vector<int>, greater<int>> hi;  // min-heap (upper half)
+public:
+    void addNum(int num) {
+        lo.push(num);
+        hi.push(lo.top()); lo.pop();
+        if (hi.size() > lo.size()) {
+            lo.push(hi.top()); hi.pop();
+        }
+    }
+    double findMedian() {
+        return lo.size() > hi.size()
+            ? lo.top()
+            : (lo.top() + hi.top()) / 2.0;
+    }
+};`,
+        whenToUse: [
+          "Running median in a data stream",
+          "Need fast insert + fast median query",
+          "Two-heap pattern: split data into lower/upper halves",
+        ],
+        tips: [
+          "Max-heap holds smaller half, min-heap holds larger half",
+          "Always push through lo → hi to maintain order",
+          "Rebalance so lo.size() >= hi.size()",
+        ],
+      },
+    ],
+  },
+  {
+    name: "Shortest Path Algorithms",
+    slug: "shortest-path",
+    templates: [
+      {
+        title: "Dijkstra's Algorithm",
+        timeComplexity: "O((V + E) log V)",
+        spaceComplexity: "O(V + E)",
+        code: `vector<int> dijkstra(int n, vector<vector<pair<int,int>>>& adj, int src) {
+    vector<int> dist(n, INT_MAX);
+    priority_queue<pair<int,int>, vector<pair<int,int>>, greater<>> pq;
+    dist[src] = 0;
+    pq.push({0, src});
+
+    while (!pq.empty()) {
+        auto [d, u] = pq.top(); pq.pop();
+        if (d > dist[u]) continue;  // stale entry
+        for (auto [v, w] : adj[u]) {
+            if (dist[u] + w < dist[v]) {
+                dist[v] = dist[u] + w;
+                pq.push({dist[v], v});
+            }
+        }
+    }
+    return dist;
+}`,
+        whenToUse: [
+          "Single-source shortest path with non-negative weights",
+          "Weighted graph shortest path",
+          "Network routing / minimum cost path problems",
+        ],
+        tips: [
+          "Only works for NON-NEGATIVE edge weights",
+          "Skip stale entries with if (d > dist[u]) continue",
+          "For negative weights, use Bellman-Ford instead",
+        ],
+      },
+      {
+        title: "Bellman-Ford Algorithm",
+        timeComplexity: "O(V × E)",
+        spaceComplexity: "O(V)",
+        code: `vector<int> bellmanFord(int n, vector<tuple<int,int,int>>& edges, int src) {
+    vector<int> dist(n, INT_MAX);
+    dist[src] = 0;
+
+    for (int i = 0; i < n - 1; i++) {
+        for (auto& [u, v, w] : edges) {
+            if (dist[u] != INT_MAX && dist[u] + w < dist[v]) {
+                dist[v] = dist[u] + w;
+            }
+        }
+    }
+    // Detect negative cycle
+    for (auto& [u, v, w] : edges) {
+        if (dist[u] != INT_MAX && dist[u] + w < dist[v]) {
+            return {};  // negative cycle exists
+        }
+    }
+    return dist;
+}`,
+        whenToUse: [
+          "Shortest path with negative edge weights",
+          "Detect negative weight cycles",
+          "When Dijkstra fails due to negative edges",
+        ],
+        tips: [
+          "Relax all edges V-1 times",
+          "One more pass detects negative cycles",
+          "Slower than Dijkstra but handles negative weights",
+        ],
+      },
+      {
+        title: "Floyd-Warshall (All-Pairs Shortest Path)",
+        timeComplexity: "O(V³)",
+        spaceComplexity: "O(V²)",
+        code: `vector<vector<int>> floydWarshall(int n, vector<vector<int>>& dist) {
+    // dist[i][j] = weight of edge (i,j), or INT_MAX if no edge
+    // dist[i][i] = 0
+    for (int k = 0; k < n; k++)
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                if (dist[i][k] != INT_MAX && dist[k][j] != INT_MAX)
+                    dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
+    return dist;
+}`,
+        whenToUse: [
+          "All-pairs shortest path in dense graphs",
+          "Small graph (V ≤ 400–500)",
+          "Transitive closure / reachability queries",
+        ],
+        tips: [
+          "K loop must be outermost",
+          "Guard against INT_MAX overflow before adding",
+          "Can detect negative cycles: dist[i][i] < 0",
+        ],
+      },
+    ],
+  },
+  {
+    name: "Linked List Patterns",
+    slug: "linked-list",
+    templates: [
+      {
+        title: "Reverse a Linked List (Iterative)",
+        timeComplexity: "O(n)",
+        spaceComplexity: "O(1)",
+        code: `ListNode* reverseList(ListNode* head) {
+    ListNode* prev = nullptr;
+    ListNode* curr = head;
+    while (curr) {
+        ListNode* next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+    }
+    return prev;
+}`,
+        whenToUse: [
+          "Reverse entire or partial linked list",
+          "Building block for many LL problems",
+          "Palindrome check, reorder list, etc.",
+        ],
+        tips: [
+          "Three pointers: prev, curr, next",
+          "Save next before overwriting curr->next",
+          "prev ends up as the new head",
+        ],
+      },
+      {
+        title: "Detect Cycle (Floyd's Algorithm)",
+        timeComplexity: "O(n)",
+        spaceComplexity: "O(1)",
+        code: `ListNode* detectCycle(ListNode* head) {
+    ListNode *slow = head, *fast = head;
+    while (fast && fast->next) {
+        slow = slow->next;
+        fast = fast->next->next;
+        if (slow == fast) {
+            slow = head;
+            while (slow != fast) {
+                slow = slow->next;
+                fast = fast->next;
+            }
+            return slow;  // cycle start
+        }
+    }
+    return nullptr;  // no cycle
+}`,
+        whenToUse: [
+          "Detect if linked list has a cycle",
+          "Find the start node of a cycle",
+          "Floyd's tortoise and hare algorithm",
+        ],
+        tips: [
+          "Phase 1: slow (1 step) and fast (2 steps) meet inside cycle",
+          "Phase 2: reset slow to head, both move 1 step — they meet at cycle start",
+          "Works because of math: distance from head to cycle start == distance from meeting point to cycle start",
+        ],
+      },
+      {
+        title: "Merge Two Sorted Lists",
+        timeComplexity: "O(n + m)",
+        spaceComplexity: "O(1)",
+        code: `ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+    ListNode dummy(0);
+    ListNode* tail = &dummy;
+    while (l1 && l2) {
+        if (l1->val <= l2->val) {
+            tail->next = l1;
+            l1 = l1->next;
+        } else {
+            tail->next = l2;
+            l2 = l2->next;
+        }
+        tail = tail->next;
+    }
+    tail->next = l1 ? l1 : l2;
+    return dummy.next;
+}`,
+        whenToUse: [
+          "Merge two sorted linked lists into one sorted list",
+          "Building block for merge sort on linked lists",
+          "Combine two ordered sequences",
+        ],
+        tips: [
+          "Use a dummy head to simplify edge cases",
+          "Append remaining nodes after loop",
+          "In-place — no extra nodes created",
+        ],
+      },
+    ],
+  },
+  {
+    name: "Bit Manipulation",
+    slug: "bit-manipulation",
+    templates: [
+      {
+        title: "Single Number (XOR)",
+        timeComplexity: "O(n)",
+        spaceComplexity: "O(1)",
+        code: `int singleNumber(vector<int>& nums) {
+    int result = 0;
+    for (int num : nums) result ^= num;
+    return result;
+}`,
+        whenToUse: [
+          "Every element appears twice except one — find the unique one",
+          "XOR all elements: duplicates cancel out",
+          "Missing / unique element with XOR trick",
+        ],
+        tips: [
+          "a ^ a = 0, a ^ 0 = a",
+          "XOR is commutative and associative",
+          "For 'appears 3 times except one', use bit counting per position",
+        ],
+      },
+      {
+        title: "Count Set Bits (Brian Kernighan)",
+        timeComplexity: "O(number of set bits)",
+        spaceComplexity: "O(1)",
+        code: `int countSetBits(int n) {
+    int count = 0;
+    while (n) {
+        n &= (n - 1);  // clear lowest set bit
+        count++;
+    }
+    return count;
+}`,
+        whenToUse: [
+          "Count number of 1-bits in an integer",
+          "Hamming weight / popcount",
+          "Problems involving subset size via bitmask",
+        ],
+        tips: [
+          "n & (n-1) clears the lowest set bit",
+          "Loop runs exactly (number of set bits) times",
+          "Also useful: __builtin_popcount(n) in C++",
+        ],
+      },
+      {
+        title: "Power of Two Check",
+        timeComplexity: "O(1)",
+        spaceComplexity: "O(1)",
+        code: `bool isPowerOfTwo(int n) {
+    return n > 0 && (n & (n - 1)) == 0;
+}`,
+        whenToUse: [
+          "Check if a number is a power of 2",
+          "Bitmask problems — power-of-2 means exactly one bit set",
+          "Fast validation without loops",
+        ],
+        tips: [
+          "A power of 2 has exactly one set bit",
+          "n & (n-1) == 0 means only one bit is set",
+          "Must check n > 0 (0 is not a power of 2)",
+        ],
+      },
+      {
+        title: "Subsets Using Bitmask",
+        timeComplexity: "O(2^n × n)",
+        spaceComplexity: "O(2^n × n)",
+        code: `vector<vector<int>> subsets(vector<int>& nums) {
+    int n = nums.size();
+    vector<vector<int>> result;
+    for (int mask = 0; mask < (1 << n); mask++) {
+        vector<int> subset;
+        for (int i = 0; i < n; i++) {
+            if (mask & (1 << i)) subset.push_back(nums[i]);
+        }
+        result.push_back(subset);
+    }
+    return result;
+}`,
+        whenToUse: [
+          "Generate all subsets of a set",
+          "Enumerate all 2^n combinations",
+          "When n ≤ 20 and brute force is feasible",
+        ],
+        tips: [
+          "Each bit in mask represents include/exclude",
+          "mask & (1 << i) checks if element i is included",
+          "Total subsets = 2^n",
+        ],
+      },
+    ],
+  },
+  {
+    name: "Segment Tree",
+    slug: "segment-tree",
+    templates: [
+      {
+        title: "Segment Tree (Range Sum + Point Update)",
+        timeComplexity: "O(n) build, O(log n) query/update",
+        spaceComplexity: "O(n)",
+        code: `class SegTree {
+    vector<int> tree;
+    int n;
+    void build(vector<int>& arr, int node, int start, int end) {
+        if (start == end) { tree[node] = arr[start]; return; }
+        int mid = (start + end) / 2;
+        build(arr, 2*node, start, mid);
+        build(arr, 2*node+1, mid+1, end);
+        tree[node] = tree[2*node] + tree[2*node+1];
+    }
+    void update(int node, int start, int end, int idx, int val) {
+        if (start == end) { tree[node] = val; return; }
+        int mid = (start + end) / 2;
+        if (idx <= mid) update(2*node, start, mid, idx, val);
+        else update(2*node+1, mid+1, end, idx, val);
+        tree[node] = tree[2*node] + tree[2*node+1];
+    }
+    int query(int node, int start, int end, int l, int r) {
+        if (r < start || end < l) return 0;
+        if (l <= start && end <= r) return tree[node];
+        int mid = (start + end) / 2;
+        return query(2*node, start, mid, l, r) +
+               query(2*node+1, mid+1, end, l, r);
+    }
+public:
+    SegTree(vector<int>& arr) : n(arr.size()), tree(4 * arr.size()) {
+        build(arr, 1, 0, n - 1);
+    }
+    void update(int idx, int val) { update(1, 0, n-1, idx, val); }
+    int query(int l, int r) { return query(1, 0, n-1, l, r); }
+};`,
+        whenToUse: [
+          "Range sum / min / max queries with point updates",
+          "Need O(log n) per query AND update",
+          "Used in competitive programming for range-query problems",
+        ],
+        tips: [
+          "Tree size = 4×n is safe upper bound",
+          "Node i has children 2i and 2i+1",
+          "Change + to min/max for range min/max tree",
+        ],
+      },
+      {
+        title: "Segment Tree with Lazy Propagation",
+        timeComplexity: "O(n) build, O(log n) range update/query",
+        spaceComplexity: "O(n)",
+        code: `class LazySegTree {
+    vector<long long> tree, lazy;
+    int n;
+    void pushDown(int node) {
+        if (lazy[node]) {
+            for (int child : {2*node, 2*node+1}) {
+                tree[child] += lazy[node];
+                lazy[child] += lazy[node];
+            }
+            lazy[node] = 0;
+        }
+    }
+    void rangeUpdate(int node, int start, int end, int l, int r, long long val) {
+        if (r < start || end < l) return;
+        if (l <= start && end <= r) {
+            tree[node] += val;
+            lazy[node] += val;
+            return;
+        }
+        pushDown(node);
+        int mid = (start + end) / 2;
+        rangeUpdate(2*node, start, mid, l, r, val);
+        rangeUpdate(2*node+1, mid+1, end, l, r, val);
+        tree[node] = max(tree[2*node], tree[2*node+1]);
+    }
+    long long query(int node, int start, int end, int l, int r) {
+        if (r < start || end < l) return LLONG_MIN;
+        if (l <= start && end <= r) return tree[node];
+        pushDown(node);
+        int mid = (start + end) / 2;
+        return max(query(2*node, start, mid, l, r),
+                   query(2*node+1, mid+1, end, l, r));
+    }
+public:
+    LazySegTree(int sz) : n(sz), tree(4*sz, 0), lazy(4*sz, 0) {}
+    void update(int l, int r, long long val) { rangeUpdate(1, 0, n-1, l, r, val); }
+    long long query(int l, int r) { return query(1, 0, n-1, l, r); }
+};`,
+        whenToUse: [
+          "Range updates + range queries (both O(log n))",
+          "Add value to a range and query max/sum of a range",
+          "Problems requiring bulk updates over intervals",
+        ],
+        tips: [
+          "Lazy stores pending updates not yet pushed to children",
+          "Always pushDown before recursing into children",
+          "Adapt merge function (max / min / sum) to problem needs",
+        ],
+      },
+    ],
+  },
+  {
+    name: "String Algorithms",
+    slug: "string-algorithms",
+    templates: [
+      {
+        title: "KMP Pattern Matching",
+        timeComplexity: "O(n + m)",
+        spaceComplexity: "O(m)",
+        code: `vector<int> kmpSearch(string& text, string& pattern) {
+    int n = text.size(), m = pattern.size();
+    // Build failure / LPS array
+    vector<int> lps(m, 0);
+    for (int i = 1, len = 0; i < m; ) {
+        if (pattern[i] == pattern[len]) {
+            lps[i++] = ++len;
+        } else if (len) {
+            len = lps[len - 1];
+        } else {
+            lps[i++] = 0;
+        }
+    }
+    // Search
+    vector<int> matches;
+    for (int i = 0, j = 0; i < n; ) {
+        if (text[i] == pattern[j]) { i++; j++; }
+        if (j == m) {
+            matches.push_back(i - j);
+            j = lps[j - 1];
+        } else if (i < n && text[i] != pattern[j]) {
+            if (j) j = lps[j - 1];
+            else i++;
+        }
+    }
+    return matches;
+}`,
+        whenToUse: [
+          "Exact pattern matching in O(n + m)",
+          "Find all occurrences of pattern in text",
+          "When brute force O(n×m) is too slow",
+        ],
+        tips: [
+          "LPS[i] = length of longest proper prefix which is also suffix of pattern[0..i]",
+          "On mismatch, jump back using LPS to avoid re-comparing",
+          "Build LPS in O(m), search in O(n)",
+        ],
+      },
+      {
+        title: "Rabin-Karp (Rolling Hash)",
+        timeComplexity: "O(n + m) average, O(n×m) worst",
+        spaceComplexity: "O(1)",
+        code: `vector<int> rabinKarp(string& text, string& pattern) {
+    int n = text.size(), m = pattern.size();
+    if (m > n) return {};
+    const long long MOD = 1e9 + 7, BASE = 31;
+    long long pHash = 0, tHash = 0, power = 1;
+
+    for (int i = 0; i < m; i++) {
+        pHash = (pHash * BASE + pattern[i]) % MOD;
+        tHash = (tHash * BASE + text[i]) % MOD;
+        if (i < m - 1) power = power * BASE % MOD;
+    }
+
+    vector<int> matches;
+    for (int i = 0; i <= n - m; i++) {
+        if (pHash == tHash) {
+            if (text.substr(i, m) == pattern) matches.push_back(i);
+        }
+        if (i < n - m) {
+            tHash = ((tHash - text[i] * power % MOD + MOD) * BASE + text[i + m]) % MOD;
+        }
+    }
+    return matches;
+}`,
+        whenToUse: [
+          "Pattern matching with rolling hash",
+          "Multiple pattern search (compute hash for each pattern)",
+          "Substring equality checks in O(1) after preprocessing",
+        ],
+        tips: [
+          "Use double hashing (two different MODs) to reduce collisions",
+          "Always verify matches with actual string comparison",
+          "Rolling hash: remove leftmost char, add rightmost char",
+        ],
+      },
+      {
+        title: "Z-Algorithm (Z-Array)",
+        timeComplexity: "O(n)",
+        spaceComplexity: "O(n)",
+        code: `vector<int> zFunction(string& s) {
+    int n = s.size();
+    vector<int> z(n, 0);
+    int l = 0, r = 0;
+    for (int i = 1; i < n; i++) {
+        if (i < r) z[i] = min(r - i, z[i - l]);
+        while (i + z[i] < n && s[z[i]] == s[i + z[i]]) z[i]++;
+        if (i + z[i] > r) { l = i; r = i + z[i]; }
+    }
+    return z;
+}
+
+// Pattern matching: concat pattern + "$" + text, find z[i] == m
+vector<int> zSearch(string& text, string& pattern) {
+    string concat = pattern + "$" + text;
+    int m = pattern.size();
+    vector<int> z = zFunction(concat);
+    vector<int> matches;
+    for (int i = m + 1; i < (int)concat.size(); i++)
+        if (z[i] == m) matches.push_back(i - m - 1);
+    return matches;
+}`,
+        whenToUse: [
+          "Pattern matching alternative to KMP",
+          "Z[i] = length of longest substring starting at i matching prefix",
+          "String periodicity and repetition detection",
+        ],
+        tips: [
+          "Z[0] is undefined (typically set to 0 or n)",
+          "For pattern matching: concat pattern + '$' + text",
+          "Z-values equal to pattern length indicate matches",
         ],
       },
     ],

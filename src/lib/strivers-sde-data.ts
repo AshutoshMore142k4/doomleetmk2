@@ -61,7 +61,7 @@ void sortColors(vector<int>& nums) {
         difficulty: "Medium",
         topic: "Arrays",
         description: "Given an unsorted array of size n. Array elements are in the range from 1 to n. One number is missing and one number occurs twice. Find both numbers.",
-        approach: "Use mathematical approach: Calculate sum and sum of squares. Let x be missing and y be repeating. x-y = S - Sn, x^2 - y^2 = S2 - S2n. Solve both equations to find x and y.",
+        approach: "Use mathematical approach: Calculate sum and sum of squares. Let x be repeating and y be missing. x-y = S - Sn, x^2 - y^2 = S2 - S2n. Solve both equations to find x and y.",
         solutionCode: `#include <bits/stdc++.h>
 using namespace std;
 
@@ -78,6 +78,7 @@ vector<int> findMissingRepeating(vector<int>& arr) {
     
     long long val1 = S - Sn;   // x - y
     long long val2 = S2 - S2n; // x^2 - y^2
+    if (val1 == 0) return {-1, -1}; // no repeating/missing
     val2 = val2 / val1;        // x + y
     
     long long x = (val1 + val2) / 2; // repeating
@@ -412,6 +413,7 @@ int mergeSort(vector<int>& nums, int low, int high) {
 }
 
 int reversePairs(vector<int>& nums) {
+    if (nums.empty()) return 0;
     return mergeSort(nums, 0, nums.size() - 1);
 }`,
         hints: ["Modified merge sort with separate counting step", "Count before merging"],
@@ -561,7 +563,7 @@ using namespace std;
 int uniquePaths(int m, int n) {
     int N = m + n - 2;
     int r = min(m - 1, n - 1);
-    double result = 1;
+    long long result = 1;
     for (int i = 1; i <= r; i++) {
         result = result * (N - r + i) / i;
     }
@@ -1043,6 +1045,7 @@ ListNode* reverseList(ListNode* head) {
         description: "Given the head of a singly linked list, return true if it is a palindrome.",
         approach: "Find middle using slow/fast. Reverse the second half. Compare first half with reversed second half.",
         solutionCode: `bool isPalindrome(ListNode* head) {
+    if (!head || !head->next) return true;
     ListNode* slow = head;
     ListNode* fast = head;
     while (fast->next && fast->next->next) {
@@ -2016,9 +2019,13 @@ int nthRoot(int n, int m) {
     while (low <= high) {
         int mid = (low + high) / 2;
         long long val = 1;
-        for (int i = 0; i < n; i++) val *= mid;
-        if (val == m) return mid;
-        else if (val < m) low = mid + 1;
+        bool overflow = false;
+        for (int i = 0; i < n; i++) {
+            val *= mid;
+            if (val > m) { overflow = true; break; }
+        }
+        if (!overflow && val == m) return mid;
+        else if (!overflow && val < m) low = mid + 1;
         else high = mid - 1;
     }
     return -1;
@@ -2254,9 +2261,10 @@ class MaxHeap {
 public:
     void insert(int val) { heap.push_back(val); heapifyUp(heap.size()-1); }
     int extractMax() {
+        if (heap.empty()) throw runtime_error("Heap is empty");
         int mx = heap[0];
         heap[0] = heap.back(); heap.pop_back();
-        heapifyDown(0);
+        if (!heap.empty()) heapifyDown(0);
         return mx;
     }
 };`,
@@ -2711,6 +2719,7 @@ int largestRectangleArea(vector<int>& heights) {
         solutionCode: `#include <bits/stdc++.h>
 using namespace std;
 // Assume knows(a, b) API given
+bool knows(int a, int b); // forward declaration
 int celebrity(int n) {
     int candidate = 0;
     for (int i = 1; i < n; i++) {
@@ -3131,7 +3140,7 @@ int repeatedStringMatch(string a, string b) {
     { id: "s123", title: "Construct Binary Tree from Inorder and Preorder", difficulty: "Medium", topic: "Binary Tree Part-II", description: "Build binary tree from inorder and preorder traversals.", approach: "First element of preorder is root. Find it in inorder to split left and right subtrees. Recurse.", solutionCode: `TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {\n    unordered_map<int,int> mp;\n    for (int i = 0; i < inorder.size(); i++) mp[inorder[i]] = i;\n    int idx = 0;\n    function<TreeNode*(int, int)> build = [&](int l, int r) -> TreeNode* {\n        if (l > r) return nullptr;\n        int val = preorder[idx++];\n        auto node = new TreeNode(val);\n        node->left = build(l, mp[val] - 1);\n        node->right = build(mp[val] + 1, r);\n        return node;\n    };\n    return build(0, inorder.size() - 1);\n}`, hints: ["Preorder first = root", "Find root in inorder to split"], timeComplexity: "O(n)", spaceComplexity: "O(n)", leetcodeNumber: 105 }
   ]},
   { name: "Binary Tree Part-III", day: 19, problems: [
-    { id: "s124", title: "Mirror / Symmetric Tree", difficulty: "Easy", topic: "Binary Tree Part-III", description: "Check if a binary tree is a mirror of itself (symmetric).", approach: "Compare left subtree with right subtree recursively. Left's left matches right's right and vice versa.", solutionCode: `bool isSymmetric(TreeNode* root) {\n    function<bool(TreeNode*, TreeNode*)> check = [&](TreeNode* l, TreeNode* r) -> bool {\n        if (!l && !r) return true;\n        if (!l || !r) return false;\n        return l->val == r->val && check(l->left, r->right) && check(l->right, r->left);\n    };\n    return check(root->left, root->right);\n}`, hints: ["Compare left-left with right-right", "Mirror comparison"], timeComplexity: "O(n)", spaceComplexity: "O(h)", leetcodeNumber: 101 },
+    { id: "s124", title: "Mirror / Symmetric Tree", difficulty: "Easy", topic: "Binary Tree Part-III", description: "Check if a binary tree is a mirror of itself (symmetric).", approach: "Compare left subtree with right subtree recursively. Left's left matches right's right and vice versa.", solutionCode: `bool isSymmetric(TreeNode* root) {\n    if (!root) return true;\n    function<bool(TreeNode*, TreeNode*)> check = [&](TreeNode* l, TreeNode* r) -> bool {\n        if (!l && !r) return true;\n        if (!l || !r) return false;\n        return l->val == r->val && check(l->left, r->right) && check(l->right, r->left);\n    };\n    return check(root->left, root->right);\n}`, hints: ["Compare left-left with right-right", "Mirror comparison"], timeComplexity: "O(n)", spaceComplexity: "O(h)", leetcodeNumber: 101 },
     { id: "s125", title: "Flatten Binary Tree to Linked List", difficulty: "Medium", topic: "Binary Tree Part-III", description: "Flatten a binary tree to a linked list in-place following preorder.", approach: "Morris-like: for each node, find rightmost of left subtree, connect it to right child, then move left to right.", solutionCode: `void flatten(TreeNode* root) {\n    TreeNode* curr = root;\n    while (curr) {\n        if (curr->left) {\n            TreeNode* pred = curr->left;\n            while (pred->right) pred = pred->right;\n            pred->right = curr->right;\n            curr->right = curr->left;\n            curr->left = nullptr;\n        }\n        curr = curr->right;\n    }\n}`, hints: ["Connect left subtree's rightmost to right child", "Move left to right"], timeComplexity: "O(n)", spaceComplexity: "O(1)", leetcodeNumber: 114 },
     { id: "s126", title: "Check Children Sum Property", difficulty: "Medium", topic: "Binary Tree Part-III", description: "Check if for every node, its value equals the sum of its children's values.", approach: "Recursive check. For each node, verify val == left.val + right.val (with nulls as 0).", solutionCode: `bool isChildrenSum(TreeNode* root) {\n    if (!root || (!root->left && !root->right)) return true;\n    int sum = 0;\n    if (root->left) sum += root->left->val;\n    if (root->right) sum += root->right->val;\n    return root->val == sum && isChildrenSum(root->left) && isChildrenSum(root->right);\n}`, hints: ["Node value = sum of children", "Leaf nodes satisfy trivially"], timeComplexity: "O(n)", spaceComplexity: "O(h)" },
     { id: "s127", title: "Nodes at Distance K", difficulty: "Medium", topic: "Binary Tree Part-III", description: "Find all nodes at distance K from a target node.", approach: "BFS from target. First build parent pointers using BFS. Then BFS from target using parent pointers.", solutionCode: `vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {\n    unordered_map<TreeNode*, TreeNode*> parent;\n    queue<TreeNode*> q;\n    q.push(root);\n    while (!q.empty()) {\n        auto node = q.front(); q.pop();\n        if (node->left) { parent[node->left] = node; q.push(node->left); }\n        if (node->right) { parent[node->right] = node; q.push(node->right); }\n    }\n    unordered_set<TreeNode*> visited;\n    q.push(target);\n    visited.insert(target);\n    int dist = 0;\n    while (!q.empty()) {\n        if (dist == k) { vector<int> res; while (!q.empty()) { res.push_back(q.front()->val); q.pop(); } return res; }\n        int sz = q.size();\n        while (sz--) {\n            auto node = q.front(); q.pop();\n            if (node->left && !visited.count(node->left)) { visited.insert(node->left); q.push(node->left); }\n            if (node->right && !visited.count(node->right)) { visited.insert(node->right); q.push(node->right); }\n            if (parent.count(node) && !visited.count(parent[node])) { visited.insert(parent[node]); q.push(parent[node]); }\n        }\n        dist++;\n    }\n    return {};\n}`, hints: ["Build parent map first", "BFS from target in all 3 directions"], timeComplexity: "O(n)", spaceComplexity: "O(n)", leetcodeNumber: 863 },
@@ -3153,7 +3162,7 @@ int repeatedStringMatch(string a, string b) {
     { id: "s139", title: "Kth Smallest in BST", difficulty: "Medium", topic: "Binary Search Tree Part-II", description: "Find the kth smallest element in a BST.", approach: "Inorder traversal gives sorted order. Return the kth element.", solutionCode: `int kthSmallest(TreeNode* root, int k) {\n    int count = 0, result = 0;\n    function<void(TreeNode*)> inorder = [&](TreeNode* node) {\n        if (!node || count >= k) return;\n        inorder(node->left);\n        if (++count == k) { result = node->val; return; }\n        inorder(node->right);\n    };\n    inorder(root);\n    return result;\n}`, hints: ["Inorder = sorted order in BST", "Stop at kth element"], timeComplexity: "O(h + k)", spaceComplexity: "O(h)", leetcodeNumber: 230 },
     { id: "s140", title: "Kth Largest in BST", difficulty: "Medium", topic: "Binary Search Tree Part-II", description: "Find the kth largest element in a BST.", approach: "Reverse inorder (right, root, left) gives descending order.", solutionCode: `int kthLargest(TreeNode* root, int k) {\n    int count = 0, result = 0;\n    function<void(TreeNode*)> revInorder = [&](TreeNode* node) {\n        if (!node || count >= k) return;\n        revInorder(node->right);\n        if (++count == k) { result = node->val; return; }\n        revInorder(node->left);\n    };\n    revInorder(root);\n    return result;\n}`, hints: ["Reverse inorder = descending", "Stop at kth element"], timeComplexity: "O(h + k)", spaceComplexity: "O(h)" },
     { id: "s141", title: "Floor and Ceil in BST", difficulty: "Medium", topic: "Binary Search Tree Part-II", description: "Find floor (largest <= key) and ceil (smallest >= key) in BST.", approach: "Traverse BST. For floor: if node <= key, update floor and go right. For ceil: if node >= key, update ceil and go left.", solutionCode: `int floorBST(TreeNode* root, int key) {\n    int floor = -1;\n    while (root) {\n        if (root->val == key) return key;\n        if (root->val < key) { floor = root->val; root = root->right; }\n        else root = root->left;\n    }\n    return floor;\n}\nint ceilBST(TreeNode* root, int key) {\n    int ceil = -1;\n    while (root) {\n        if (root->val == key) return key;\n        if (root->val > key) { ceil = root->val; root = root->left; }\n        else root = root->right;\n    }\n    return ceil;\n}`, hints: ["Track candidate while traversing", "BST property guides direction"], timeComplexity: "O(h)", spaceComplexity: "O(1)" },
-    { id: "s142", title: "Largest BST in Binary Tree", difficulty: "Hard", topic: "Binary Search Tree Part-II", description: "Find the size of the largest BST subtree in a binary tree.", approach: "Post-order traversal. Each node returns (isBST, size, min, max). Combine children's info.", solutionCode: `int largestBST(TreeNode* root) {\n    int maxSize = 0;\n    // Returns {size, min, max}, size=-1 if not BST\n    function<tuple<int,int,int>(TreeNode*)> solve = [&](TreeNode* node) -> tuple<int,int,int> {\n        if (!node) return {0, INT_MAX, INT_MIN};\n        auto [ls, lmin, lmax] = solve(node->left);\n        auto [rs, rmin, rmax] = solve(node->right);\n        if (ls >= 0 && rs >= 0 && lmax < node->val && node->val < rmin) {\n            int sz = ls + rs + 1;\n            maxSize = max(maxSize, sz);\n            return {sz, min(lmin, node->val), max(rmax, node->val)};\n        }\n        return {-1, 0, 0};\n    };\n    solve(root);\n    return maxSize;\n}`, hints: ["Post-order: validate from bottom up", "Return size, min, max for each subtree"], timeComplexity: "O(n)", spaceComplexity: "O(h)" },
+    { id: "s142", title: "Largest BST in Binary Tree", difficulty: "Hard", topic: "Binary Search Tree Part-II", description: "Find the size of the largest BST subtree in a binary tree.", approach: "Post-order traversal. Each node returns (isBST, size, min, max). Combine children's info.", solutionCode: `int largestBST(TreeNode* root) {\n    int maxSize = 0;\n    // Returns {size, min, max}, size=-1 if not BST\n    function<tuple<int,int,int>(TreeNode*)> solve = [&](TreeNode* node) -> tuple<int,int,int> {\n        if (!node) return {0, LONG_MAX, LONG_MIN};\n        auto [ls, lmin, lmax] = solve(node->left);\n        auto [rs, rmin, rmax] = solve(node->right);\n        if (ls >= 0 && rs >= 0 && lmax < node->val && node->val < rmin) {\n            int sz = ls + rs + 1;\n            maxSize = max(maxSize, sz);\n            return {sz, min(lmin, node->val), max(rmax, node->val)};\n        }\n        return {-1, 0, 0};\n    };\n    solve(root);\n    return maxSize;\n}`, hints: ["Post-order: validate from bottom up", "Return size, min, max for each subtree"], timeComplexity: "O(n)", spaceComplexity: "O(h)" },
     { id: "s143", title: "Insert into BST", difficulty: "Medium", topic: "Binary Search Tree Part-II", description: "Insert a value into a BST and return the root.", approach: "Find the correct leaf position using BST property. Insert as a new leaf.", solutionCode: `TreeNode* insertIntoBST(TreeNode* root, int val) {\n    if (!root) return new TreeNode(val);\n    if (val < root->val) root->left = insertIntoBST(root->left, val);\n    else root->right = insertIntoBST(root->right, val);\n    return root;\n}`, hints: ["Recurse to find correct position", "Insert as leaf"], timeComplexity: "O(h)", spaceComplexity: "O(h)", leetcodeNumber: 701 },
     { id: "s144", title: "Delete Node in BST", difficulty: "Medium", topic: "Binary Search Tree Part-II", description: "Delete a key from BST and return the modified root.", approach: "Find node. If leaf, remove. If one child, replace. If two children, replace with inorder successor and delete successor.", solutionCode: `TreeNode* deleteNode(TreeNode* root, int key) {\n    if (!root) return nullptr;\n    if (key < root->val) root->left = deleteNode(root->left, key);\n    else if (key > root->val) root->right = deleteNode(root->right, key);\n    else {\n        if (!root->left) return root->right;\n        if (!root->right) return root->left;\n        TreeNode* succ = root->right;\n        while (succ->left) succ = succ->left;\n        root->val = succ->val;\n        root->right = deleteNode(root->right, succ->val);\n    }\n    return root;\n}`, hints: ["Three cases: leaf, one child, two children", "Replace with inorder successor for two children"], timeComplexity: "O(h)", spaceComplexity: "O(h)", leetcodeNumber: 450 },
     { id: "s145", title: "Convert Sorted Array to BST", difficulty: "Easy", topic: "Binary Search Tree Part-II", description: "Convert a sorted array to a height-balanced BST.", approach: "Pick middle element as root. Recursively build left and right subtrees from subarrays.", solutionCode: `TreeNode* sortedArrayToBST(vector<int>& nums) {\n    function<TreeNode*(int, int)> build = [&](int l, int r) -> TreeNode* {\n        if (l > r) return nullptr;\n        int mid = (l + r) / 2;\n        auto node = new TreeNode(nums[mid]);\n        node->left = build(l, mid - 1);\n        node->right = build(mid + 1, r);\n        return node;\n    };\n    return build(0, nums.size() - 1);\n}`, hints: ["Mid element = root for balanced tree", "Divide and conquer"], timeComplexity: "O(n)", spaceComplexity: "O(log n)", leetcodeNumber: 108 }
