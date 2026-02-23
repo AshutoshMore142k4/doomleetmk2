@@ -66,6 +66,12 @@ export function Header() {
               Templates
             </Link>
             <Link 
+              to="/system-design" 
+              className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all whitespace-nowrap"
+            >
+              System Design
+            </Link>
+            <Link 
               to="/mapper" 
               className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all whitespace-nowrap"
             >
@@ -81,7 +87,13 @@ export function Header() {
               to="/cheatsheet" 
               className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all whitespace-nowrap"
             >
-              Bonus
+              Cheatsheet
+            </Link>
+            <Link 
+              to="/system-design" 
+              className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all whitespace-nowrap"
+            >
+              System Design
             </Link>
           </div>
         </nav>

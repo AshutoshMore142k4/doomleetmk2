@@ -1836,8 +1836,8 @@ vector<vector<string>> solveNQueens(int n) {
     return result;
 }`,
         hints: ["Place column by column", "Track rows and both diagonals"],
-        timeComplexity: "O(n!)",
-        spaceComplexity: "O(n²)",
+        timeComplexity: "O(N! × N)",
+        spaceComplexity: "O(N²)",
         leetcodeNumber: 51
       },
       {

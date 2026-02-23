@@ -214,4 +214,232 @@ export const comparisonGroups: ComparisonGroup[] = [
       },
     },
   },
+  {
+    title: "MST: Kruskal vs Prim",
+    slug: "mst",
+    description: "Choose the right Minimum Spanning Tree algorithm based on graph density.",
+    algorithms: [
+      {
+        name: "Kruskal's",
+        bestFor: "Sparse graphs, edge-list input",
+        time: "O(E log E)",
+        space: "O(V + E)",
+        limitation: "Requires sorting all edges; needs Union-Find",
+      },
+      {
+        name: "Prim's",
+        bestFor: "Dense graphs, adjacency matrix input",
+        time: "O(E log V) with min-heap",
+        space: "O(V + E)",
+        limitation: "Harder to implement for disconnected graphs",
+      },
+    ],
+    decisionTree: {
+      question: "Is the graph dense (E ≈ V²)?",
+      yes: "Prim's (adjacency matrix, O(V²))",
+      no: {
+        question: "Is the input given as an edge list?",
+        yes: "Kruskal's",
+        no: "Prim's (min-heap variant)",
+      },
+    },
+  },
+  {
+    title: "Two Pointers vs Sliding Window",
+    slug: "two-pointers-sliding-window",
+    description: "Both use O(n) linear scans — pick based on what you're optimising.",
+    algorithms: [
+      {
+        name: "Two Pointers",
+        bestFor: "Pair/triplet search in sorted array, palindrome check",
+        time: "O(n)",
+        space: "O(1)",
+        limitation: "Usually requires sorted input",
+      },
+      {
+        name: "Sliding Window (Fixed)",
+        bestFor: "Subarray of exact length k",
+        time: "O(n)",
+        space: "O(1)",
+        limitation: "Only works when window size is fixed",
+      },
+      {
+        name: "Sliding Window (Variable)",
+        bestFor: "Longest/shortest subarray satisfying a condition",
+        time: "O(n)",
+        space: "O(k) for frequency map",
+        limitation: "Condition must be monotonic (shrinking is well-defined)",
+      },
+    ],
+    decisionTree: {
+      question: "Are you searching for a pair/triplet summing to target?",
+      yes: "Two Pointers (sort first if needed)",
+      no: {
+        question: "Is the subarray/substring length fixed (exactly k)?",
+        yes: "Sliding Window — Fixed Size",
+        no: {
+          question: "Are you finding the longest/shortest subarray meeting a constraint?",
+          yes: "Sliding Window — Variable Size",
+          no: "Two Pointers (e.g. palindrome, merge sorted arrays)",
+        },
+      },
+    },
+  },
+  {
+    title: "DP: Top-Down (Memoization) vs Bottom-Up (Tabulation)",
+    slug: "dp-approach",
+    description: "Both have the same asymptotic complexity — pick based on problem structure.",
+    algorithms: [
+      {
+        name: "Top-Down (Memoization)",
+        bestFor: "Natural recursive structure, sparse state space",
+        time: "O(states × transition)",
+        space: "O(states) + call stack",
+        limitation: "Stack overflow for very deep recursion; overhead per call",
+      },
+      {
+        name: "Bottom-Up (Tabulation)",
+        bestFor: "All states needed, space optimisation possible",
+        time: "O(states × transition)",
+        space: "O(states), often reducible to O(1) row",
+        limitation: "Must determine correct iteration order upfront",
+      },
+    ],
+    decisionTree: {
+      question: "Is the recursion depth very large (>10⁴)?",
+      yes: "Bottom-Up (avoids stack overflow)",
+      no: {
+        question: "Are only a fraction of states actually reachable?",
+        yes: "Top-Down (only computes reachable states)",
+        no: {
+          question: "Do you need to reduce space below O(states)?",
+          yes: "Bottom-Up (roll the DP table to O(1) row)",
+          no: "Top-Down (easier to write, debug, and reason about)",
+        },
+      },
+    },
+  },
+  {
+    title: "Union-Find vs DFS for Graph Connectivity",
+    slug: "connectivity",
+    description: "Both detect connected components — choose based on whether edges arrive online.",
+    algorithms: [
+      {
+        name: "Union-Find (DSU)",
+        bestFor: "Dynamic connectivity, online edge insertions",
+        time: "O(α(n)) per query (near O(1))",
+        space: "O(V)",
+        limitation: "Doesn't track actual paths; hard to undo (no edge deletion)",
+      },
+      {
+        name: "DFS / BFS",
+        bestFor: "Static graph, need component members or paths",
+        time: "O(V + E)",
+        space: "O(V)",
+        limitation: "Must re-run after each edge addition",
+      },
+    ],
+    decisionTree: {
+      question: "Are edges added one at a time (online / streaming)?",
+      yes: "Union-Find (DSU)",
+      no: {
+        question: "Do you need the actual path or list of nodes in each component?",
+        yes: "DFS / BFS",
+        no: {
+          question: "Are you just counting components or checking if two nodes are connected?",
+          yes: "Union-Find (simpler)",
+          no: "DFS / BFS",
+        },
+      },
+    },
+  },
+  {
+    title: "Binary Search Variants",
+    slug: "binary-search",
+    description: "Classic, lower-bound, upper-bound, and answer-space binary search.",
+    algorithms: [
+      {
+        name: "Classic Binary Search",
+        bestFor: "Find exact target in sorted array",
+        time: "O(log n)",
+        space: "O(1)",
+        limitation: "Only works on sorted or monotonic data",
+      },
+      {
+        name: "Lower Bound (first ≥ target)",
+        bestFor: "First position where condition becomes true",
+        time: "O(log n)",
+        space: "O(1)",
+        limitation: "Off-by-one errors are very common",
+      },
+      {
+        name: "Upper Bound (first > target)",
+        bestFor: "Count occurrences, range queries",
+        time: "O(log n)",
+        space: "O(1)",
+        limitation: "Off-by-one errors are very common",
+      },
+      {
+        name: "Binary Search on Answer",
+        bestFor: "Minimise maximum / maximise minimum problems",
+        time: "O(log(range) × O(check))",
+        space: "O(1)",
+        limitation: "Requires a monotonic yes/no feasibility function",
+      },
+    ],
+    decisionTree: {
+      question: "Are you searching for an exact value in a sorted array?",
+      yes: "Classic Binary Search",
+      no: {
+        question: "Is the problem 'minimise maximum' or 'maximise minimum'?",
+        yes: "Binary Search on Answer",
+        no: {
+          question: "Do you need the first position ≥ target?",
+          yes: "Lower Bound",
+          no: "Upper Bound (first position > target)",
+        },
+      },
+    },
+  },
+  {
+    title: "Graph Representation: Adjacency List vs Matrix vs Edge List",
+    slug: "graph-representation",
+    description: "Choose how to store a graph based on density and operation needs.",
+    algorithms: [
+      {
+        name: "Adjacency List",
+        bestFor: "Sparse graphs (E << V²), BFS/DFS traversal",
+        time: "Add edge O(1), check edge O(degree)",
+        space: "O(V + E)",
+        limitation: "Slow edge existence check compared to matrix",
+      },
+      {
+        name: "Adjacency Matrix",
+        bestFor: "Dense graphs, O(1) edge existence check",
+        time: "Add edge O(1), check edge O(1)",
+        space: "O(V²)",
+        limitation: "Wastes memory for sparse graphs",
+      },
+      {
+        name: "Edge List",
+        bestFor: "Kruskal's MST, sorting/filtering edges",
+        time: "Add edge O(1), check edge O(E)",
+        space: "O(E)",
+        limitation: "Slow neighbour lookup; no direct V→neighbours access",
+      },
+    ],
+    decisionTree: {
+      question: "Do you need O(1) edge existence check (u→v)?",
+      yes: "Adjacency Matrix",
+      no: {
+        question: "Do you primarily process edges sorted/filtered (e.g. Kruskal's)?",
+        yes: "Edge List",
+        no: {
+          question: "Is the graph sparse (E << V²)?",
+          yes: "Adjacency List",
+          no: "Adjacency Matrix",
+        },
+      },
+    },
+  },
 ];

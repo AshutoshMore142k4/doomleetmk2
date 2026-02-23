@@ -12,8 +12,7 @@ import StriverSheet from "./pages/StriverSheet";
 import Templates from "./pages/Templates";
 import ProblemMapper from "./pages/ProblemMapper";
 import Compare from "./pages/Compare";
-import CheatSheet from "./pages/CheatSheet";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
+import CheatSheet from "./pages/CheatSheet";import SystemDesign from './pages/SystemDesign';import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Support from "./pages/Support";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
@@ -36,6 +35,7 @@ const App = () => (
               <Route path="/mapper" element={<ProblemMapper />} />
               <Route path="/compare" element={<Compare />} />
               <Route path="/cheatsheet" element={<CheatSheet />} />
+              <Route path="/system-design" element={<SystemDesign />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/support" element={<Support />} />
               <Route path="/auth" element={<Auth />} />
