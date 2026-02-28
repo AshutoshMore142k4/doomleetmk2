@@ -3,16 +3,25 @@
   <rect width="64" height="64" rx="14" fill="#0f0f0f"/>
   <!-- Amber top accent bar -->
   <rect x="10" y="8" width="44" height="5" rx="2.5" fill="#f0a500"/>
-  <!-- Bold "G" letter -->
-  <text
-    x="10"
-    y="52"
-    font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif"
-    font-size="38"
-    font-weight="900"
-    fill="#ffffff"
-    letter-spacing="-1"
-  >GL</text>
-  <!-- Amber underline dot -->
-  <circle cx="54" cy="55" r="4" fill="#f0a500"/>
+
+  <!-- G letter — pure paths, no font dependency -->
+  <!-- Left vertical stroke -->
+  <rect x="10" y="19" width="7" height="30" rx="2" fill="#ffffff"/>
+  <!-- Top horizontal stroke -->
+  <rect x="10" y="19" width="23" height="7" rx="2" fill="#ffffff"/>
+  <!-- Bottom horizontal stroke -->
+  <rect x="10" y="42" width="26" height="7" rx="2" fill="#ffffff"/>
+  <!-- Middle shelf (the G notch) -->
+  <rect x="22" y="32" width="14" height="6" rx="2" fill="#ffffff"/>
+  <!-- Right lower vertical (shelf down to bottom) -->
+  <rect x="29" y="32" width="7" height="17" rx="2" fill="#ffffff"/>
+
+  <!-- L letter — pure paths, no font dependency -->
+  <!-- Left vertical stroke -->
+  <rect x="39" y="19" width="7" height="30" rx="2" fill="#ffffff"/>
+  <!-- Bottom horizontal stroke -->
+  <rect x="39" y="42" width="17" height="7" rx="2" fill="#ffffff"/>
+
+  <!-- Amber accent dot -->
+  <circle cx="55" cy="55" r="4" fill="#f0a500"/>
 </svg>

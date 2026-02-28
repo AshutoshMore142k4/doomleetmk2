@@ -4,6 +4,14 @@
   "devCommand": "npm run dev",
   "installCommand": "npm install",
   "framework": "vite",
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "www.grindside.app" }],
+      "destination": "https://grindside.app/$1",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/(.*)",
