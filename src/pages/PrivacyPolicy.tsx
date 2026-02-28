@@ -127,6 +127,10 @@ export default function PrivacyPolicy() {
               <Link to="/support" className="text-primary hover:underline">
                 Support page
               </Link>
+              {' '}or email us directly at{' '}
+              <a href="mailto:sec1aids@gmail.com" className="text-primary hover:underline">
+                sec1aids@gmail.com
+              </a>
               .
             </p>
           </section>

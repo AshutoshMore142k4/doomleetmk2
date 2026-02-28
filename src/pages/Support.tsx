@@ -19,7 +19,7 @@ const supportChannels = [
     title: 'Email Support',
     description: 'For account issues, privacy requests, or general inquiries.',
     action: 'Send Email',
-    href: 'mailto:grindleet.support@gmail.com',
+    href: 'mailto:sec1aids@gmail.com',
     external: true,
   },
 ];
