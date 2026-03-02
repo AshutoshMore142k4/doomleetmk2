@@ -99,7 +99,7 @@ export function Header() {
         </nav>
 
         {/* Right-side actions - always visible */}
-        <div className="flex items-center gap-0.5 shrink-0">
+        <div className="flex items-center gap-1.5 shrink-0">
           <button
             onClick={toggleTheme}
             className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-lg text-muted-foreground hover:text-foreground hover:bg-primary/[0.06] transition-all"
@@ -107,6 +107,22 @@ export function Header() {
           >
             {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </button>
+
+          {/* Product Hunt badge - hidden on small screens */}
+          <a
+            href="https://www.producthunt.com/products/grindsde?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-grindsde"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden md:flex shrink-0"
+          >
+            <img
+              src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1088652&theme=dark&t=1772481631610"
+              alt="GrindSDE - Not your ordinary tech interview prep platform. | Product Hunt"
+              width="150"
+              height="33"
+              className="h-[33px] w-auto"
+            />
+          </a>
           
           {user ? (
             <DropdownMenu>
