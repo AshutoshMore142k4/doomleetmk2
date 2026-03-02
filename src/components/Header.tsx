@@ -40,8 +40,8 @@ export function Header() {
       <div className="container flex h-14 items-center gap-2 px-4">
         {/* Logo - always visible */}
         <Link to="/" className="flex items-center gap-2 shrink-0">
-          <img src="/logo.svg" alt="GrindLeet" className="h-8 w-8 rounded-lg" />
-          <span className="text-lg font-semibold tracking-tight hidden sm:inline">GrindLeet</span>
+          <img src="/logo.svg" alt="GrindSDE" className="h-8 w-8 rounded-lg" />
+          <span className="text-lg font-semibold tracking-tight hidden sm:inline">GrindSDE</span>
         </Link>
 
         {/* Scrollable nav links */}

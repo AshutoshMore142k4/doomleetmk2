@@ -1,8 +1,8 @@
-# GrindLeet
+# GrindSDE
 
 > Master coding interviews with NeetCode 150 and Striver's SDE Sheet. 400+ problems with detailed C++ solutions, organized by pattern and difficulty.
 
-GrindLeet is a free coding interview preparation platform. It provides two complete, curated problem sets — NeetCode 150 and Striver's SDE Sheet — with battle-tested C++ solutions, approach explanations, time/space complexity analysis, and algorithm templates.
+GrindSDE is a free coding interview preparation platform. It provides two complete, curated problem sets — NeetCode 150 and Striver's SDE Sheet — with battle-tested C++ solutions, approach explanations, time/space complexity analysis, and algorithm templates.
 
 ## Features
 

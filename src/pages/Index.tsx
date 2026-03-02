@@ -235,7 +235,7 @@ export default function Index() {
         <div className="container px-4 py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
             <div className="flex flex-col sm:flex-row items-center gap-1 text-sm text-muted-foreground">
-              <span>© {new Date().getFullYear()} GrindLeet. All rights reserved.</span>
+              <span>© {new Date().getFullYear()} GrindSDE. All rights reserved.</span>
               <span className="hidden sm:inline">·</span>
               <a href="mailto:sec1aids@gmail.com" className="hover:text-foreground transition-colors">sec1aids@gmail.com</a>
             </div>

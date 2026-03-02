@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 
 export type TemplateStatus = 'none' | 'learned' | 'needs-review';
 
-const STORAGE_KEY = 'grindleet-template-progress';
+const STORAGE_KEY = 'GrindSDE-template-progress';
 
 function loadProgress(): Record<string, TemplateStatus> {
   try {

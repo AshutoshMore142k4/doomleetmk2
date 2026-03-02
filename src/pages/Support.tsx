@@ -27,7 +27,7 @@ const supportChannels = [
 const faqItems = [
   {
     icon: HelpCircle,
-    question: 'Is GrindLeet free to use?',
+    question: 'Is GrindSDE free to use?',
     answer:
       'Yes! The core features — NeetCode 150, Striver SDE Sheet, Problem Mapper, and Compare — are completely free. Some template categories require a free sign-in to access.',
   },

@@ -27,7 +27,7 @@ export default function PrivacyPolicy() {
           <section>
             <h2 className="text-lg font-semibold text-foreground mb-3">1. Introduction</h2>
             <p>
-              GrindLeet is committed to protecting your privacy.
+              GrindSDE is committed to protecting your privacy.
               This Privacy Policy explains how we collect, use, and safeguard your
               information when you use our website and services.
             </p>
