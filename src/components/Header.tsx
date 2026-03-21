@@ -47,53 +47,47 @@ export function Header() {
         {/* Scrollable nav links */}
         <nav className="flex-1 overflow-x-auto scrollbar-hide min-w-0">
           <div className="flex items-center gap-0.5 sm:gap-1 w-max">
-            <Link 
-              to="/problems" 
+            <Link
+              to="/problems"
               className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all whitespace-nowrap"
             >
               NeetCode
             </Link>
-            <Link 
-              to="/striver" 
+            <Link
+              to="/striver"
               className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all whitespace-nowrap"
             >
               Striver
             </Link>
-            <Link 
-              to="/templates" 
+            <Link
+              to="/templates"
               className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all whitespace-nowrap"
             >
               Templates
             </Link>
-            <Link 
-              to="/system-design" 
+            <Link
+              to="/system-design"
               className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all whitespace-nowrap"
             >
               System Design
             </Link>
-            <Link 
-              to="/mapper" 
+            <Link
+              to="/mapper"
               className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all whitespace-nowrap"
             >
               Mapper
             </Link>
-            <Link 
-              to="/compare" 
+            <Link
+              to="/compare"
               className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all whitespace-nowrap"
             >
               Compare
             </Link>
-            <Link 
-              to="/cheatsheet" 
+            <Link
+              to="/cheatsheet"
               className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all whitespace-nowrap"
             >
               Cheatsheet
-            </Link>
-            <Link 
-              to="/system-design" 
-              className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-primary/[0.06] transition-all whitespace-nowrap"
-            >
-              System Design
             </Link>
           </div>
         </nav>
@@ -123,7 +117,7 @@ export function Header() {
               className="h-[33px] w-auto"
             />
           </a>
-          
+
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -140,8 +134,8 @@ export function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Link 
-              to="/auth" 
+            <Link
+              to="/auth"
               className="rounded-full bg-foreground text-background px-4 py-1.5 text-xs sm:text-sm font-medium hover:bg-foreground/90 transition-colors"
             >
               Sign In
