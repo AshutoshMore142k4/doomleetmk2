@@ -14,4 +14,8 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    modulePreload: false,
+    chunkSizeWarningLimit: 1000,
+  }
 }));
